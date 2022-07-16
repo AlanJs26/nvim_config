@@ -1,5 +1,7 @@
 # nvim config
 
-![startscreen](./imgs/startscreen.png)
+![startscreen](./imgs/startscreen2.png)
 
-![coding](./imgs/coding.png)
+![coding](./imgs/coding2.png)
+
+![telescope](./imgs/telescope.png)
