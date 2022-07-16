@@ -110,7 +110,7 @@ i = { ':noh<cr>',                  'remove highlights'},
 Q = { ':call ExitQuestion()<cr>',  'force quit'},
 q = { ':wqa<cr>',                  'quit save all'},
 n = { ':NvimTreeToggle<cr>',       'file tree' },
-S = { ':Startify<cr>',             'start screen' },
+S = { ':Alpha<cr>',             'start screen' },
 w = { ':w<cr>',                    'write'},
 d = { ':Kwbd<cr>',                 'delete buffer'},
 a = { ':wa<cr>',                   'write all'},
@@ -177,7 +177,7 @@ o = {
 s = {
  name='+sessions',
  n= {':lua floatwin("SSave {{value}}", "New Session")<cr>', 'save session'},
- c= {':SClose<cr>',                                         'close session'},
+ c= {':exec "silent! SaveSession"|let g:auto_session_enabled = v:false|bufdo bwipeout|Alpha<cr>',                                         'close session'},
  s= {':Telescope session-lens search_session<cr>',          'switch session'},
  f= {':SaveSession<cr>',                                    'quick save session'},
  r= {':RestoreSession<cr>',                                 'restore previous session'},
@@ -203,6 +203,14 @@ t = {
  },
 }, {prefix = "<leader>", nowait = true })
 
+if vim.v.argv[#vim.v.argv] == 'echo "noquit"' then
+  wk.register({
+    q = { ':wa|echo "Saved"<cr>',                   'write all'},
+    a = "which_key_ignore",
+
+  }, {prefix = "<leader>", nowait=true, mode= 'n'})
+end
+
 
 TaskManager({
 c = {
@@ -214,7 +222,7 @@ cpp = {
     {":w | sp | term g++ '{{p}}' -o {{t:r}}&&./{{t:r}}", 'Compile and run'},
 },
 python = {
-    {":w | sp | term python3 '{{p}}'", 'run'},
+    {":w | sp | term python3 \"{{p}}\"", 'run'},
 },
 vim = {
     {"source %", 'source current file'},

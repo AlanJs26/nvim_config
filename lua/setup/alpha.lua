@@ -1,228 +1,139 @@
-local status_ok, alpha = pcall(require, "alpha")
-if not status_ok then
-  return
-end
+vim.highlight.create('StartLogo1',  {guifg = "#4b4397" },false)
+vim.highlight.create('StartLogo2',  {guifg = "#474798" },false)
+vim.highlight.create('StartLogo3',  {guifg = "#444a99" },false)
+vim.highlight.create('StartLogo4',  {guifg = "#414e99" },false)
+vim.highlight.create('StartLogo5',  {guifg = "#3f5199" },false)
+vim.highlight.create('StartLogo6',  {guifg = "#3d5499" },false)
+vim.highlight.create('StartLogo7',  {guifg = "#3b5799" },false)
+vim.highlight.create('StartLogo8',  {guifg = "#3a5a99" },false)
+vim.highlight.create('StartLogo9',  {guifg = "#3a5d98" },false)
+vim.highlight.create('StartLogo10', {guifg = "#3b5f97" },false)
+vim.highlight.create('StartLogo11', {guifg = "#3c6296" },false)
 
-local path_ok, path = pcall(require, "plenary.path")
-if not path_ok then
-  return
-end
-
+local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
-local nvim_web_devicons = require "nvim-web-devicons"
-local cdir = vim.fn.getcwd()
+local fortune = require("alpha.fortune")
 
-local function get_extension(fn)
-    local match = fn:match("^.+(%..+)$")
-    local ext = ""
-    if match ~= nil then
-        ext = match:sub(2)
-    end
-    return ext
-end
-
-local function icon(fn)
-    local nwd = require("nvim-web-devicons")
-    local ext = get_extension(fn)
-    return nwd.get_icon(fn, ext, { default = true })
-end
-
-local function file_button(fn, sc, short_fn)
-    short_fn = short_fn or fn
-    local ico_txt
-    local fb_hl = {}
-
-    local ico, hl = icon(fn)
-    local hl_option_type = type(nvim_web_devicons.highlight)
-    if hl_option_type == "boolean" then
-        if hl and nvim_web_devicons.highlight then
-            table.insert(fb_hl, { hl, 0, 1 })
-        end
-    end
-    if hl_option_type == "string" then
-        table.insert(fb_hl, { nvim_web_devicons.highlight, 0, 1 })
-    end
-    ico_txt = ico .. "  "
-
-    local file_button_el = dashboard.button(sc, ico_txt .. short_fn, "<cmd>e " .. fn .. " <CR>")
-    local fn_start = short_fn:match(".*/")
-    if fn_start ~= nil then
-        table.insert(fb_hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt - 2 })
-    end
-    file_button_el.opts.hl = fb_hl
-    return file_button_el
-end
-
-local default_mru_ignore = { "gitcommit" }
-
-local mru_opts = {
-    ignore = function(path, ext)
-        return (string.find(path, "COMMIT_EDITMSG")) or (vim.tbl_contains(default_mru_ignore, ext))
-    end,
+-- Inspired by https://github.com/glepnir/dashboard-nvim with my own flair
+local header = {
+  [[   ⣴⣶⣤⡤⠦⣤⣀⣤⠆     ⣈⣭⣿⣶⣿⣦⣼⣆          ]],
+  [[    ⠉⠻⢿⣿⠿⣿⣿⣶⣦⠤⠄⡠⢾⣿⣿⡿⠋⠉⠉⠻⣿⣿⡛⣦       ]],
+  [[          ⠈⢿⣿⣟⠦ ⣾⣿⣿⣷    ⠻⠿⢿⣿⣧⣄     ]],
+  [[           ⣸⣿⣿⢧ ⢻⠻⣿⣿⣷⣄⣀⠄⠢⣀⡀⠈⠙⠿⠄    ]],
+  [[          ⢠⣿⣿⣿⠈    ⣻⣿⣿⣿⣿⣿⣿⣿⣛⣳⣤⣀⣀   ]],
+  [[   ⢠⣧⣶⣥⡤⢄ ⣸⣿⣿⠘  ⢀⣴⣿⣿⡿⠛⣿⣿⣧⠈⢿⠿⠟⠛⠻⠿⠄  ]],
+  [[  ⣰⣿⣿⠛⠻⣿⣿⡦⢹⣿⣷   ⢊⣿⣿⡏  ⢸⣿⣿⡇ ⢀⣠⣄⣾⠄   ]],
+  [[ ⣠⣿⠿⠛ ⢀⣿⣿⣷⠘⢿⣿⣦⡀ ⢸⢿⣿⣿⣄ ⣸⣿⣿⡇⣪⣿⡿⠿⣿⣷⡄  ]],
+  [[ ⠙⠃   ⣼⣿⡟  ⠈⠻⣿⣿⣦⣌⡇⠻⣿⣿⣷⣿⣿⣿ ⣿⣿⡇ ⠛⠻⢷⣄ ]],
+  [[      ⢻⣿⣿⣄   ⠈⠻⣿⣿⣿⣷⣿⣿⣿⣿⣿⡟ ⠫⢿⣿⡆     ]],
+  [[       ⠻⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⢀⣀⣤⣾⡿⠃     ]],
 }
 
---- @param start number
---- @param cwd string optional
---- @param items_number number optional number of items to generate, default = 10
-local function mru(start, cwd, items_number, opts)
-    opts = opts or mru_opts
-    items_number = items_number or 9
-
-    local oldfiles = {}
-    for _, v in pairs(vim.v.oldfiles) do
-        if #oldfiles == items_number then
-            break
-        end
-        local cwd_cond
-        if not cwd then
-            cwd_cond = true
-        else
-            cwd_cond = vim.startswith(v, cwd)
-        end
-        local ignore = (opts.ignore and opts.ignore(v, get_extension(v))) or false
-        if (vim.fn.filereadable(v) == 1) and cwd_cond and not ignore then
-            oldfiles[#oldfiles + 1] = v
-        end
-    end
-
-    local special_shortcuts = {'a', 's', 'd' }
-    local target_width = 35
-
-    local tbl = {}
-    for i, fn in ipairs(oldfiles) do
-        local short_fn
-        if cwd then
-            short_fn = vim.fn.fnamemodify(fn, ":.")
-        else
-            short_fn = vim.fn.fnamemodify(fn, ":~")
-        end
-
-        if(#short_fn > target_width) then
-          short_fn = path.new(short_fn):shorten(1, {-2, -1})
-          if(#short_fn > target_width) then
-            short_fn = path.new(short_fn):shorten(1, {-1})
-          end
-        end
-
-        local shortcut = ""
-        if i <= #special_shortcuts then
-          shortcut = special_shortcuts[i]
-        else
-          shortcut = tostring(i + start - 1 - #special_shortcuts)
-        end
-
-        local file_button_el = file_button(fn, " " .. shortcut, short_fn)
-        tbl[i] = file_button_el
-    end
-    return {
-        type = "group",
-        val = tbl,
-        opts = {},
-    }
-end
-
-local cool = {
-  [[    ███╗   ███╗ █████╗ ██╗  ██╗███████╗   ]],
-  [[    ████╗ ████║██╔══██╗██║ ██╔╝██╔════╝   ]],
-  [[    ██╔████╔██║███████║█████╔╝ █████╗     ]],
-  [[    ██║╚██╔╝██║██╔══██║██╔═██╗ ██╔══╝     ]],
-  [[    ██║ ╚═╝ ██║██║  ██║██║  ██╗███████╗   ]],
-  [[    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝   ]],
-  [[      ██████╗ ██████╗  ██████╗ ██╗        ]],
-  [[     ██╔════╝██╔═══██╗██╔═══██╗██║        ]],
-  [[     ██║     ██║   ██║██║   ██║██║        ]],
-  [[     ██║     ██║   ██║██║   ██║██║        ]],
-  [[     ╚██████╗╚██████╔╝╚██████╔╝███████╗   ]],
-  [[      ╚═════╝ ╚═════╝  ╚═════╝ ╚══════╝   ]],
-  [[███████╗████████╗██╗   ██╗███████╗███████╗]],
-  [[██╔════╝╚══██╔══╝██║   ██║██╔════╝██╔════╝]],
-  [[███████╗   ██║   ██║   ██║█████╗  █████╗  ]],
-  [[╚════██║   ██║   ██║   ██║██╔══╝  ██╔══╝  ]],
-  [[███████║   ██║   ╚██████╔╝██║     ██║     ]],
-  [[╚══════╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝     ]],
-}
-
-local headers = {cool}
-
-local function header_chars()
-  return headers[ math.random(#headers) ]
-end
-
-local function header_color()
+-- Make the header a bit more fun with some color!
+local function colorize_header()
   local lines = {}
-  for i, line_chars in pairs(header_chars()) do
-    local hi = "StartLogo" .. i
+
+  for i, chars in pairs(header) do
     local line = {
       type = "text",
-      val = line_chars,
+      val = chars,
       opts = {
-        hl = hi,
+        hl = "StartLogo" .. i,
         shrink_margin = false,
         position = "center",
       },
     }
+
     table.insert(lines, line)
   end
 
-  local output = {
-    type = "group",
-    val = lines,
-    opts = { position = "center", },
-  }
-
-  return output
+  return lines
 end
 
-local section_mru = {
-  type = "group",
-  val = {
-    {
-      type = "text",
-      val = "Recent files",
-      opts = {
-        hl = "SpecialComment",
-        shrink_margin = false,
-        position = "center",
-      },
-    },
-    { type = "padding", val = 1 },
-    {
-      type = "group",
-      val = function()
-        return { mru(1, cdir, 9) }
-      end,
-      opts = { shrink_margin = false },
-    },
-  }
+function _G.OpenConfig()
+  local sessionsfolder = vim.fn.stdpath('data')..'/sessions/'
+  local configfile = vim.fn.system('ls -d '..sessionsfolder..'*|rg nvim|head -n1'):gsub('\\', '/'):gsub('%%', '\\%%')
+
+  vim.api.nvim_command('source '..configfile)
+end
+
+dashboard.section.buttons.val = {
+  dashboard.button("e", "  New file", ":ene | startinsert <CR>"),
+  dashboard.button("s", "  Recent sessions", ":silent! Telescope session-lens search_session<CR>"),
+  dashboard.button("f", "  Recent files", ":Telescope oldfiles<CR>"),
+  dashboard.button("r", "  Recent folders", ":Telescope zoxide list<CR>"),
+  dashboard.button("c", "  Config", ":lua OpenConfig()<CR>"),
+  dashboard.button("q", "ﰌ  Quit", ":qa<CR>"),
 }
 
-local buttons = {
-  type = "group",
-  val = {
-    { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
-    { type = "padding", val = 1 },
-    dashboard.button("f", "  Find file", ":FzfLua files <CR>"),
-    dashboard.button("F", "  Find text", ":FzfLua live_grep <CR>"),
-    dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
-    dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
-    dashboard.button( "u", "  Update plugins" , ":PackerSync<CR>"),
-    dashboard.button( "q", "  Quit" , ":qa<CR>"),
+-- Everyone could use a good fortune cookie from time to time, right?
+dashboard.section.footer.val = fortune()
+dashboard.section.footer.opts.hl = "NonText"
+
+-- Hide all the unnecessary visual elements while on the dashboard, and add
+-- them back when leaving the dashboard.
+local group = vim.api.nvim_create_augroup("CleanDashboard", {})
+
+vim.api.nvim_create_autocmd("User", {
+  group = group,
+  pattern = "AlphaReady",
+  callback = function()
+    vim.opt.showtabline = 0
+    vim.opt.showmode = false
+    vim.opt.laststatus = 0
+    vim.opt.showcmd = false
+    vim.opt.ruler = false
+    vim.g.auto_session_enabled = false
+    vim.api.nvim_command('echon ""')
+
+    vim.cmd([[
+      let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val) < 0 && (getbufline(v:val, 1, "$") == [""])')
+      if !empty(buffers)
+          exe 'bd '.join(buffers, ' ')
+      endif
+    ]])
+
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufUnload", {
+  group = group,
+  pattern = "*",
+  callback = function()
+    local unalowedft = {'', 'alpha', 'TelescopePrompt', 'NvimTree'}
+    for _, value in ipairs(unalowedft) do
+      if vim.o.filetype == value then
+        return
+      end
+    end
+    vim.opt.showtabline = 2
+    vim.opt.showmode = true
+    vim.opt.laststatus = 2
+    vim.opt.showcmd = true
+    vim.opt.ruler = true
+    vim.g.auto_session_enabled = true
+  end,
+})
+
+alpha.setup({
+  layout = {
+    { type = "padding", val = 2 },
+    { type = "group", val = colorize_header() },
+    { type = "padding", val = 2 },
+    dashboard.section.buttons,
+    dashboard.section.footer,
   },
-  position = "center",
-}
+  opts = { margin = 5 },
+})
 
-local opts = {
-    layout = {
-        { type = "padding", val = 2 },
-        header_color(),
-        { type = "padding", val = 2 },
-        section_mru,
-        { type = "padding", val = 2 },
-        buttons,
-    },
-    opts = {
-        margin = 5,
-    },
-}
+local newgroup = vim.api.nvim_create_augroup("newgroup", {})
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = newgroup,
+  pattern = "<buffer>",
+  callback = function()
+    if vim.o.filetype == '' then
+      vim.api.nvim_command(':Alpha')
+    end
+  end,
+})
 
-alpha.setup(opts)

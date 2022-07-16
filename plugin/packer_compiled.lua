@@ -137,11 +137,6 @@ _G.packer_plugins = {
     path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\cmp-path",
     url = "https://github.com/hrsh7th/cmp-path"
   },
-  ["dashboard-nvim"] = {
-    loaded = true,
-    path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\dashboard-nvim",
-    url = "https://github.com/glepnir/dashboard-nvim"
-  },
   ["emmet-vim"] = {
     loaded = false,
     needs_bufread = false,
@@ -202,12 +197,9 @@ _G.packer_plugins = {
     url = "https://github.com/mtikekar/nvim-send-to-term"
   },
   ["nvim-tree.lua"] = {
-    commands = { ":NvimTreeToggle", ":NvimTree", ":NvimTreeOpen", ":NvimTreeClose" },
-    config = { 'require("setup.nvim-tree")' },
-    loaded = false,
-    needs_bufread = false,
-    only_cond = false,
-    path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\opt\\nvim-tree.lua",
+    config = { 'require("setup.nvimtree")' },
+    loaded = true,
+    path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-tree.lua",
     url = "https://github.com/kyazdani42/nvim-tree.lua"
   },
   ["nvim-treesitter"] = {
@@ -219,6 +211,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-treesitter-textobjects",
     url = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-web-devicons",
+    url = "https://github.com/kyazdani42/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
@@ -234,7 +231,7 @@ _G.packer_plugins = {
     config = { 'require("setup.session-lens")' },
     loaded = true,
     path = "C:\\Users\\alanj\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\session-lens",
-    url = "https://github.com/rmagatti/session-lens"
+    url = "https://github.com/AlanJs26/session-lens"
   },
   ["sideways.vim"] = {
     loaded = false,
@@ -476,26 +473,18 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: alpha-nvim
-time([[Config for alpha-nvim]], true)
-require("setup.alpha")
-time([[Config for alpha-nvim]], false)
--- Config for: Comment.nvim
-time([[Config for Comment.nvim]], true)
-require("setup.comment")
-time([[Config for Comment.nvim]], false)
 -- Config for: telescope-zoxide
 time([[Config for telescope-zoxide]], true)
 require("setup.zoxide")
 time([[Config for telescope-zoxide]], false)
--- Config for: session-lens
-time([[Config for session-lens]], true)
-require("setup.session-lens")
-time([[Config for session-lens]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
-require("setup.telescope")
-time([[Config for telescope.nvim]], false)
+-- Config for: nvim-tree.lua
+time([[Config for nvim-tree.lua]], true)
+require("setup.nvimtree")
+time([[Config for nvim-tree.lua]], false)
+-- Config for: alpha-nvim
+time([[Config for alpha-nvim]], true)
+require("setup.alpha")
+time([[Config for alpha-nvim]], false)
 -- Config for: auto-session
 time([[Config for auto-session]], true)
 require("setup.auto-session")
@@ -504,34 +493,43 @@ time([[Config for auto-session]], false)
 time([[Config for nvim-cmp]], true)
 require("setup.cmp")
 time([[Config for nvim-cmp]], false)
+-- Config for: session-lens
+time([[Config for session-lens]], true)
+require("setup.session-lens")
+time([[Config for session-lens]], false)
+-- Config for: Comment.nvim
+time([[Config for Comment.nvim]], true)
+require("setup.comment")
+time([[Config for Comment.nvim]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+require("setup.telescope")
+time([[Config for telescope.nvim]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
-pcall(vim.cmd, [[au CmdUndefined :NvimTree ++once lua require"packer.load"({'nvim-tree.lua'}, {}, _G.packer_plugins)]])
-pcall(vim.cmd, [[au CmdUndefined :NvimTreeOpen ++once lua require"packer.load"({'nvim-tree.lua'}, {}, _G.packer_plugins)]])
-pcall(vim.cmd, [[au CmdUndefined :NvimTreeClose ++once lua require"packer.load"({'nvim-tree.lua'}, {}, _G.packer_plugins)]])
-pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file ZenMode lua require("packer.load")({'zen-mode.nvim'}, { cmd = "ZenMode", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file Git lua require("packer.load")({'vim-fugitive'}, { cmd = "Git", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
-pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file MundoToggle lua require("packer.load")({'vim-mundo'}, { cmd = "MundoToggle", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
-pcall(vim.cmd, [[au CmdUndefined :NvimTreeToggle ++once lua require"packer.load"({'nvim-tree.lua'}, {}, _G.packer_plugins)]])
+pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file ZenMode lua require("packer.load")({'zen-mode.nvim'}, { cmd = "ZenMode", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file SymbolsOutline lua require("packer.load")({'symbols-outline.nvim'}, { cmd = "SymbolsOutline", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file SymbolsOutlineOpen lua require("packer.load")({'symbols-outline.nvim'}, { cmd = "SymbolsOutlineOpen", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
+pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file MundoToggle lua require("packer.load")({'vim-mundo'}, { cmd = "MundoToggle", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
 time([[Defining lazy-load commands]], false)
 
 -- Keymap lazy-loads
 time([[Defining lazy-load keymaps]], true)
-vim.cmd [[noremap <silent> <C-n> <cmd>lua require("packer.load")({'vim-visual-multi'}, { keys = "<lt>C-n>", prefix = "" }, _G.packer_plugins)<cr>]]
-vim.cmd [[noremap <silent> <space> <cmd>lua require("packer.load")({'which-key.nvim'}, { keys = "<lt>space>", prefix = "" }, _G.packer_plugins)<cr>]]
-vim.cmd [[noremap <silent> gS <cmd>lua require("packer.load")({'splitjoin.vim'}, { keys = "gS", prefix = "" }, _G.packer_plugins)<cr>]]
-vim.cmd [[noremap <silent> çc <cmd>lua require("packer.load")({'vim-visual-multi'}, { keys = "çc", prefix = "" }, _G.packer_plugins)<cr>]]
 vim.cmd [[noremap <silent> cx <cmd>lua require("packer.load")({'vim-exchange'}, { keys = "cx", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[noremap <silent> çc <cmd>lua require("packer.load")({'vim-visual-multi'}, { keys = "çc", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[noremap <silent> gS <cmd>lua require("packer.load")({'splitjoin.vim'}, { keys = "gS", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[noremap <silent> <space> <cmd>lua require("packer.load")({'which-key.nvim'}, { keys = "<lt>space>", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[noremap <silent> <C-n> <cmd>lua require("packer.load")({'vim-visual-multi'}, { keys = "<lt>C-n>", prefix = "" }, _G.packer_plugins)<cr>]]
 time([[Defining lazy-load keymaps]], false)
 
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'FixCursorHold.nvim', 'vim-markdown', 'emmet-vim', 'vimtex'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType arduino ++once lua require("packer.load")({'vim-arduino'}, { ft = "arduino" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'FixCursorHold.nvim', 'vimtex', 'emmet-vim', 'vim-markdown'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType html ++once lua require("packer.load")({'emmet-vim'}, { ft = "html" }, _G.packer_plugins)]]
 vim.cmd [[au FileType jsxtypescript ++once lua require("packer.load")({'emmet-vim'}, { ft = "jsxtypescript" }, _G.packer_plugins)]]
 vim.cmd [[au FileType javascripttypescript ++once lua require("packer.load")({'emmet-vim'}, { ft = "javascripttypescript" }, _G.packer_plugins)]]
@@ -539,21 +537,14 @@ vim.cmd [[au FileType javascript ++once lua require("packer.load")({'emmet-vim'}
 vim.cmd [[au FileType javascriptreact ++once lua require("packer.load")({'emmet-vim'}, { ft = "javascriptreact" }, _G.packer_plugins)]]
 vim.cmd [[au FileType tex ++once lua require("packer.load")({'vimtex'}, { ft = "tex" }, _G.packer_plugins)]]
 vim.cmd [[au FileType latex ++once lua require("packer.load")({'vimtex'}, { ft = "latex" }, _G.packer_plugins)]]
-vim.cmd [[au FileType arduino ++once lua require("packer.load")({'vim-arduino'}, { ft = "arduino" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
   -- Event lazy-loads
 time([[Defining lazy-load event autocommands]], true)
-vim.cmd [[au BufRead * ++once lua require("packer.load")({'vim-indent-guides', 'vim-polyglot', 'nvim-lspconfig', 'sideways.vim'}, { event = "BufRead *" }, _G.packer_plugins)]]
-vim.cmd [[au VimEnter * ++once lua require("packer.load")({'vim-crunch', 'vim-easy-align', 'bufferline.nvim', 'vim-signify', 'lualine.nvim'}, { event = "VimEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au VimEnter * ++once lua require("packer.load")({'vim-signify', 'bufferline.nvim', 'lualine.nvim', 'vim-easy-align', 'vim-crunch'}, { event = "VimEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au BufRead * ++once lua require("packer.load")({'nvim-lspconfig', 'sideways.vim', 'vim-indent-guides', 'vim-polyglot'}, { event = "BufRead *" }, _G.packer_plugins)]]
 time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
-time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-arduino\ftdetect\arduino.vim]], true)
-vim.cmd [[source C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-arduino\ftdetect\arduino.vim]]
-time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-arduino\ftdetect\arduino.vim]], false)
-time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-markdown\ftdetect\markdown.vim]], true)
-vim.cmd [[source C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-markdown\ftdetect\markdown.vim]]
-time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-markdown\ftdetect\markdown.vim]], false)
 time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vimtex\ftdetect\cls.vim]], true)
 vim.cmd [[source C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vimtex\ftdetect\cls.vim]]
 time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vimtex\ftdetect\cls.vim]], false)
@@ -563,6 +554,12 @@ time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\
 time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vimtex\ftdetect\tikz.vim]], true)
 vim.cmd [[source C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vimtex\ftdetect\tikz.vim]]
 time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vimtex\ftdetect\tikz.vim]], false)
+time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-arduino\ftdetect\arduino.vim]], true)
+vim.cmd [[source C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-arduino\ftdetect\arduino.vim]]
+time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-arduino\ftdetect\arduino.vim]], false)
+time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-markdown\ftdetect\markdown.vim]], true)
+vim.cmd [[source C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-markdown\ftdetect\markdown.vim]]
+time([[Sourcing ftdetect script at: C:\Users\alanj\AppData\Local\nvim-data\site\pack\packer\opt\vim-markdown\ftdetect\markdown.vim]], false)
 vim.cmd("augroup END")
 if should_profile then save_profiles() end
 

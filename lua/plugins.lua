@@ -84,12 +84,8 @@ return packer.startup(function(use)
     use { 'mhinz/vim-startify', config = get_setup('startify'), disable = true }
 
 
-    use { 'glepnir/dashboard-nvim', requires = {
-      { 'kyazdani42/nvim-web-devicons' }
-    } }
-
     use { 'goolord/alpha-nvim', config = get_setup('alpha'), requires = {
-      { 'glepnir/dashboard-nvim' }
+      { 'kyazdani42/nvim-web-devicons' }
     } }
 
     use { 'rmagatti/auto-session', config = get_setup('auto-session') }
@@ -103,14 +99,14 @@ return packer.startup(function(use)
 
     use {'jvgrootveld/telescope-zoxide', config = get_setup('zoxide')}
 
-    use { 'rmagatti/session-lens', config = get_setup('session-lens') }
+    use { 'AlanJs26/session-lens', config = get_setup('session-lens') }
 
     use { 'folke/which-key.nvim', config = get_setup('which-key'), keys = "<space>" }
 
     use { 'akinsho/bufferline.nvim', config = get_setup('bufferline'), event = "VimEnter" }
     use { 'nvim-lualine/lualine.nvim', config = get_setup('lualine'), event = "VimEnter" }
 
-    use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree'), cmd = { ":NvimTreeToggle", ":NvimTree", ":NvimTreeOpen", ":NvimTreeClose" } }
+    use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree') }
 
     use { 'mhinz/vim-signify', event = 'VimEnter' }
 
