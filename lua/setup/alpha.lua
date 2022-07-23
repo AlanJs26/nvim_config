@@ -52,7 +52,7 @@ end
 
 function _G.OpenConfig()
   local sessionsfolder = vim.fn.stdpath('data')..'/sessions/'
-  local configfile = vim.fn.system('ls -d '..sessionsfolder..'*|rg nvim|head -n1'):gsub('\\', '/'):gsub('%%', '\\%%')
+  local configfile = vim.fn.system('ls -d '..sessionsfolder:gsub('\\','/')..'*|rg nvim\\.vim|head -n1'):gsub('\\', '/'):gsub('%%', '\\%%')
 
   vim.api.nvim_command('source '..configfile)
 end

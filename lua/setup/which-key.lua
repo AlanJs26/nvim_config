@@ -1,5 +1,5 @@
 local wk = require('which-key')
-local tm = require('taskmanager')
+require('taskmanager')
 
 wk.setup {
   triggers = {'<space>'},
@@ -96,7 +96,7 @@ vim.cmd([[
   endfunction
 ]])
 
-vim.g.scratchfolder = "C:/Users/alanj/AppData/Local/nvim-data/scratch/"
+vim.g.scratchfolder = vim.fn.stdpath("data") .. "/scratch/"
 
 wk.register({
     -- y = {":'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'}, 
@@ -176,11 +176,11 @@ o = {
 
 s = {
  name='+sessions',
- n= {':lua floatwin("SSave {{value}}", "New Session")<cr>', 'save session'},
- c= {':exec "silent! SaveSession"|let g:auto_session_enabled = v:false|bufdo bwipeout|Alpha<cr>',                                         'close session'},
- s= {':Telescope session-lens search_session<cr>',          'switch session'},
- f= {':SaveSession<cr>',                                    'quick save session'},
- r= {':RestoreSession<cr>',                                 'restore previous session'},
+ n= {':lua floatwin("SSave {{value}}", "New Session")<cr>',                                       'save session'},
+ c= {':exec "silent! SaveSession"|let g:auto_session_enabled = v:false|bufdo bwipeout|Alpha<cr>', 'close session'},
+ s= {':Telescope session-lens search_session<cr>',                                                'switch session'},
+ f= {':SaveSession<cr>',                                                                          'quick save session'},
+ r= {':RestoreSession<cr>',                                                                       'restore previous session'},
 },
 
 t = {
@@ -195,8 +195,8 @@ t = {
  s= {':set spell!<cr>',                                                       'spell'},
  S= {':if &laststatus == 0|set laststatus=2|else|set laststatus=0|endif<cr>', 'statusline'},
  p= {':suspend<cr>',                                                          'suspend'},
- t= {':exe "vsp|term"|exe "SendHere"|norm i<cr>',                             'vertical terminal'},
- T= {':exe "sp|term"|exe "SendHere"|norm i<cr>',                              'horizontal terminal'},
+ t= {':call v:lua.searchTerminal(v:true,v:true)<cr>',                'vertical terminal'},
+ T= {':exe "sp|term"|exe "SendHere"|set nonumber|norm i<cr>',                 'horizontal terminal'},
 
  v= {':vsplit<cr>',                                                           'vertical split'},
  h= {':split<cr>',                                                            'horizontal split'}

@@ -1,33 +1,34 @@
 local options = {
-  clipboard  = 'unnamedplus',
-  autochdir  = true,
-  mouse      = "a",
-  cursorline = true,
-  spell      = false,
-  foldmethod = "syntax",
-  foldlevel  = 99,
-  scrolloff  = 7,
-  shiftwidth = 2,
-  tabstop    = 2,
-  expandtab  = true,
-  smartcase  = true,
-  ignorecase = true,
-  timeoutlen = 300,
-  updatetime = 250,
-  encoding   = "UTF-8",
-  undodir    = vim.fn.stdpath("config").."\\.vim\\undo",
-  undofile   = true,
-  report     = 30,
-  lazyredraw = true,
-  gdefault   = true,
-  cmdheight  = 1,
-  hidden     = true,
-  showmode   = false,
-  splitright = true,
-  splitbelow = true,
-  number     = true,
-  swapfile   = false,
-  wrap       = false,
+  clipboard   = 'unnamedplus',
+  autochdir   = true,
+  -- shell       = 'C:/cygwin64/bin/bash.exe',
+  mouse       = "a",
+  cursorline  = true,
+  spell       = false,
+  foldmethod  = "syntax",
+  foldlevel   = 99,
+  scrolloff   = 7,
+  shiftwidth  = 2,
+  tabstop     = 2,
+  expandtab   = true,
+  smartcase   = true,
+  ignorecase  = true,
+  timeoutlen  = 300,
+  updatetime  = 250,
+  encoding    = "UTF-8",
+  undodir     = vim.fn.stdpath("config").."\\.vim\\undo",
+  undofile    = true,
+  report      = 30,
+  lazyredraw  = true,
+  gdefault    = true,
+  cmdheight   = 1,
+  hidden      = true,
+  showmode    = false,
+  splitright  = true,
+  splitbelow  = true,
+  number      = true,
+  swapfile    = false,
+  wrap        = false,
 }
 
 for key, value in pairs(options) do
@@ -39,11 +40,10 @@ vim.g.maplocalleader = "ç"
 vim.g.tokyonight_style = 'storm' -- available: night, storm
 vim.g.tokyonight_enable_italic = 1
 
-vim.cmd([[
-  colorscheme tokyonight
-]])
 
 vim.cmd([[
+  colorscheme tokyonight
+
   syntax enable
   set cpoptions+=y
   set cinkeys-=:

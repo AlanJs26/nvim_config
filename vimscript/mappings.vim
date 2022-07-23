@@ -117,41 +117,92 @@ function! OpenCurrentAsNewTab()
     call setpos(".", l:currentPos)
 endfunction
 
-"nnoremap <silent> <C-t>       :tabnew      <CR>
-"nnoremap <silent> <C-[>       :tabNext      <CR>
-"nnoremap <silent> <C-\>       :tabprevious  <CR>
-"nnoremap <silent> <C-w>       :tabclose     <CR>
 nmap go :call OpenCurrentAsNewTab()<CR>
 
 lua << EOF
-function _G.searchTerminal()
-  local currentbuf = vim.api.nvim_get_current_buf()
-  local currentbufname = vim.api.nvim_buf_get_name(currentbuf)
+function _G.searchTerminal(shouldsplit, preferclose)
+local api = vim.api
+local bufs = api.nvim_list_bufs()
+local currentwin = api.nvim_get_current_win()
+local currentbuf = api.nvim_get_current_buf()
+
+local w = api.nvim_win_get_width(currentwin)
+local h = api.nvim_win_get_height(currentwin)
+
+local isterm = string.find(api.nvim_buf_get_name(currentbuf), 'term')
+--local shouldsplit = true
+--local preferclose = true
+
+if isterm then
+  if api.nvim_win_get_config(currentwin).relative ~= '' or preferclose then
+    api.nvim_win_close(currentwin, false)
+  else
+    api.nvim_command(':wincmd p')
+  end
+  return
+end
+
+for _,win in ipairs(api.nvim_list_wins()) do
+  local buf = api.nvim_win_get_buf(win)
+  local bufname = api.nvim_buf_get_name(buf)
   
-  if string.find(currentbufname, 'term') then
-    vim.api.nvim_command(':wincmd p')
+  if string.find(bufname, 'term') then
+    api.nvim_set_current_win(win)
+    vim.fn.feedkeys('i')
     return
   end
+end
 
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local config = vim.api.nvim_win_get_config(win);
-    local buf = vim.api.nvim_win_get_buf(win)
-    local bufname = vim.api.nvim_buf_get_name(buf)
-    
-    if string.find(bufname, 'term') then
-      vim.api.nvim_set_current_win(win)
-      vim.fn.feedkeys('i')
-      return
-    end
+local foundbuffer = nil
+
+for _,buf in ipairs(bufs) do
+  if string.find(api.nvim_buf_get_name(buf), 'term')  then
+    foundbuffer = buf
+    break
   end
 end
+
+local floatopts = {
+  width = w-15,
+  height = h-7,
+  relative = 'win',
+  row = 3 ,
+  col = 7,
+  border = 'rounded'
+}
+if foundbuffer == nil then
+  if shouldsplit then
+    api.nvim_command(':vsp|term')
+    api.nvim_command(':SendHere')
+    foundbuffer = api.nvim_get_current_buf()
+    vim.fn.setbufvar(foundbuffer, '&buflisted', 0)
+  else
+    foundbuffer = api.nvim_create_buf(false, false)
+
+    api.nvim_open_win(foundbuffer, true, floatopts )
+    api.nvim_command('term')
+    api.nvim_command(':SendHere')
+    vim.fn.setbufvar(foundbuffer, '&buflisted', 0)
+  end
+else
+  if shouldsplit then
+    api.nvim_command(':vsp')
+    api.nvim_win_set_buf(0,foundbuffer)
+  else
+    api.nvim_open_win(foundbuffer, true, floatopts )
+  end
+end
+vim.o.number = false
+vim.fn.feedkeys('i')
+end
+vim.keymap.set('t', '<A-p>', function()searchTerminal(false,false)end, {noremap = true})
 EOF
 
-nnoremap <silent> <A-d> :vsp<bar>term<CR>:SendHere<CR>i
+nnoremap <silent> <A-d> :call v:lua.searchTerminal(v:true,v:true)<CR>
 tnoremap <silent> <A-d> <C-\><C-n>
 
-tnoremap <silent> <A-p> <C-\><C-n><C-w>p
-nnoremap <silent> <A-p> :call v:lua.searchTerminal()<CR>
+" tnoremap <silent> <A-p> <C-\><C-n><C-w>p
+nnoremap <silent> <A-p> :call v:lua.searchTerminal(v:false,v:false)<CR>
 " nnoremap <silent> <expr> <A-p> v:lua.searchTerminal()
 
 nnoremap <silent> vs       :vsplit     <CR>
