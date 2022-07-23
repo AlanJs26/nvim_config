@@ -80,7 +80,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     -- This sets the spacing and the prefix, obviously.
     virtual_text = {
       spacing = 4,
-      prefix = ''
+      prefix = ' '
     }
   }
 )
@@ -146,7 +146,7 @@ handlers["textDocument/signatureHelp"] = lsp.with(handlers.signature_help, pop_o
 
 --
 require'lspsaga'.init_lsp_saga {
-  error_sign   = '',
+  error_sign   = '', -- 
   warn_sign    = '',
   hint_sign    = '',
   infor_sign   = '',

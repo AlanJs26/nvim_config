@@ -13,13 +13,6 @@ imap     <Up>    <C-O>gk
 imap     <Down>  <C-O>gj
 
 
-
-" :lua floatwin(\'.!inkscape-figures create "{{value}}" "../Files/"\', "add figure")<cr>
-
-" nnoremap <C-f> : silent exec '!inkscape-figures edit "../Files/" > /dev/null 2>&1 &'<CR><CR>:redraw!<CR>
-
-
-
 " Search for selected text.
 " http://vim.wikia.com/wiki/VimTip171
 let s:save_cpo = &cpo | set cpo&vim

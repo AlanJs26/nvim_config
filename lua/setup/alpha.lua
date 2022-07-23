@@ -54,7 +54,11 @@ function _G.OpenConfig()
   local sessionsfolder = vim.fn.stdpath('data')..'/sessions/'
   local configfile = vim.fn.system('ls -d '..sessionsfolder:gsub('\\','/')..'*|rg nvim\\.vim|head -n1'):gsub('\\', '/'):gsub('%%', '\\%%')
 
-  vim.api.nvim_command('source '..configfile)
+  if configfile == '' then
+    vim.api.nvim_command('e '..vim.fn.stdpath('config')..'/init.lua')
+  else
+    vim.api.nvim_command('source '..configfile)
+  end
 end
 
 dashboard.section.buttons.val = {
