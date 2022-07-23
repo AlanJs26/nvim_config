@@ -58,7 +58,9 @@ vim.cmd([[
   " Cursorline
   highlight CursorLine   cterm=NONE guibg=#2C2F45 guifg=NONE
 
-  let g:python3_host_prog = 'C:/Users/alanj/miniconda3/python.exe'
+  if has('win32')
+    let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'
+  endif
 
   autocmd BufEnter,BufNew *.ino :ArduinoChoosePort /dev/ttyUSB0
   autocmd BufEnter,BufNew *.ino :ArduinoSetBaud 115200
