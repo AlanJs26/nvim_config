@@ -1,4 +1,4 @@
-local vimscriptpath = vim.fn.stdpath("config").."\\vimscript\\"
+local vimscriptpath = vim.fn.stdpath("config").."/vimscript/"
 
 require('plugins')
 require('settings')
