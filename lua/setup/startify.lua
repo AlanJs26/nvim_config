@@ -1,4 +1,4 @@
-vim.g.startify_session_dir = 'C:/Users/alanj/AppData/Local/nvim/session'
+vim.g.startify_session_dir = vim.fn.stdpath('data')..'/starify_session'
 
 local startify_ascii_header = {
  '                                           ██\\',
