@@ -82,14 +82,6 @@ vim.api.nvim_create_autocmd("User", {
   group = group,
   pattern = "AlphaReady",
   callback = function()
-    vim.opt.showtabline = 0
-    vim.opt.showmode = false
-    vim.opt.laststatus = 0
-    vim.opt.showcmd = false
-    vim.opt.ruler = false
-    vim.g.auto_session_enabled = false
-    vim.api.nvim_command('echon ""')
-
     vim.cmd([[
       let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val) < 0 && (getbufline(v:val, 1, "$") == [""])')
       if !empty(buffers)
@@ -97,12 +89,18 @@ vim.api.nvim_create_autocmd("User", {
       endif
     ]])
 
+    vim.opt.showcmd = false
+    vim.opt.showmode = false
+    vim.opt.showtabline = 0
+    vim.opt.ruler = false
+    vim.g.auto_session_enabled = false
+    vim.api.nvim_command('echon ""')
   end,
 })
 
 vim.api.nvim_create_autocmd("BufUnload", {
   group = group,
-  pattern = "*",
+  pattern = "<buffer>",
   callback = function()
     local unalowedft = {'', 'alpha', 'TelescopePrompt', 'NvimTree'}
     for _, value in ipairs(unalowedft) do

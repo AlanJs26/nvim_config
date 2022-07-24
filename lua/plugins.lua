@@ -1,4 +1,5 @@
 local fn = vim.fn
+local custom_compile_path =vim.fn.stdpath('data')..'/plugin/packer_compiled.lua' 
 
 -- Automatically install packer
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
@@ -31,6 +32,7 @@ end
 
 -- Have packer use a popup window
 packer.init({
+  compile_path = custom_compile_path,
 	display = {
 		open_fn = function()
 			return require("packer.util").float({ border = "rounded" })
@@ -48,9 +50,10 @@ end
 -- Only required if you have packer configured as `opt`
 -- vim.cmd [[packadd packer.nvim]]
 
-return packer.startup(function(use)
+packer.startup(function(use)
   -- Packer can manage itself
   use { 'wbthomason/packer.nvim' }
+  -- use { vim.fn.stdpath('data')..'/plugin' }
 
   -- libs
   use { 'skywind3000/asyncrun.vim' }
@@ -80,7 +83,7 @@ return packer.startup(function(use)
   use { 'nvim-telescope/telescope.nvim', config = get_setup('telescope') }
   use { 'jvgrootveld/telescope-zoxide', config = get_setup('zoxide') }
 
-  use { 'folke/which-key.nvim', config = get_setup('which-key'), keys = "<space>" }
+  use { 'folke/which-key.nvim', config = get_setup('which-key'), module = 'which-key', keys = '<space>' }
 
   use { 'akinsho/bufferline.nvim', config = get_setup('bufferline'), event = "VimEnter" }
   use { 'nvim-lualine/lualine.nvim', config = get_setup('lualine'), event = "VimEnter" }
@@ -194,3 +197,5 @@ return packer.startup(function(use)
 
 
 end)
+
+vim.cmd('source '..custom_compile_path)

@@ -1,5 +1,4 @@
 local wk = require('which-key')
-require('taskmanager')
 
 wk.setup {
   triggers = {'<space>'},
@@ -25,12 +24,12 @@ vim.cmd([[
   highlight default link WhichKeyGroup     Identifier
   highlight default link WhichKeyDesc      Function
 
-  function! ExitQuestion()
+  function! ExitQuestion(command)
       redraw!
       let choice = confirm("Are you sure you want exit?", "&Yes\n&No", 2)
 
       if choice == 1
-          qa!
+        exec a:command
       endif
   endfunction
 
@@ -101,23 +100,22 @@ vim.g.scratchfolder = vim.fn.stdpath("data") .. "/scratch/"
 wk.register({
     -- y = {":'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'}, 
     c = {nil, 'comment'},
-    --r = {name = 'better replace'},
 }, {prefix = "<leader>", nowait = true, mode='v' })
 
 wk.register({
 -- Q = { ':lua confirmPopup("Are you sure you want exit?", "qa!", "")<cr>',                  'force quit'},
 i = { ':noh<cr>',                  'remove highlights'},
-Q = { ':call ExitQuestion()<cr>',  'force quit'},
+-- Q = { ':call ExitQuestion("qa!")<cr>',  'force quit'},
 q = { ':wqa<cr>',                  'quit save all'},
 n = { ':NvimTreeToggle<cr>',       'file tree' },
-S = { ':Alpha<cr>',             'start screen' },
+S = { ':Alpha<cr>',                'start screen' },
 w = { ':w<cr>',                    'write'},
 d = { ':Kwbd<cr>',                 'delete buffer'},
 a = { ':wa<cr>',                   'write all'},
 p = { ':Telescope<cr>',            'Telescope'},
 g = { ':Telescope live_grep<cr>',  'live grep'},
 f = { ':Telescope find_files<cr>', 'find file'},
-b = {":Telescope buffers<cr>",     'buffers'},
+b = { ':Telescope buffers<cr>',    'buffers'},
 
 -- y = {"vip:'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'},
 -- h = {":lua require('spectre').open()<cr>i",     'find and replace'},
@@ -199,82 +197,16 @@ t = {
  T= {':exe "sp|term"|exe "SendHere"|set nonumber|norm i<cr>',                 'horizontal terminal'},
 
  v= {':vsplit<cr>',                                                           'vertical split'},
- h= {':split<cr>',                                                            'horizontal split'}
+ h= {':split<cr>',                                                            'horizontal split'},
  },
 }, {prefix = "<leader>", nowait = true })
 
 if vim.v.argv[#vim.v.argv] == 'echo "noquit"' then
   wk.register({
-    q = { ':wa|echo "Saved"<cr>',                   'write all'},
-    a = "which_key_ignore",
+    q = { ':call ExitQuestion("wqa")<cr>',                   'quit save all'},
 
   }, {prefix = "<leader>", nowait=true, mode= 'n'})
 end
 
 
-TaskManager({
-c = {
-    -- {"w | sp | term gcc '{{p}}' -o {{t:r}} -Wall -ansi -pedantic -O2 -lm&&./{{t:r}}", 'Compile and run'},
-    {"w | sp | term gcc \"{{p}}\" -o {{t:r}} -Wall -ansi -pedantic -O2 -lm && \"{{t:r}}.exe\"", 'Compile and run'},
-    -- {"w | sp | term gcc \"{{p}}\" -o {{t:r}} -Wall -ansi -pedantic -O2",            'Compile'},
-},
-cpp = {
-    {":w | sp | term g++ '{{p}}' -o {{t:r}}&&./{{t:r}}", 'Compile and run'},
-},
-python = {
-    {":w | sp | term python3 \"{{p}}\"", 'run'},
-},
-vim = {
-    {"source %", 'source current file'},
-},
-rust = {
-    {"w | sp | term cargo run", 'Compile and run'},
-},
-ps1 = {
-    {"w | sp | term powershell.exe -Command \"& '{{p}}'\"", 'Run script'},
-},
-sh = {
-    {"w | sp | term {{p}}", 'Run script'},
-},
-arduino = {
-    {'!killall screen; /home/alan/miniconda3/bin/python /home/alan/Documentos/tools/single-kitty-keys.py arduino "clear -x;echo "compiling..."; arduino-cli compile . && arduino-cli upload -p {{g:arduino_serial_port}} &&screen {{g:arduino_serial_port}}  {{g:arduino_serial_baud}} \r"&', 'Compile and Upload'},
-    {'!killall screen; /home/alan/miniconda3/bin/python /home/alan/Documentos/tools/single-kitty-keys.py arduino "screen {{g:arduino_serial_port}}  {{g:arduino_serial_baud}} \r"&', 'Serial Monitor'},
-},
-})
-
-RegisterWKByFiletype({
-    markdown = {
-        m = {
-            name='+markdown',
-            b= {"So<cr>",                       'bold'},
-            i= {"Si<cr>",                       'italic'},
-            s= {"Su<cr>",                       'strikethrough'},
-            e= {"S=<cr>",                       'emphasis'},
-        }
-    },
-}, 'v')
-RegisterWKByFiletype({
-    markdown = {
-        m = {
-            name='+markdown',
-            b= {'ysiwo<cr>',                            'bold'},
-            i= {'ysiwi<cr>',                            'italic'},
-            s= {'ysiwu<cr>',                            'strikethrough'},
-            e= {'ysiw=<cr>',                            'emphasis'},
-
-            c= {':lua floatwin(\'.!inkscape-figures create "{{value}}" "../Files/"\', "figure name")<cr>',                           'create figure'},
-            a= {':.!a=$(ls ../Files/*.svg|xargs -i basename {}|sed \'s/\\.svg//\'|rofi -dmenu);echo "\\![$a](../Files/$a.svg)"<cr>', 'add figure'},
-            g= {':!inkscape-figures edit ../Files/ > /dev/null 2>&1 &<CR><CR>:redraw!<CR>',                                          'edit figure'},
-
-            -- h= {'iheader<TAB>',                       'add Header'},
-            n= {':lua create_file("iheader<TAB>", ".", "md")<cr>', 'Create new note'},
-        }
-    },
-    c = {
-        m = {
-            name='+clang',
-            n= {':lua create_file("istart<TAB>", "../:file:", "c")<cr>', 'new c project'},
-        }
-    },
-}, 'n')
 
