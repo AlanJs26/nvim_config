@@ -4,6 +4,12 @@ let g:VM_maps = {}
 let g:VM_mouse_mappings = 1
 " let g:VM_maps["select all words in the file"] = 'ça' 
 
+" vim fugitive
+nnoremap <silent>çs :Git<CR>
+
+" vim mundo
+nnoremap <silent> çj :MundoToggle<CR>
+
 " auto pairs
 let g:AutoPairsShortcutToggle = ''
 
@@ -114,6 +120,7 @@ hi Conceal ctermbg=none
 
 " Emmet
 let g:user_emmet_install_global = 1
+let g:user_emmet_leader_key='ç'
 
 
 " Diff highlights and style

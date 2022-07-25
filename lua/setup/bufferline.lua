@@ -13,6 +13,10 @@ require("bufferline").setup{
 
 
 vim.cmd([[
+nmap <silent> <M-[>   :BufferLineCycleNext  <CR>
+nmap <silent> <M-]>   :BufferLineCyclePrev  <CR>
+" nnoremap <silent> <C-[>   :BufferLineMoveNext<CR>
+
 " bufferline
 highlight BufferLineBackground cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
 highlight BufferLineCloseButton cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
