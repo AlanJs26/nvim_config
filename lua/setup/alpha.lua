@@ -1,14 +1,14 @@
-vim.highlight.create('StartLogo1',  {guifg = "#4b4397" },false)
-vim.highlight.create('StartLogo2',  {guifg = "#474798" },false)
-vim.highlight.create('StartLogo3',  {guifg = "#444a99" },false)
-vim.highlight.create('StartLogo4',  {guifg = "#414e99" },false)
-vim.highlight.create('StartLogo5',  {guifg = "#3f5199" },false)
-vim.highlight.create('StartLogo6',  {guifg = "#3d5499" },false)
-vim.highlight.create('StartLogo7',  {guifg = "#3b5799" },false)
-vim.highlight.create('StartLogo8',  {guifg = "#3a5a99" },false)
-vim.highlight.create('StartLogo9',  {guifg = "#3a5d98" },false)
-vim.highlight.create('StartLogo10', {guifg = "#3b5f97" },false)
-vim.highlight.create('StartLogo11', {guifg = "#3c6296" },false)
+vim.api.nvim_set_hl(0, 'StartLogo1',  {fg = "#4b4397" })
+vim.api.nvim_set_hl(0, 'StartLogo2',  {fg = "#474798" })
+vim.api.nvim_set_hl(0, 'StartLogo3',  {fg = "#444a99" })
+vim.api.nvim_set_hl(0, 'StartLogo4',  {fg = "#414e99" })
+vim.api.nvim_set_hl(0, 'StartLogo5',  {fg = "#3f5199" })
+vim.api.nvim_set_hl(0, 'StartLogo6',  {fg = "#3d5499" })
+vim.api.nvim_set_hl(0, 'StartLogo7',  {fg = "#3b5799" })
+vim.api.nvim_set_hl(0, 'StartLogo8',  {fg = "#3a5a99" })
+vim.api.nvim_set_hl(0, 'StartLogo9',  {fg = "#3a5d98" })
+vim.api.nvim_set_hl(0, 'StartLogo10', {fg = "#3b5f97" })
+vim.api.nvim_set_hl(0, 'StartLogo11', {fg = "#3c6296" })
 
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
@@ -54,7 +54,7 @@ function _G.OpenConfig()
   local sessionsfolder = vim.fn.stdpath('data')..'/sessions/'
   local configfile = vim.fn.system('ls -d '..sessionsfolder:gsub('\\','/')..'*|rg nvim\\.vim|head -n1'):gsub('\\', '/'):gsub('%%', '\\%%')
 
-  if configfile == '' then
+  if string.match(configfile, '/nvim') == nil then
     vim.api.nvim_command('e '..vim.fn.stdpath('config')..'/init.lua')
   else
     vim.api.nvim_command('source '..configfile)
@@ -67,7 +67,7 @@ dashboard.section.buttons.val = {
   dashboard.button("f", "  Recent files", ":Telescope oldfiles<CR>"),
   dashboard.button("r", "  Recent folders", ":Telescope zoxide list<CR>"),
   dashboard.button("c", "  Config", ":lua OpenConfig()<CR>"),
-  dashboard.button("q", "ﰌ  Quit", ":qa<CR>"),
+  dashboard.button("q", "  Quit", ":qa<CR>"),
 }
 
 -- Everyone could use a good fortune cookie from time to time, right?

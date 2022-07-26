@@ -65,7 +65,19 @@ lsp_installer.on_server_ready(function(server)
 
 end)
 
-
+-- clangd
+nvim_lsp.clangd.setup {
+  on_attach = on_attach,
+  -- capabilities = capabilities,
+  filetypes = {'arduino', 'c', 'cpp', 'ino'},
+  -- cmd = {'C:/tools/clangd_14.0.3/bin/clangd.exe', '--resource-dir','C:/SFML-2.4.2;C:/tools/clangd_14.0.3/lib/clang/14.0.3/include'},
+  --[[ settings = {
+    clangd = {
+      arguments = {'-IC:/SFML-2.4.2/include', '-LC:/SFML-2.4.2/lib'},
+      path = 'alan'
+    }
+  } ]]
+}
 
 -- TypeScript
 nvim_lsp.tsserver.setup {
@@ -84,11 +96,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     }
   }
 )
-
-nvim_lsp.clangd.setup{
-   on_attach = on_attach,
-   filetypes = {'arduino', 'c', 'cpp', 'ino'}
-}
 
 require'nvim-treesitter.configs'.setup {
   highlight = { enable = true, disable = { 'vim' } },
