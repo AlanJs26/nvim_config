@@ -18,10 +18,12 @@ nmap <silent> <M-]>   :BufferLineCyclePrev  <CR>
 " nnoremap <silent> <C-[>   :BufferLineMoveNext<CR>
 
 " bufferline
-highlight BufferLineBackground cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
-highlight BufferLineCloseButton cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
-highlight BufferlineSeparator guibg=#1D202F guifg=#1D202F
-highlight BufferlineTabSelected guifg=#354166
+if has('win32')
+  highlight BufferLineBackground cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
+  highlight BufferLineCloseButton cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
+  highlight BufferlineSeparator guibg=#1D202F guifg=#1D202F
+  highlight BufferlineTabSelected guifg=#354166
 
-highlight BufferLineBufferSelected cterm=bold gui=bold guifg=#91adff
+  highlight BufferLineBufferSelected cterm=bold gui=bold guifg=#91adff
+endif
 ]])
