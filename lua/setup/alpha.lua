@@ -54,7 +54,7 @@ function _G.OpenConfig()
   local sessionsfolder = vim.fn.stdpath('data')..'/sessions/'
   local configfile = vim.fn.system('ls -d '..sessionsfolder:gsub('\\','/')..'*|rg nvim\\.vim|head -n1'):gsub('\\', '/'):gsub('%%', '\\%%')
 
-  if string.match(configfile, '/nvim') == nil then
+  if string.match(configfile, '%*') then
     vim.api.nvim_command('e '..vim.fn.stdpath('config')..'/init.lua')
   else
     vim.api.nvim_command('source '..configfile)
