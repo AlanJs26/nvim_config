@@ -37,7 +37,7 @@ end
 
 vim.g.maplocalleader = "ç"
 
-if vim.fn.has('win32') then
+if vim.fn.has('win32') == 1 then
   vim.g.tokyonight_style = 'storm' -- available: night, storm
 else
   vim.g.tokyonight_style = 'night' -- available: night, storm
