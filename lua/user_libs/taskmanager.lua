@@ -16,6 +16,8 @@ function M.setup(opts)
     after = 'call feedkeys("i")',
   }
 
+  M.lines = {}
+
   if opts ~= nil then
     for key, value in pairs(opts) do
       M.opts[key] = value
@@ -198,7 +200,7 @@ function M.updateMenu()
   local Menu = require("nui.menu")
   local event = require("nui.utils.autocmd").event
 
-  local lines = {}
+  M.lines = {}
 
   for filetype, FiletypeTasks in pairs(M.tasks) do
     if filetype == vim.o.filetype then
@@ -207,7 +209,7 @@ function M.updateMenu()
         if task.disabled then
           disabled = 'disabled'
         end
-        table.insert(lines, Menu.item(' ['..disabled..']  ' .. task[2]))
+        table.insert(M.lines, Menu.item(' ['..disabled..']  ' .. task[2]))
       end
       break
     end
@@ -217,7 +219,7 @@ function M.updateMenu()
     position = "50%",
     size = {
       width = 65,
-      height = #lines,
+      height = #M.lines == 0 and 4 or #M.lines,
     },
     border = {
       style = "single",
@@ -230,7 +232,7 @@ function M.updateMenu()
       winhighlight = "Normal:Normal,FloatBorder:Normal",
     },
   }, {
-    lines = lines,
+    lines = M.lines,
     max_width = 20,
     keymap = {
       focus_next = { "j", "<Down>", "<Tab>" },

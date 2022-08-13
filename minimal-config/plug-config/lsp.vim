@@ -58,6 +58,7 @@ nvim_lsp.clangd.setup{
    filetypes = {'arduino', 'c', 'cpp', 'ino'}
 }
 
+
 require'nvim-treesitter.configs'.setup {
   highlight = { enable = true, disable = { 'vim' } },
   textobjects = {

@@ -1,5 +1,5 @@
 local fn = vim.fn
-local custom_compile_path =vim.fn.stdpath('data')..'/plugin/packer_compiled.lua' 
+local custom_compile_path =vim.fn.stdpath('data')..'/plugin/packer_compiled.lua'
 
 -- Automatically install packer
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
@@ -40,7 +40,7 @@ packer.init({
 	},
 })
 
-function get_setup(name)
+local function get_setup(name)
   return string.format('require("setup.%s")', name)
 end
 
@@ -67,17 +67,19 @@ packer.startup(function(use)
   use { 'mtikekar/nvim-send-to-term' }
 
 
-  -- ui related
-  use { 'machakann/vim-highlightedyank' }
+  -- gui related
   use { 'markonm/traces.vim' }
 
-  use { 'sheerun/vim-polyglot', event = 'BufRead' }
+  -- use { 'sheerun/vim-polyglot', event = 'BufRead' }
 
   use { 'folke/zen-mode.nvim', config = get_setup('zen-mode'), cmd = "ZenMode" }
   use { 'rrethy/vim-hexokinase',  run = 'make hexokinase'  }
 
+  use { 'ziontee113/color-picker.nvim', config = function ()
+    require('color-picker')
+  end }
   use { 'mhinz/vim-signify', event = 'VimEnter' }
-  use { 'nathanaelkane/vim-indent-guides', event = 'BufRead' }
+  use { 'lukas-reineke/indent-blankline.nvim', event = 'BufRead', config = get_setup('indent-blankline') }
 
   -- ui/ide related plugins
   use { 'nvim-telescope/telescope.nvim', config = get_setup('telescope') }
@@ -89,20 +91,18 @@ packer.startup(function(use)
   use { 'nvim-lualine/lualine.nvim', config = get_setup('lualine'), event = "VimEnter" }
   use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree') }
 
-  use { 'simnalamburt/vim-mundo', cmd = "MundoToggle", disable = true  }
-  use { 'simrat39/symbols-outline.nvim', config = get_setup('symbols-outline'), cmd = { "SymbolsOutline", "SymbolsOutlineOpen" }}
+  use { 'simnalamburt/vim-mundo', cmd = "MundoToggle"  }
   use { 'tpope/vim-fugitive', cmd = 'Git' }
 
   -- theme
   use { 'folke/tokyonight.nvim', branch = 'main' }
 
   -- writing essentials
-  use { 'justinmk/vim-sneak', disable = true }
+  use { 'tpope/vim-repeat' }
   use { 'wellle/targets.vim' }
   use { 'jiangmiao/auto-pairs' }
   use { 'tpope/vim-surround' }
   use { 'rhysd/clever-f.vim' }
-  use { 'tpope/vim-repeat' }
 
   use { 'inkarkat/vim-ReplaceWithRegister', requires = {
       { 'inkarkat/vim-ingo-library' }
@@ -113,12 +113,13 @@ packer.startup(function(use)
       { 'kana/vim-textobj-entire' }
   }
 
-  use { 'preservim/nerdcommenter', event = "BufRead", disable = true }
   use { 'numToStr/Comment.nvim', config = get_setup('comment') }
 
   -- less important writing plugins
   use { 'arecarn/vim-selection' }
   use { 'arecarn/vim-crunch', event = 'VimEnter' }
+
+  -- use {'stevearc/gkeep.nvim', run = ':UpdateRemotePlugins'}
 
   use { 'mg979/vim-visual-multi', branch = 'master', keys = {"çc", "<C-n>"} }
   use { 'AndrewRadev/splitjoin.vim', keys = "gS" }
@@ -126,18 +127,11 @@ packer.startup(function(use)
   -- use 'inkarkat/vim-visualrepeat'
 
   use { 'ggandor/lightspeed.nvim', config = get_setup('lightspeed') }
-  use { 'benfrain/pounce.nvim', config = get_setup('pounce'), disable = true }
   use {'junegunn/vim-easy-align', event = 'VimEnter'}
-  use { 'tommcdo/vim-exchange', keys = "cx" }
-  -- use { 'tpope/vim-abolish'}
-
-
-  use { 'honza/vim-snippets' }
-  use { 'SirVer/ultisnips' }
+  use { 'tommcdo/vim-exchange', keys = {"cx", "X"} }
 
 
   -- start menu and sessions
-  use { 'mhinz/vim-startify', config = get_setup('startify'), disable = true }
   use { 'goolord/alpha-nvim', config = get_setup('alpha'), requires = {
       { 'kyazdani42/nvim-web-devicons' }
   } }
@@ -145,24 +139,31 @@ packer.startup(function(use)
   use { 'rmagatti/auto-session', config = get_setup('auto-session') }
   use { 'AlanJs26/session-lens', config = get_setup('session-lens') }
 
-  -- lsp
-  use { 'neovim/nvim-lspconfig', config = get_setup('lsp'), event = 'BufRead' }
 
-  use {
-    'tami5/lspsaga.nvim',
-    { 'williamboman/nvim-lsp-installer'},
-    { 'ray-x/lsp_signature.nvim' },
-    { 'eeeXun/lspkind-nvim' },
-    event = 'BufRead'
-  }
+  -- snippets
+  use { 'honza/vim-snippets' }
+  use { 'L3MON4D3/LuaSnip', after = 'nvim-cmp', config = get_setup('luasnip') }
+  -- use { 'SirVer/ultisnips' }
+
+  -- lsp
+  use { 'neovim/nvim-lspconfig', requires = {
+    { 'williamboman/mason.nvim' },
+    { 'williamboman/mason-lspconfig.nvim' },
+    { 'glepnir/lspsaga.nvim' } ,
+    { 'ray-x/lsp_signature.nvim' } ,
+  }, config = get_setup('lsp'), event = 'BufRead' }
 
   use { 'hrsh7th/nvim-cmp',
     requires = {
+      { 'eeeXun/lspkind-nvim' },
       { 'hrsh7th/cmp-nvim-lsp' },
       { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-calc' },
+      { 'saadparwaiz1/cmp_luasnip' },
       { 'hrsh7th/cmp-path' },
-      { 'quangnguyen30192/cmp-nvim-ultisnips' }
-      -- {'hrsh7th/cmp-cmdline'},
+      -- { 'quangnguyen30192/cmp-nvim-ultisnips' },
+      {'hrsh7th/cmp-cmdline'},
+      { 'ziontee113/color-picker.nvim' },
     },
     config = get_setup('cmp')
   }

@@ -3,6 +3,9 @@
 let g:mapleader="\<space>"
 
 map ZZ <Nop>
+autocmd BufRead * imap <M-k> <up>
+
+cnoreabbrev git Git
 
 nnoremap <silent> <M-w>       :close       <CR>
 nnoremap <silent> <M-v>       :VisualBlock <CR>
@@ -31,6 +34,12 @@ nnoremap <C-j>   <C-w>j
 nnoremap <C-k>   <C-w>k
 nnoremap <C-l>   <C-w>l
 nnoremap <C-m>   <C-w>w
+
+" Move cursor while in insert mode
+inoremap <silent> <M-h>       <left>
+inoremap <silent> <M-j>       <down>
+imap <silent> <M-k>       <up> 
+inoremap <silent> <M-l>       <right>
 
 nnoremap <C-z> :undo<CR>
 inoremap <C-z> <C-O>:undo<CR>

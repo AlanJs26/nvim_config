@@ -118,7 +118,7 @@ f = { ':Telescope find_files<cr>', 'find file'},
 b = { ':Telescope buffers<cr>',    'buffers'},
 
 -- y = {"vip:'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'},
--- h = {":lua require('spectre').open()<cr>i",     'find and replace'},
+h = {":MundoToggle<cr>",     'undo history'},
 
 r = {name = '+open recent',
   r = {":Telescope zoxide list<cr>",     'recent folders'},
@@ -129,9 +129,9 @@ l = {
  name='+lsp',
  d= {':Lspsaga preview_definition<cr>',       'preview definition'},
 --  h={':lua vim.lsp.buf.hover()<cr>',                                      'hover'},
- h= {':Lspsaga hover_doc<cr>',                'hover'},
- D= {':lua vim.lsp.buf.definition()<cr>',     'definition'},
- i= {':lua vim.lsp.buf.implementation()<cr>', 'implementation'},
+ -- h= {':Lspsaga hover_doc<cr>',                'hover'},
+ -- D= {':lua vim.lsp.buf.definition()<cr>',     'definition'},
+ -- i= {':lua vim.lsp.buf.implementation()<cr>', 'implementation'},
  s= {':lua vim.lsp.buf.signature_help()<cr>', 'signature help'},
 -- a= {':lua vim.lsp.buf.add_workspace_folder()<cr>',                       'add wosksp folder'},
 -- A= {':lua vim.lsp.buf.remove_workspace_folder()<cr>',                    'remove worksp folder'},
@@ -139,10 +139,11 @@ l = {
 --  t= {':lua vim.lsp.buf.type_definition()<cr>',                           'type definition'},
  t= {':Telescope lsp_document_symbols<cr>',   'telescope symbols'},
  r= {':Lspsaga rename<cr>',                   'rename'},
+ k= {':PickColor<cr>',                        'Color Picker'},
 -- c={':lua vim.lsp.buf.code_action()<cr>',                                 'code action'},
  c= {':Lspsaga code_action<cr>',              'code action'},
- o= {':Lspsaga open_floaterm<cr>',            'float terminal'},
- R= {':lua vim.lsp.buf.references()<cr>',     'references'},
+ -- o= {':Lspsaga open_floaterm<cr>',            'float terminal'},
+ -- R= {':lua vim.lsp.buf.references()<cr>',     'references'},
  l= {':Lspsaga show_line_diagnostics<cr>',    'show diagnostics'},
 -- l={'<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>',               'show diagnostics'},
  p= {':Lspsaga diagnostic_jump_prev<cr>',     'previous diagnostic'},
@@ -151,7 +152,7 @@ l = {
 -- n={'<cmd>lua vim.lsp.diagnostic.goto_next()<cr>',                           'next diagnostic'},
  f= {':lua vim.lsp.buf.formatting()<cr>',     'formatting'},
  w= {':cd %:p:h|pwd<cr>',                     'use current buffer as working dir'},
- m= {':SymbolsOutline<cr>',                   'symbols'}
+ m= {':LSoutlineToggle<cr>',                  'symbols'}
  },
 
 c = {nil, 'comment'},
@@ -186,20 +187,28 @@ t = {
  z= {':ZenMode<cr>',                                                          'zen mode'},
  l= {':call CicleNumberMode()<cr>',                                           'line numbers'},
  L= {':set nonumber norelativenumber|let b:currentNumberMode = 0<cr>',        'hide line numbers'},
- i= {':IndentGuidesToggle<cr>',                                               'toggle indent guides'},
+ i= {':IndentBlanklineToggle<cr>',                                            'toggle indent guides'},
  w= {':call ToggleWrap(-1)<cr>',                                              'toggle word wrap'},
  m= {':wincmd ||wincmd _<cr>',                                                'maximize window'},
  n= {':wincmd =<cr>',                                                         'normalize windows'},
  s= {':set spell!<cr>',                                                       'spell'},
  S= {':if &laststatus == 0|set laststatus=2|else|set laststatus=0|endif<cr>', 'statusline'},
- p= {':suspend<cr>',                                                          'suspend'},
- t= {':call v:lua.searchTerminal(v:true,v:true)<cr>',                'vertical terminal'},
+ t= {':call v:lua.searchTerminal(v:true,v:true)<cr>',                         'vertical terminal'},
  T= {':exe "sp|term"|exe "SendHere"|set nonumber|norm i<cr>',                 'horizontal terminal'},
+ g= {':Git<cr>',                                                              'Git' },
 
  v= {':vsplit<cr>',                                                           'vertical split'},
  h= {':split<cr>',                                                            'horizontal split'},
  },
 }, {prefix = "<leader>", nowait = true })
+
+if not vim.fn.has('win32') then
+  wk.register({
+    t ={
+      p= {':suspend<cr>',                                   'suspend'},
+    }
+  }, {prefix = "<leader>", nowait=true, mode= 'n'})
+end
 
 if vim.v.argv[#vim.v.argv] == 'echo "noquit"' then
   wk.register({

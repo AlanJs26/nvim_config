@@ -18,7 +18,7 @@ nmap <silent> <M-]>   :BufferLineCyclePrev  <CR>
 " nnoremap <silent> <C-[>   :BufferLineMoveNext<CR>
 
 " bufferline
-if has('win32')
+if g:tokyonight_style == 'storm'
   highlight BufferLineBackground cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
   highlight BufferLineCloseButton cterm=italic gui=italic guibg=#202336 guifg=#4b61a3
   highlight BufferlineSeparator guibg=#1D202F guifg=#1D202F

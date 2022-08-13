@@ -1,19 +1,4 @@
 
-vim.cmd([[
-  highlight link LspSagaFinderSelection Search
-
-
-  " nnoremap <silent>K :Lspsaga hover_doc<CR>
-  " inoremap <silent> <C-k> <Cmd>Lspsaga hover_doc<CR>
-
-  " nnoremap <silent> <A-d> :Lspsaga open_floaterm<CR>
-  " tnoremap <silent> <A-d> <C-\><C-n>:Lspsaga close_floaterm<CR>
-
-  " inoremap <silent> <C-k> <Cmd>Lspsaga signature_help<CR>
-  nnoremap <silent> gh <Cmd>Lspsaga lsp_finder<CR>
-  nnoremap <silent> dn :Lspsaga diagnostic_jump_next<CR>
-  nnoremap <silent> dp :Lspsaga diagnostic_jump_prev<CR>
-]])
 
 -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -37,33 +22,36 @@ local on_attach = function(client, bufnr)
 
 end
 
+-- mason / lsp_install
 
-local lsp_installer = require("nvim-lsp-installer")
+require('mason').setup()
 
-lsp_installer.on_server_ready(function(server)
-  local opts = {
-    on_attach = on_attach,
-    capabilities = capabilities
-  }
+local mason_lspconfig = require("mason-lspconfig")
+mason_lspconfig.setup()
 
-  if server.name == 'sumneko_lua' then
-    server:setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-      Lua = {
-        diagnostics = {
-          globals = { 'vim' }
+mason_lspconfig.setup_handlers({
+  function (server_name) -- default handler
+    nvim_lsp[server_name].setup({
+      on_attach = on_attach,
+      capabilities = capabilities
+    })
+  end,
+
+  ['sumneko_lua'] = function ()
+    nvim_lsp.sumneko_lua.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' }
+          }
         }
       }
-    }
   })
-  else
-    server:setup(opts)
-  end
+end,
+})
 
-
-end)
 
 -- clangd
 nvim_lsp.clangd.setup {
@@ -71,32 +59,23 @@ nvim_lsp.clangd.setup {
   -- capabilities = capabilities,
   filetypes = {'arduino', 'c', 'cpp', 'ino'},
   -- cmd = {'C:/tools/clangd_14.0.3/bin/clangd.exe', '--resource-dir','C:/SFML-2.4.2;C:/tools/clangd_14.0.3/lib/clang/14.0.3/include'},
-  --[[ settings = {
+  settings = {
     clangd = {
-      arguments = {'-IC:/SFML-2.4.2/include', '-LC:/SFML-2.4.2/lib'},
-      path = 'alan'
-    }
-  } ]]
-}
-
--- TypeScript
-nvim_lsp.tsserver.setup {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
-
--- icon
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    -- This sets the spacing and the prefix, obviously.
-    virtual_text = {
-      spacing = 4,
-      prefix = ' '
+      arguments = {
+        "-IC:/SFML-2.4.2/include",
+        "-LC:/SFML-2.4.2/lib",
+        "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
+        "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32",
+        "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward",
+        "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include",
+        "-IC:/MinGW/include",
+        "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
+      },
     }
   }
-)
+}
 
+require 'nvim-treesitter.install'.compilers = {'gcc'}
 require'nvim-treesitter.configs'.setup {
   highlight = { enable = true, disable = { 'vim' } },
   textobjects = {
@@ -141,27 +120,68 @@ require'nvim-treesitter.configs'.setup {
 
 
 
---- lsp-saga
 
 local lsp = vim.lsp
 local handlers = lsp.handlers
+
+-- icon
+lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  lsp.diagnostic.on_publish_diagnostics, {
+    underline = true,
+    -- This sets the spacing and the prefix, obviously.
+    virtual_text = {
+      spacing = 4,
+      prefix = ' '
+    }
+  }
+)
+
 
 -- Hover doc popup
 local pop_opts = { border = "rounded", max_width = 80 }
 handlers["textDocument/hover"] = lsp.with(handlers.hover, pop_opts)
 handlers["textDocument/signatureHelp"] = lsp.with(handlers.signature_help, pop_opts)
 
---
-require'lspsaga'.init_lsp_saga {
-  error_sign   = '', -- 
-  warn_sign    = '',
-  hint_sign    = '',
-  infor_sign   = '',
-  border_style = "round",
-  code_action_prompt = { enable = false }
-}
+--- lsp-saga
+-- use custom config
+require('lspsaga').init_lsp_saga({
+  border_style = "rounded", 
+  diagnostic_header = { "", "", "", "" },
+  show_diagnostic_source = true,
+  code_action_icon = "",
+  code_action_lightbulb = {
+    enable = true,
+    sign = true,
+    enable_in_insert = true,
+    sign_priority = 20,
+    virtual_text = true,
+  },
 
+})
 
+vim.keymap.set('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", {silent = true})
+vim.keymap.set('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", {silent = true})
+vim.keymap.set('n', 'dp', "<cmd>Lspsaga diagnostic_jump_prev<CR>", {silent = true})
+
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+vim.cmd([[
+  highlight link LspSagaFinderSelection Search
+
+  sign define LspDiagnosticsSignHint        text=
+  sign define LspDiagnosticsSignError       text=
+  sign define LspDiagnosticsSignWarning     text=
+  sign define LspDiagnosticsSignInformation text=
+
+  " nnoremap <silent>K :Lspsaga hover_doc<CR>
+  " inoremap <silent> <C-k> <Cmd>Lspsaga hover_doc<CR>
+
+  " inoremap <silent> <C-k> <Cmd>Lspsaga signature_help<CR>
+]])
 
 
 
