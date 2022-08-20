@@ -22,3 +22,8 @@ require("telescope._extensions.zoxide.config").setup({
     ["<C-q>"] = { action = z_utils.create_basic_command("split") },
   }
 })
+
+vim.cmd([[
+  autocmd DirChanged * silent exec '!zoxide add "'..expand('%:p:h')..'"'
+]])
+

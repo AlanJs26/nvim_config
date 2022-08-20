@@ -4,6 +4,8 @@ let g:mapleader="\<space>"
 
 map ZZ <Nop>
 autocmd BufRead * imap <M-k> <up>
+imap <c-l> <End>
+inoremap <c-h> <c-o>^
 
 cnoreabbrev git Git
 

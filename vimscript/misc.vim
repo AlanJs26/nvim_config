@@ -12,6 +12,7 @@ nnoremap <silent> çj :MundoToggle<CR>
 
 " auto pairs
 let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsMapCh = 0
 
 " fix cursor hold
 let g:cursorhold_updatetime = 600

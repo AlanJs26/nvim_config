@@ -118,7 +118,7 @@ f = { ':Telescope find_files<cr>', 'find file'},
 b = { ':Telescope buffers<cr>',    'buffers'},
 
 -- y = {"vip:'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'},
-h = {":MundoToggle<cr>",     'undo history'},
+-- h = {":MundoToggle<cr>",     'undo history'},
 
 r = {name = '+open recent',
   r = {":Telescope zoxide list<cr>",     'recent folders'},

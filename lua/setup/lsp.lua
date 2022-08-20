@@ -75,7 +75,7 @@ nvim_lsp.clangd.setup {
   }
 }
 
-require 'nvim-treesitter.install'.compilers = {'gcc'}
+require 'nvim-treesitter.install'.compilers = {'clang', 'gcc'}
 require'nvim-treesitter.configs'.setup {
   highlight = { enable = true, disable = { 'vim' } },
   textobjects = {

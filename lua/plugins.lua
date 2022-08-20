@@ -91,7 +91,7 @@ packer.startup(function(use)
   use { 'nvim-lualine/lualine.nvim', config = get_setup('lualine'), event = "VimEnter" }
   use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree') }
 
-  use { 'simnalamburt/vim-mundo', cmd = "MundoToggle"  }
+  -- use { 'simnalamburt/vim-mundo', cmd = "MundoToggle"  }
   use { 'tpope/vim-fugitive', cmd = 'Git' }
 
   -- theme
@@ -141,8 +141,8 @@ packer.startup(function(use)
 
 
   -- snippets
-  use { 'honza/vim-snippets' }
-  use { 'L3MON4D3/LuaSnip', after = 'nvim-cmp', config = get_setup('luasnip') }
+  use { 'rafamadriz/friendly-snippets' }
+  use { 'L3MON4D3/LuaSnip', config = get_setup('luasnip') }
   -- use { 'SirVer/ultisnips' }
 
   -- lsp
