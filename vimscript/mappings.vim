@@ -7,6 +7,9 @@ autocmd BufRead * imap <M-k> <up>
 imap <c-l> <End>
 inoremap <c-h> <c-o>^
 
+command! ReloadTasks source C:\Users\alanj\AppData\Local\nvim\lua\tasks.lua
+command! EditTasks e C:\Users\alanj\AppData\Local\nvim\lua\tasks.lua
+
 cnoreabbrev git Git
 
 nnoremap <silent> <M-w>       :close       <CR>

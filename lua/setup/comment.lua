@@ -66,7 +66,8 @@ require('Comment').setup({
     post_hook = nil,
 })
 
-vim.api.nvim_set_keymap('x', '<space>c', '<Plug>(comment_toggle_blockwise_visual)', {})
+-- vim.api.nvim_set_keymap('x', '<space>c', '<Plug>(comment_toggle_blockwise_visual)', {})
+vim.api.nvim_set_keymap('x', '<space>c', '<Plug>(comment_toggle_linewise_visual)', {})
 
 local ft = require('Comment.ft')
 

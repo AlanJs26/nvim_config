@@ -70,7 +70,7 @@ packer.startup(function(use)
   -- gui related
   use { 'markonm/traces.vim' }
 
-  -- use { 'sheerun/vim-polyglot', event = 'BufRead' }
+  use { 'sheerun/vim-polyglot', event = 'BufRead' }
 
   use { 'folke/zen-mode.nvim', config = get_setup('zen-mode'), cmd = "ZenMode" }
   use { 'rrethy/vim-hexokinase',  run = 'make hexokinase'  }
@@ -90,6 +90,7 @@ packer.startup(function(use)
   use { 'akinsho/bufferline.nvim', config = get_setup('bufferline'), event = "VimEnter" }
   use { 'nvim-lualine/lualine.nvim', config = get_setup('lualine'), event = "VimEnter" }
   use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree') }
+
 
   -- use { 'simnalamburt/vim-mundo', cmd = "MundoToggle"  }
   use { 'tpope/vim-fugitive', cmd = 'Git' }
