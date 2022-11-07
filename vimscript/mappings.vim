@@ -96,7 +96,7 @@ function! OpenCurrentAsNewTab()
     call setpos(".", l:currentPos)
 endfunction
 
-nmap go :call OpenCurrentAsNewTab()<CR>
+" nmap go :call OpenCurrentAsNewTab()<CR>
 
 "very magic mode
 nnoremap / /\v
@@ -191,9 +191,9 @@ function! s:VSetSearch(cmd)
   normal! gV
   call setreg('"', old_reg, old_regtype)
 endfunction
-vnoremap <silent> * :<C-U>call <SID>VSetSearch('/')<CR>/<C-R>/<CR>
-vnoremap <silent> # :<C-U>call <SID>VSetSearch('?')<CR>?<C-R>/<CR>
-vmap <kMultiply> *
+" vnoremap <silent> * :<C-U>call <SID>VSetSearch('/')<CR>/<C-R>/<CR>
+" vnoremap <silent> # :<C-U>call <SID>VSetSearch('?')<CR>?<C-R>/<CR>
+" vmap <kMultiply> *
 nmap <silent> <Plug>VLToggle :let g:VeryLiteral = !g:VeryLiteral
   \\| echo "VeryLiteral " . (g:VeryLiteral ? "On" : "Off")<CR>
 if !hasmapto("<Plug>VLToggle")
@@ -214,7 +214,7 @@ local currentbuf = api.nvim_get_current_buf()
 local w = api.nvim_win_get_width(currentwin)
 local h = api.nvim_win_get_height(currentwin)
 
-local isterm = string.find(api.nvim_buf_get_name(currentbuf), 'term')
+local isterm = string.find(api.nvim_buf_get_name(currentbuf), 'myterm')
 --local shouldsplit = true
 --local preferclose = true
 
@@ -231,7 +231,7 @@ for _,win in ipairs(api.nvim_list_wins()) do
   local buf = api.nvim_win_get_buf(win)
   local bufname = api.nvim_buf_get_name(buf)
   
-  if string.find(bufname, 'term') then
+  if string.find(bufname, 'myterm') then
     api.nvim_set_current_win(win)
     vim.fn.feedkeys('i')
     return
@@ -241,7 +241,7 @@ end
 local foundbuffer = nil
 
 for _,buf in ipairs(bufs) do
-  if string.find(api.nvim_buf_get_name(buf), 'term')  then
+  if string.find(api.nvim_buf_get_name(buf), 'myterm')  then
     foundbuffer = buf
     break
   end
@@ -258,7 +258,7 @@ local floatopts = {
 if foundbuffer == nil then
   if shouldsplit then
     api.nvim_command(':vsp|term')
-    api.nvim_command(':SendHere')
+    -- api.nvim_command(':SendHere')
     foundbuffer = api.nvim_get_current_buf()
     vim.fn.setbufvar(foundbuffer, '&buflisted', 0)
   else
@@ -266,9 +266,10 @@ if foundbuffer == nil then
 
     api.nvim_open_win(foundbuffer, true, floatopts )
     api.nvim_command('term')
-    api.nvim_command(':SendHere')
+    -- api.nvim_command(':SendHere')
     vim.fn.setbufvar(foundbuffer, '&buflisted', 0)
   end
+  api.nvim_buf_set_name(foundbuffer, 'myterm')
 else
   if shouldsplit then
     api.nvim_command(':vsp')

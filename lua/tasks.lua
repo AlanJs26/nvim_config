@@ -16,8 +16,8 @@ function Setup_tasks(auid)
             {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2',                      'Compile'},
         },
         cpp = {
-            -- {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},
-            {'g++ *.cpp -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile all and run'},
+            {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},
+            -- {'g++ *.cpp -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile all and run'},
             -- {"g++ -I"..sfmlpath.."/include -c {{t:p}} -o {{t:r}}.o && g++ {{t:r}}.o -o {{t:r}}.exe -L"..sfmlpath.."/lib -lsfml-graphics -lsfml-window -lsfml-system && {{t:r}}.exe", 'Compile and run SFML'},
         },
         python = {

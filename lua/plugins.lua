@@ -53,7 +53,6 @@ end
 packer.startup(function(use)
   -- Packer can manage itself
   use { 'wbthomason/packer.nvim' }
-  -- use { vim.fn.stdpath('data')..'/plugin' }
 
   -- libs
   use { 'skywind3000/asyncrun.vim' }
@@ -64,11 +63,58 @@ packer.startup(function(use)
   use { 'ryanoasis/vim-devicons',
       { 'kyazdani42/nvim-web-devicons' }
   }
-  use { 'mtikekar/nvim-send-to-term' }
+  -- use { 'mtikekar/nvim-send-to-term' }
 
 
   -- gui related
   use { 'markonm/traces.vim' }
+  -- use {
+  --   "smjonas/live-command.nvim",
+  --   -- live-command supports semantic versioning via tags
+  --   -- tag = "1.*",
+  --   config = function()
+  --     require("live-command").setup {
+  --       commands = {
+  --         Norm = { cmd = "norm" },
+  --       },
+  --     }
+  --   end,
+  -- }
+
+  use {
+    'nyngwang/NeoZoom.lua',
+    requires = {
+      'nyngwang/NeoNoName.lua' -- you will need this if you want to use the keymap sample below.
+      },
+      config = get_setup('neo-zoom')
+  }
+
+  -- use {
+  --   "zbirenbaum/neodim",
+  --   event = "LspAttach",
+  --   config = function ()
+  --     require("neodim").setup({
+  --       alpha = 0.35,
+  --       blend_color = "#ff0000",
+  --       update_in_insert = {
+  --         enable = true,
+  --         delay = 100,
+  --       },
+  --       hide = {
+  --         virtual_text = true,
+  --         signs = true,
+  --         underline = true,
+  --       }
+  --     })
+  --   end
+  -- }
+
+
+  use { "petertriho/nvim-scrollbar", requires = { 'kevinhwang91/nvim-hlslens' }, config = function ()
+    require("scrollbar").setup()
+    require("scrollbar.handlers.search").setup()
+
+  end }
 
   use { 'sheerun/vim-polyglot', event = 'BufRead' }
 
@@ -117,14 +163,12 @@ packer.startup(function(use)
   use { 'numToStr/Comment.nvim', config = get_setup('comment') }
 
   -- less important writing plugins
-  use { 'arecarn/vim-selection' }
-  use { 'arecarn/vim-crunch', event = 'VimEnter' }
-
-  -- use {'stevearc/gkeep.nvim', run = ':UpdateRemotePlugins'}
+  -- use { 'arecarn/vim-selection' }
+  -- use { 'arecarn/vim-crunch', event = 'VimEnter' }
 
   use { 'mg979/vim-visual-multi', branch = 'master', keys = {"çc", "<C-n>"} }
-  use { 'AndrewRadev/splitjoin.vim', keys = "gS" }
-  use { 'AndrewRadev/sideways.vim', event = 'BufRead' }
+  -- use { 'AndrewRadev/splitjoin.vim', keys = "gS" }
+  -- use { 'AndrewRadev/sideways.vim', event = 'BufRead' }
   -- use 'inkarkat/vim-visualrepeat'
 
   use { 'ggandor/lightspeed.nvim', config = get_setup('lightspeed') }
@@ -181,11 +225,30 @@ packer.startup(function(use)
     ft = {'markdown', 'html', 'jsxtypescript', 'javascripttypescript', 'javascript', 'javascriptreact'}
   }
 
+  use {
+    "iurimateus/luasnip-latex-snippets.nvim",
+    requires = { "L3MON4D3/LuaSnip", "lervag/vimtex" },
+    config = function()
+      require'luasnip-latex-snippets'.setup()
+      -- or setup({ use_treesitter = true })
+
+      require'setup.latexsnippets'.setup()
+      require'setup.markdownsnippets'.setup()
+    end,
+    ft = { "tex", "markdown" },
+  }
+
   use { 'lervag/vimtex',  ft = {'markdown', 'tex', 'latex'} }
   use { 'plasticboy/vim-markdown',  ft = {'markdown'} }
-  use { 'antoinemadec/FixCursorHold.nvim',  ft = {'markdown'} }
+  -- use { 'antoinemadec/FixCursorHold.nvim',  ft = {'markdown'} }
 
-  use { 'stevearc/vim-arduino',  ft = {'arduino'} }
+  use({
+      "iamcco/markdown-preview.nvim",
+      run = function() vim.fn["mkdp#util#install"]() end,
+      ft = { 'markdown' },
+  })
+
+  use { 'stevearc/vim-arduino',  ft = {'arduino'}, cond = (not vim.fn.has('win32')) }
   -- end
 
 

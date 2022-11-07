@@ -21,7 +21,7 @@ local options = {
   report      = 30,
   lazyredraw  = true,
   gdefault    = true,
-  cmdheight   = 1,
+  cmdheight   = 0,
   hidden      = true,
   showmode    = false,
   splitright  = true,
@@ -37,7 +37,7 @@ end
 
 vim.g.maplocalleader = "ç"
 
-if vim.fn.has('win32') == 2 then
+if vim.fn.has('win32') == 0 then
   vim.g.tokyonight_style = 'storm' -- available: night, storm
 else
   vim.g.tokyonight_style = 'night' -- available: night, storm
@@ -47,7 +47,11 @@ vim.g.tokyonight_enable_italic = 1
 
 
 vim.cmd([[
-  colorscheme tokyonight
+  if g:tokyonight_style == 'storm'
+    colorscheme tokyonight
+  else
+    colorscheme tokyonight-night
+  endif
 
   syntax enable
   set cpoptions+=y
@@ -90,6 +94,11 @@ vim.cmd([[
   highlight CmpItemKind guifg=#7aa2f7 
   highlight CmpItemAbbrMatch guifg=#7aa2f7 
   highlight CmpItemAbbrMatchFuzzy guifg=#4c68a6 
+
+
+  syn match Done "DONE" containedin=.*Comment  
+  hi Done guifg=#565f89 gui=bold
+  hi Todo guibg=none guifg=#bb9af7 gui=italic 
 ]])
 
 

@@ -26,13 +26,14 @@ cmp.setup.cmdline('/', {
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(':', {
-  sources = cmp.config.sources({
+  sources = cmp.config.sources(
+    {
       { name = 'path' }
-    }, {
-    { name = 'cmdline',
-      keyword_pattern = [[\!\@<!\w*]]
+    },
+    {
+      { name = 'cmdline', keyword_pattern = [[\!\@<!\w*]] }
     }
-  })
+    )
 })
 
 cmp.setup({
@@ -103,7 +104,12 @@ cmp.setup({
     { name = 'path' },
   }),
   formatting = {
-    format = lspkind.cmp_format(),
+    format = function (entry, vim_item)
+      vim_item = lspkind.cmp_format()(entry,vim_item)
+      vim_item.dup = { cmdline = 0, path = 0 }
+
+      return vim_item
+    end,
   },
 
   --[[ window = {

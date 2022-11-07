@@ -66,7 +66,7 @@ vim.cmd([[
     autocmd!
     autocmd FileType markdown call MarkdownMappings() 
     autocmd FileType markdown call ToggleWrap(1)
-    autocmd CursorHold * if &filetype == "markdown" | update | endif
+    " autocmd CursorHold * if &filetype == "markdown" | update | endif
   augroup END
 
   function! MarkdownMappings()
@@ -185,6 +185,7 @@ s = {
 t = {
  name='+toggle',
  z= {':ZenMode<cr>',                                                          'zen mode'},
+ b= {':ScrollbarToggle<cr>',                                                  'scrollbar'},
  l= {':call CicleNumberMode()<cr>',                                           'line numbers'},
  L= {':set nonumber norelativenumber|let b:currentNumberMode = 0<cr>',        'hide line numbers'},
  i= {':IndentBlanklineToggle<cr>',                                            'toggle indent guides'},
@@ -210,7 +211,8 @@ if not vim.fn.has('win32') then
   }, {prefix = "<leader>", nowait=true, mode= 'n'})
 end
 
-if vim.v.argv[#vim.v.argv] == 'echo "noquit"' then
+-- if string.find(vim.v.argv[#vim.v.argv], 'noquit') then
+if vim.fn.getcwd():gsub('\\', '/') == "G:/Users/Alan/Documents/_Codes" then
   wk.register({
     q = { ':call ExitQuestion("wqa")<cr>',                   'quit save all'},
 

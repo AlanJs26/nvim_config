@@ -1,7 +1,8 @@
 
 
 -- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 
 local nvim_lsp = require('lspconfig')
@@ -147,8 +148,15 @@ handlers["textDocument/signatureHelp"] = lsp.with(handlers.signature_help, pop_o
 require('lspsaga').init_lsp_saga({
   border_style = "rounded", 
   diagnostic_header = { "", "", "", "" },
-  show_diagnostic_source = true,
+  -- show_diagnostic_source = true,
   code_action_icon = "",
+  show_outline = {
+    auto_preview = false
+  },
+  symbol_in_winbar = {
+    enable = true,
+    show_file = false
+  },
   code_action_lightbulb = {
     enable = true,
     sign = true,
@@ -156,7 +164,6 @@ require('lspsaga').init_lsp_saga({
     sign_priority = 20,
     virtual_text = true,
   },
-
 })
 
 vim.keymap.set('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", {silent = true})
