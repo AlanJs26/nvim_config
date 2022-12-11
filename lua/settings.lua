@@ -95,7 +95,6 @@ vim.cmd([[
   highlight CmpItemAbbrMatch guifg=#7aa2f7 
   highlight CmpItemAbbrMatchFuzzy guifg=#4c68a6 
 
-
   syn match Done "DONE" containedin=.*Comment  
   hi Done guifg=#565f89 gui=bold
   hi Todo guibg=none guifg=#bb9af7 gui=italic 

@@ -151,7 +151,8 @@ require('lspsaga').init_lsp_saga({
   -- show_diagnostic_source = true,
   code_action_icon = "",
   show_outline = {
-    auto_preview = false
+    auto_preview = false,
+    auto_enter = false,
   },
   symbol_in_winbar = {
     enable = true,

@@ -183,24 +183,38 @@ s = {
 },
 
 t = {
- name='+toggle',
+ name='+window toggle',
  z= {':ZenMode<cr>',                                                          'zen mode'},
- b= {':ScrollbarToggle<cr>',                                                  'scrollbar'},
- l= {':call CicleNumberMode()<cr>',                                           'line numbers'},
- L= {':set nonumber norelativenumber|let b:currentNumberMode = 0<cr>',        'hide line numbers'},
- i= {':IndentBlanklineToggle<cr>',                                            'toggle indent guides'},
- w= {':call ToggleWrap(-1)<cr>',                                              'toggle word wrap'},
  m= {':wincmd ||wincmd _<cr>',                                                'maximize window'},
  n= {':wincmd =<cr>',                                                         'normalize windows'},
- s= {':set spell!<cr>',                                                       'spell'},
- S= {':if &laststatus == 0|set laststatus=2|else|set laststatus=0|endif<cr>', 'statusline'},
  t= {':call v:lua.searchTerminal(v:true,v:true)<cr>',                         'vertical terminal'},
  T= {':exe "sp|term"|exe "SendHere"|set nonumber|norm i<cr>',                 'horizontal terminal'},
- g= {':Git<cr>',                                                              'Git' },
 
  v= {':vsplit<cr>',                                                           'vertical split'},
  h= {':split<cr>',                                                            'horizontal split'},
+
+
  },
+
+ j = {
+   name='+toggle',
+
+   b= {':ScrollbarToggle<cr>',                                                  'scrollbar'},
+   l= {':call CicleNumberMode()<cr>',                                           'line numbers'},
+   L= {':set nonumber norelativenumber|let b:currentNumberMode = 0<cr>',        'hide line numbers'},
+   i= {':IndentBlanklineToggle<cr>',                                            'toggle indent guides'},
+   w= {':call ToggleWrap(-1)<cr>',                                              'toggle word wrap'},
+   s= {':set spell!<cr>',                                                       'spell'},
+   S= {':if &laststatus == 0|set laststatus=2|else|set laststatus=0|endif<cr>', 'statusline'},
+   g= {':Git<cr>',                                                              'Git' },
+   h= {':IlluminateToggle<cr>',                                                            'word highlight'},
+
+   f = {
+     name='+fun',
+     r = {':CellularAutomaton make_it_rain<cr>', 'rain'},
+     g = {':CellularAutomaton game_of_life<cr>', 'game of life'},
+   }
+ }
 }, {prefix = "<leader>", nowait = true })
 
 if not vim.fn.has('win32') then

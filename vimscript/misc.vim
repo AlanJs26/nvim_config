@@ -35,7 +35,9 @@ nmap gç  <Plug>(abolish-coerce-word)
 
 " EasyAlign
 xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+
+nmap gaip <Plug>(EasyAlign)ip
+nmap gaap <Plug>(EasyAlign)ip
 
 " vim targets
 autocmd User targets#mappings#user call targets#mappings#extend({

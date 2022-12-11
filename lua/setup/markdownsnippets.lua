@@ -117,9 +117,17 @@ M.setup = function(opts)
     ls.parser.parse_snippet({ trig = "pn", name = "easy minus" }, "-"),
     ls.parser.parse_snippet({ trig = "tm", name = "easy times" }, "*"),
     ls.parser.parse_snippet({ trig = "spp", name = "\\:" }, " \\: "),
+    ls.parser.parse_snippet({ trig = "beg", name = "begin end" }, "\\begin{$1}\n$2\n\\end{$1}$0"),
+
+    -- linear algebra
+
     ls.parser.parse_snippet({ trig = "inp", name = "\\langle,\\rangle" }, "\\langle $1\\rangle $0"),
     ls.parser.parse_snippet({ trig = "lvn", name = "list of vectors" }, "($1_1,$1_2,\\dots,$1_n)$0"),
-    ls.parser.parse_snippet({ trig = "beg", name = "begin end" }, "\\begin{$1}\n$2\n\\end{$1}$0"),
+    ls.parser.parse_snippet({ trig = "tran", name = "linear transformation" }, "T \\colon $1 \\to $2 $0"),
+    ls.parser.parse_snippet({ trig = "dim", name = "dimension" }, "\\text{dim } $0"),
+    ls.parser.parse_snippet({ trig = "det", name = "determinant" }, "\\text{det } $0"),
+    ls.parser.parse_snippet({ trig = "TT", name = "transformation matrix" }, "[$1] _{\\mathbb{$2}}$0"),
+    ls.parser.parse_snippet({ trig = "bb", name = "mathbb" }, "\\mathbb{$1}$0"),
   }
 
   for _, snip in ipairs(math_iA_no_backslash) do

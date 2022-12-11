@@ -10,7 +10,7 @@ function Setup_tasks(auid)
     local wk = require('which-key')
     tm.setup()
     local sfmlpath = 'C:/SFML-2.4.2'
-    tm.register({
+    local tasks_config = {
         c = {
             {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2 -lm && "{{t:r}}.exe"', 'Compile and run'},
             {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2',                      'Compile'},
@@ -39,19 +39,42 @@ function Setup_tasks(auid)
             {'!killall screen; /home/alan/miniconda3/bin/python /home/alan/Documentos/tools/single-kitty-keys.py arduino "clear -x;echo "compiling..."; arduino-cli compile . && arduino-cli upload -p {{g:arduino_serial_port}} &&screen {{g:arduino_serial_port}}  {{g:arduino_serial_baud}} \r"&', 'Compile and Upload', before = '', after = '', prefix = ''},
             {'!killall screen; /home/alan/miniconda3/bin/python /home/alan/Documentos/tools/single-kitty-keys.py arduino "screen {{g:arduino_serial_port}}  {{g:arduino_serial_baud}} \r"&', 'Serial Monitor', before = '', after = '', prefix = ''},
         },
-    })
+    }
+    tm.register(tasks_config)
 
-    wk.register({
-    t = {
-     name='+toggle',
-     c = {
-       name = 'config',
-       t = {':lua openTasksMenu()<cr>', 'Enabled tasks'},
-       e = {':EditTasks<cr>', 'Edit tasks'},
-       r = {':ReloadTasks<cr>', 'Reload tasks'}
-     }
-     },
-    }, {prefix = "<leader>", nowait = true })
+    local function resolve(path)
+      return path:gsub('\\', '/'):gsub('/$', '')
+    end
+    local tasks_path = resolve(vim.fn.stdpath("config").."/lua/tasks.lua")
+
+    for k,_ in pairs(tasks_config) do
+      RegisterWKByFiletype({
+          [k] = {
+            j = {
+              name='+toggle',
+              c = {
+                name = 'config',
+                t = {':lua openTasksMenu()<cr>', 'Enabled tasks'},
+                e = {function() vim.api.nvim_command("e "..tasks_path) end, 'Edit tasks'},
+                r = {function() vim.api.nvim_command("source "..tasks_path) end, 'Reload tasks'}
+              }
+            },
+          }
+        }, 'n')
+
+    end
+
+    -- wk.register({
+    -- j = {
+    --  name='+toggle',
+    --  c = {
+    --    name = 'config',
+    --    t = {':lua openTasksMenu()<cr>', 'Enabled tasks'},
+    --    e = {':EditTasks<cr>', 'Edit tasks'},
+    --    r = {':ReloadTasks<cr>', 'Reload tasks'}
+    --  }
+    --  },
+    -- }, {prefix = "<leader>", nowait = true })
 
 
     RegisterWKByFiletype({

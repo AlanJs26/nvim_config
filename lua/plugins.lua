@@ -81,6 +81,11 @@ packer.startup(function(use)
   --   end,
   -- }
 
+  use { 'eandrju/cellular-automaton.nvim' }
+
+  use { 'RRethy/vim-illuminate',
+  config = get_setup('illuminate')}
+
   use {
     'nyngwang/NeoZoom.lua',
     requires = {
@@ -111,7 +116,20 @@ packer.startup(function(use)
 
 
   use { "petertriho/nvim-scrollbar", requires = { 'kevinhwang91/nvim-hlslens' }, config = function ()
-    require("scrollbar").setup()
+    require("scrollbar").setup({
+        show_in_active_only = true,
+        hide_if_all_visible = true,
+        handle = {
+          hide_if_all_visible = true,
+        },
+        excluded_filetypes = {
+          "NvimTree",
+          "prompt",
+          "TelescopePrompt",
+          "noice",
+          "alpha",
+        }
+      })
     require("scrollbar.handlers.search").setup()
 
   end }
