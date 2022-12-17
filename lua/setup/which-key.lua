@@ -193,7 +193,7 @@ t = {
  v= {':vsplit<cr>',                                                           'vertical split'},
  h= {':split<cr>',                                                            'horizontal split'},
 
-
+ s= {':set scrollbind!<cr>',                                                   'scrollbind'},
  },
 
  j = {

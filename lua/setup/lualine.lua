@@ -25,7 +25,7 @@ require'lualine'.setup {
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch'},
-    lualine_c = {'g:folderName', 'vim.o.modified and vim.fn.expand("%:t").." ●" or vim.fn.expand("%:t")'},
+    lualine_c = {'g:folderName', 'vim.o.modified and vim.fn.expand("%:t").." ●" or vim.fn.expand("%:t")', 'vim.o.scrollbind and " " or ""'},
     lualine_x = {
       { 'diagnostics', sources = {"nvim_lsp"}, symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '} },
       --'encoding',
