@@ -94,6 +94,12 @@ packer.startup(function(use)
       config = get_setup('neo-zoom')
   }
 
+  use {'akinsho/flutter-tools.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+      config = get_setup('flutter-tools')
+    }
+
+
   -- use {
   --   "zbirenbaum/neodim",
   --   event = "LspAttach",

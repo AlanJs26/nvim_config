@@ -36,6 +36,11 @@ cmp.setup.cmdline(':', {
     )
 })
 
+
+-- Mappings.
+local opts = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('i', '<C-Space>', "<cmd>lua require('cmp').complete()<cr>", opts)
+
 cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
@@ -86,10 +91,11 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     -- { name = 'vsnip' }, -- For vsnip users.
-    { name = 'luasnip' }, -- For luasnip users.
+    { name = 'luasnip', keyword_pattern = [[.\+]] }, -- For luasnip users.
     -- { name = 'ultisnips' }, -- For ultisnips users.
     {
       name = 'buffer',
+      keyword_pattern = '.\\+',
       option = {
         get_bufnrs = function()
           return vim.api.nvim_list_bufs()

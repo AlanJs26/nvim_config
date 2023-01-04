@@ -28,7 +28,7 @@ require'lualine'.setup {
     lualine_c = {'g:folderName', 'vim.o.modified and vim.fn.expand("%:t").." ●" or vim.fn.expand("%:t")', 'vim.o.scrollbind and " " or ""'},
     lualine_x = {
       { 'diagnostics', sources = {"nvim_lsp"}, symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '} },
-      --'encoding',
+      'vim.fn.reg_recording() ~= "" and "recording "..vim.fn.reg_recording() or ""',
       'filetype'
       },
     lualine_y = {'progress'},

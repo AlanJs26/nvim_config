@@ -111,6 +111,11 @@ function Setup_tasks(auid)
                 n= {':lua create_file("istart<TAB>", "../:file:", "c")<cr>', 'new c project'},
             }
         },
+        dart = {
+            l = {
+                m = {':FlutterOutlineToggle<cr>', 'symbols' }
+            }
+        }
     }, 'n')
     if auid then
         vim.api.nvim_del_autocmd(auid)

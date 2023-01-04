@@ -150,9 +150,9 @@ l = {
  n= {':Lspsaga diagnostic_jump_next<cr>',     'next diagnostic'},
 -- p={'<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>',                           'previous diagnostic'},
 -- n={'<cmd>lua vim.lsp.diagnostic.goto_next()<cr>',                           'next diagnostic'},
- f= {':lua vim.lsp.buf.formatting()<cr>',     'formatting'},
+ f= {':lua vim.lsp.buf.format{async = true}<cr>',     'formatting'},
  w= {':cd %:p:h|pwd<cr>',                     'use current buffer as working dir'},
- m= {':LSoutlineToggle<cr>',                  'symbols'}
+ m= {':Lspsaga outline<cr>',                  'symbols'}
  },
 
 c = {nil, 'comment'},

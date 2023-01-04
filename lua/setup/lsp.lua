@@ -3,12 +3,14 @@
 -- Setup lspconfig.
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+
 
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
+
   local function buf_set_keymap(...)
-  vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    vim.api.nvim_buf_set_keymap(bufnr, ...)
+  end
 
   require "lsp_signature".on_attach()
 
@@ -19,9 +21,9 @@ local on_attach = function(client, bufnr)
 
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('i', '<C-k>', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  --...
 
 end
+
 
 -- mason / lsp_install
 
@@ -35,6 +37,32 @@ mason_lspconfig.setup_handlers({
     nvim_lsp[server_name].setup({
       on_attach = on_attach,
       capabilities = capabilities
+    })
+  end,
+  ['pyright'] = function()
+    nvim_lsp.pyright.setup({
+      on_attach = function(client, bufnr)
+        -- prevent duplicate pyright clients
+        for _,v in ipairs(vim.lsp.get_active_clients({name = 'pyright'})) do
+          buffer_in_client = false
+          for bufid,_ in pairs(v.attached_buffers) do
+            if bufid == bufnr then
+              buffer_in_client = true
+              break
+            end
+          end
+
+          if v.id ~= client.id and buffer_in_client == false then
+            vim.lsp.stop_client(client.id)
+            vim.lsp.buf_attach_client(bufnr, v.id)
+            break
+          end
+
+        end
+
+        on_attach(client, bufnr)
+      end,
+      capabilities = capabilities,
     })
   end,
 
