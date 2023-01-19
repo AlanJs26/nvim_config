@@ -1,3 +1,4 @@
+  return { 'nvim-telescope/telescope.nvim', config = function()
 local telescope = require('telescope')
 
 telescope.setup {
@@ -37,3 +38,5 @@ require("telescope._extensions.zoxide.config").setup({
     ["<C-q>"] = { action = z_utils.create_basic_command("split") },
   }
 })
+
+  end }

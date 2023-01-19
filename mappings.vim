@@ -94,16 +94,17 @@ inoremap <C-j> <esc>lBi <esc>ldiWciw <esc>gEa
 
 
 " command to rename current file
-function! RenameFile()
+function! RenameFile( ... )
+    echo a:1
     let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
+    let new_name = expand('%') . a:1
     if new_name != '' && new_name != old_name
         exec ':saveas ' . new_name
         exec ':silent !rm ' . old_name
         redraw!
     endif
 endfunction
-command! Rename call RenameFile()
+command! -nargs=+ Rename call RenameFile(<f-args>)
 cnoreabbrev rename Rename
 
 " creates a new tab using current buffer as main window

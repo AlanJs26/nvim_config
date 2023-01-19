@@ -1,3 +1,4 @@
+  return { 'lukas-reineke/indent-blankline.nvim', event = 'BufRead', config = function()
 local present, indent_blankline = pcall(require, "indent_blankline")
 if not present then
 	return
@@ -21,3 +22,5 @@ indent_blankline.setup {
   show_current_context = true,
   show_current_context_start = false,
 }
+
+  end }

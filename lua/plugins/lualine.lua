@@ -1,3 +1,5 @@
+  return { 'nvim-lualine/lualine.nvim', config = function()
+
 vim.cmd([[
 
 au BufEnter,VimEnter * if len(getbufinfo({'buflisted': 1})) <= 1 | set showtabline=0| else| set showtabline=2| endif
@@ -45,3 +47,4 @@ require'lualine'.setup {
   tabline = {},
   extensions = {'fugitive'}
   }
+  end, event = "VimEnter" }

@@ -1,3 +1,5 @@
+  return { 'kyazdani42/nvim-tree.lua', config = function()
+
 
 vim.o.showtabline = 2
 
@@ -59,3 +61,4 @@ highlight NvimTreeExecFile guifg=#93ce6a
 
 
 
+  end, cmd = 'NvimTreeToggle' }

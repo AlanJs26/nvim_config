@@ -1,14 +1,3 @@
-function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
-endfunction
-command! Rename call RenameFile()
-cnoreabbrev rename Rename
 " vim visual multi
 let g:VM_leader = 'ç'
 let g:VM_maps = {}
@@ -99,9 +88,6 @@ nmap <leader>ig <Nop>
 " Vim rooter
 let g:rooter_patterns = ['=src', '=nvim']
 let g:rooter_silent_chdir = 1
-
-"vim hexokinase color preview
-let g:Hexokinase_highlighters = ['backgroundfull']
 
 " surround
 let g:surround_{char2nr('q')} = "\"\r\""

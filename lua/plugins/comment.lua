@@ -1,3 +1,5 @@
+  return { 'numToStr/Comment.nvim', config = function()
+
 require('Comment').setup({
     ---Add a space b/w comment and the line
     ---@type boolean|fun():boolean
@@ -73,3 +75,4 @@ local ft = require('Comment.ft')
 
 ft.set('c', '/*%s*/')
 
+  end }

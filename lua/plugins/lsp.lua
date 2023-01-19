@@ -1,3 +1,13 @@
+return {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      { 'williamboman/mason.nvim' },
+      { 'williamboman/mason-lspconfig.nvim' },
+      { 'glepnir/lspsaga.nvim', commit = '2eb8d023790099b182ac0c43d13dede80f42153e' } ,
+      { 'ray-x/lsp_signature.nvim' } ,
+    },
+    config = function()
+
 
 
 -- Setup lspconfig.
@@ -204,3 +214,6 @@ vim.cmd([[
 
 
 
+    end,
+    event = 'BufRead'
+  }

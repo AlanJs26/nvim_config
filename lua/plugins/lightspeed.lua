@@ -1,3 +1,5 @@
+  return { 'ggandor/lightspeed.nvim', config = function()
+
 require'lightspeed'.setup {
   ignore_case = true,
   exit_after_idle_msecs = { unlabeled = 1000, labeled = 1200 },
@@ -20,3 +22,4 @@ noremap , <Plug>Lightspeed_,_sx
 noremap gs <Plug>Lightspeed_omni_s
 noremap X <Plug>Lightspeed_omni_gs
 ]])
+  end }

@@ -1,3 +1,5 @@
+  return { 'akinsho/bufferline.nvim', config = function()
+
 require("bufferline").setup{
   highlights = {
     fill = {
@@ -45,3 +47,4 @@ if g:tokyonight_style == 'storm'
   highlight BufferLineBufferSelected cterm=bold gui=bold guifg=#91adff
 endif
 ]])
+  end, event = "VimEnter" }

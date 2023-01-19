@@ -1,3 +1,8 @@
+  return {'akinsho/flutter-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    ft = 'dart',
+    config = function()
+
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...)
@@ -25,3 +30,5 @@ require("flutter-tools").setup{
     capabilities = capabilities
   }
 }
+    end
+  }
