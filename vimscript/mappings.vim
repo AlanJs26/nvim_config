@@ -26,10 +26,10 @@ nnoremap <silent> <M-o> moo<ESC>`o
 nnoremap <silent> <M-O> moO<ESC>`o
 
 " Use alt + hjkl to resize windows
-nnoremap <silent> <M-j>   :resize -2<CR>
-nnoremap <silent> <M-k>   :resize +2<CR>
-nnoremap <silent> <M-h>   :vertical resize +2<CR>
-nnoremap <silent> <M-l>   :vertical resize -2<CR>
+nnoremap <silent> <M-j>   :resize -4<CR>
+nnoremap <silent> <M-k>   :resize +4<CR>
+nnoremap <silent> <M-h>   :vertical resize +4<CR>
+nnoremap <silent> <M-l>   :vertical resize -4<CR>
 
 " Better window navigation
 nnoremap <C-h>   <C-w>h
@@ -58,7 +58,12 @@ xmap <M-,> g<C-x>
 
 
 " return to last insert position
-nnoremap gl `.
+" nnoremap gl `.
+
+" cursor to end of line
+nnoremap gl g_
+xnoremap gl g_
+onoremap gl g_
 
 nmap <silent>gm %
 xmap <silent>gm %

@@ -108,7 +108,10 @@ cmp.setup({
     { name = 'buffer', keyword_pattern = [[\w\+]] },
     { name = 'calc' },
     { name = 'path' },
-  }),
+  },{
+    { name = 'buffer', keyword_pattern = [[\w\+]] },
+  }
+  ),
   formatting = {
     format = function (entry, vim_item)
       vim_item = lspkind.cmp_format()(entry,vim_item)

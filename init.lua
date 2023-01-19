@@ -10,7 +10,8 @@ vim.cmd("source ".. vimscriptpath .."/misc.vim")
 vim.cmd("source ".. vimscriptpath .."/bufdelete.vim")
 require('user_libs.utils')
 require('user_libs.floatwin')
-require('tasks')
+require('user.setup_tasks')
+require('user.language_specific')
 
 
 

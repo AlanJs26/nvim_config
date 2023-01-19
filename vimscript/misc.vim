@@ -1,3 +1,14 @@
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+command! Rename call RenameFile()
+cnoreabbrev rename Rename
 " vim visual multi
 let g:VM_leader = 'ç'
 let g:VM_maps = {}
@@ -8,7 +19,7 @@ let g:VM_mouse_mappings = 1
 nnoremap <silent>çs :Git<CR>
 
 " vim mundo
-nnoremap <silent> çj :MundoToggle<CR>
+" nnoremap <silent> çj :MundoToggle<CR>
 
 " auto pairs
 let g:AutoPairsShortcutToggle = ''
@@ -40,31 +51,31 @@ nmap gaip <Plug>(EasyAlign)ip
 nmap gaap <Plug>(EasyAlign)ip
 
 " vim targets
-autocmd User targets#mappings#user call targets#mappings#extend({
-    \ 's': { 'separator': [{'d':';'}, {'d':','}, {'d':'.'}, {'d':':'}, {'d':'+'}, {'d':'-'},
-    \                      {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
-    \                      {'d':'\'}, {'d':'|'}, {'d':'&'}, {'d':'$'}] },
-    \ 'a': {},
-    \ })
-
-let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab rr rb bb ll al aa'
+" autocmd User targets#mappings#user call targets#mappings#extend({
+"     \ 's': { 'separator': [{'d':';'}, {'d':','}, {'d':'.'}, {'d':':'}, {'d':'+'}, {'d':'-'},
+"     \                      {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
+"     \                      {'d':'\'}, {'d':'|'}, {'d':'&'}, {'d':'$'}] },
+"     \ 'a': {},
+"     \ })
+"
+" let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab rr rb bb ll al aa'
 
 " sideways vim
-nmap <silent> çi <Plug>SidewaysArgumentInsertBefore
-nmap <silent> ça <Plug>SidewaysArgumentAppendAfter
-nmap <silent> çI <Plug>SidewaysArgumentInsertFirst
-nmap <silent> çA <Plug>SidewaysArgumentAppendLast
+" nmap <silent> çi <Plug>SidewaysArgumentInsertBefore
+" nmap <silent> ça <Plug>SidewaysArgumentAppendAfter
+" nmap <silent> çI <Plug>SidewaysArgumentInsertFirst
+" nmap <silent> çA <Plug>SidewaysArgumentAppendLast
 
-omap <silent> aa <Plug>SidewaysArgumentTextobjA
-xmap <silent> aa <Plug>SidewaysArgumentTextobjA
-omap <silent> ia <Plug>SidewaysArgumentTextobjI
-xmap <silent> ia <Plug>SidewaysArgumentTextobjI
+" omap <silent> aa <Plug>SidewaysArgumentTextobjA
+" xmap <silent> aa <Plug>SidewaysArgumentTextobjA
+" omap <silent> ia <Plug>SidewaysArgumentTextobjI
+" xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 autocmd BufEnter * silent! iunmap ça
 autocmd BufEnter * silent! iunmap çi
 
-nnoremap <silent> <M-9> :SidewaysJumpLeft<cr>
-nnoremap <silent> <M-0> :SidewaysJumpRight<cr>
+" nnoremap <silent> <M-9> :SidewaysJumpLeft<cr>
+" nnoremap <silent> <M-0> :SidewaysJumpRight<cr>
 
 " clecer f
 let g:clever_f_highlight_timeout_ms = 650

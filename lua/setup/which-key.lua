@@ -16,8 +16,6 @@ wk.setup {
   },
 }
 
-vim.g.which_key_use_floating_win = 1
-
 vim.cmd([[
   highlight default link WhichKey          Operator
   highlight default link WhichKeySeperator DiffAdded
@@ -62,25 +60,6 @@ vim.cmd([[
     endif
   endfunction
 
-  augroup markdown
-    autocmd!
-    autocmd FileType markdown call MarkdownMappings() 
-    autocmd FileType markdown call ToggleWrap(1)
-    " autocmd CursorHold * if &filetype == "markdown" | update | endif
-  augroup END
-
-  function! MarkdownMappings()
-      nmap mb ysiwo
-      nmap mi ysiwi
-      nmap ms ysiwu
-      nmap me ysiw=
-
-      xmap mb So
-      xmap mi Si
-      xmap ms Su
-      xmap me S=
-  endfunction
-
   autocmd BufReadPost * :let b:currentNumberMode = 1
   function CicleNumberMode()
       if b:currentNumberMode == 0
@@ -98,14 +77,11 @@ vim.cmd([[
 vim.g.scratchfolder = vim.fn.stdpath("data") .. "/scratch/"
 
 wk.register({
-    -- y = {":'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'}, 
     c = {nil, 'comment'},
 }, {prefix = "<leader>", nowait = true, mode='v' })
 
 wk.register({
--- Q = { ':lua confirmPopup("Are you sure you want exit?", "qa!", "")<cr>',                  'force quit'},
 i = { ':noh<cr>',                  'remove highlights'},
--- Q = { ':call ExitQuestion("qa!")<cr>',  'force quit'},
 q = { ':wqa<cr>',                  'quit save all'},
 n = { ':NvimTreeToggle<cr>',       'file tree' },
 S = { ':Alpha<cr>',                'start screen' },
@@ -117,8 +93,6 @@ g = { ':Telescope live_grep<cr>',  'live grep'},
 f = { ':Telescope find_files<cr>', 'find file'},
 b = { ':Telescope buffers<cr>',    'buffers'},
 
--- y = {"vip:'<,'>YodeCreateSeditorFloating<cr>", 'create float with paragraph'},
--- h = {":MundoToggle<cr>",     'undo history'},
 
 r = {name = '+open recent',
   r = {":Telescope zoxide list<cr>",     'recent folders'},
@@ -128,31 +102,21 @@ r = {name = '+open recent',
 l = {
  name='+lsp',
  d= {':Lspsaga preview_definition<cr>',       'preview definition'},
---  h={':lua vim.lsp.buf.hover()<cr>',                                      'hover'},
- -- h= {':Lspsaga hover_doc<cr>',                'hover'},
- -- D= {':lua vim.lsp.buf.definition()<cr>',     'definition'},
- -- i= {':lua vim.lsp.buf.implementation()<cr>', 'implementation'},
  s= {':lua vim.lsp.buf.signature_help()<cr>', 'signature help'},
--- a= {':lua vim.lsp.buf.add_workspace_folder()<cr>',                       'add wosksp folder'},
--- A= {':lua vim.lsp.buf.remove_workspace_folder()<cr>',                    'remove worksp folder'},
--- w= {':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', 'list workspaces'},
---  t= {':lua vim.lsp.buf.type_definition()<cr>',                           'type definition'},
  t= {':Telescope lsp_document_symbols<cr>',   'telescope symbols'},
  r= {':Lspsaga rename<cr>',                   'rename'},
  k= {':PickColor<cr>',                        'Color Picker'},
--- c={':lua vim.lsp.buf.code_action()<cr>',                                 'code action'},
  c= {':Lspsaga code_action<cr>',              'code action'},
- -- o= {':Lspsaga open_floaterm<cr>',            'float terminal'},
- -- R= {':lua vim.lsp.buf.references()<cr>',     'references'},
- l= {':Lspsaga show_line_diagnostics<cr>',    'show diagnostics'},
--- l={'<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>',               'show diagnostics'},
  p= {':Lspsaga diagnostic_jump_prev<cr>',     'previous diagnostic'},
  n= {':Lspsaga diagnostic_jump_next<cr>',     'next diagnostic'},
--- p={'<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>',                           'previous diagnostic'},
--- n={'<cmd>lua vim.lsp.diagnostic.goto_next()<cr>',                           'next diagnostic'},
  f= {':lua vim.lsp.buf.format{async = true}<cr>',     'formatting'},
  w= {':cd %:p:h|pwd<cr>',                     'use current buffer as working dir'},
- m= {':Lspsaga outline<cr>',                  'symbols'}
+ m= {':Lspsaga outline<cr>',                  'symbols'},
+ l= {':Lspsaga show_line_diagnostics<cr>',    'show diagnostics'},
+ -- l= {':lua vim.diagnostic.open_float()<cr>',    'show diagnostics'},
+-- a= {':lua vim.lsp.buf.add_workspace_folder()<cr>',                       'add wosksp folder'},
+-- A= {':lua vim.lsp.buf.remove_workspace_folder()<cr>',                    'remove worksp folder'},
+-- w= {':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', 'list workspaces'},
  },
 
 c = {nil, 'comment'},
@@ -209,6 +173,9 @@ t = {
    g= {':Git<cr>',                                                              'Git' },
    h= {':IlluminateToggle<cr>',                                                            'word highlight'},
 
+   -- m = {":MundoToggle<cr>",     'undo history'},
+   m = {":UndotreeToggle<cr>",     'undo history'},
+
    f = {
      name='+fun',
      r = {':CellularAutomaton make_it_rain<cr>', 'rain'},
@@ -217,19 +184,17 @@ t = {
  }
 }, {prefix = "<leader>", nowait = true })
 
-if not vim.fn.has('win32') then
+if vim.fn.has('win32') == 0 then
   wk.register({
-    t ={
-      p= {':suspend<cr>',                                   'suspend'},
+    t = {
+      p = {':suspend<cr>', 'suspend'}
     }
   }, {prefix = "<leader>", nowait=true, mode= 'n'})
 end
 
--- if string.find(vim.v.argv[#vim.v.argv], 'noquit') then
 if vim.fn.getcwd():gsub('\\', '/') == "G:/Users/Alan/Documents/_Codes" then
   wk.register({
-    q = { ':call ExitQuestion("wqa")<cr>',                   'quit save all'},
-
+    q = { ':call ExitQuestion("wqa")<cr>', 'quit save all'},
   }, {prefix = "<leader>", nowait=true, mode= 'n'})
 end
 

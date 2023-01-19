@@ -58,6 +58,8 @@ packer.startup(function(use)
   use { 'skywind3000/asyncrun.vim' }
   use { 'airblade/vim-rooter' }
 
+
+  use { 'stevearc/dressing.nvim' }
   use { 'nvim-lua/plenary.nvim' }
   use { 'MunifTanjim/nui.nvim' }
   use { 'ryanoasis/vim-devicons',
@@ -68,86 +70,50 @@ packer.startup(function(use)
 
   -- gui related
   use { 'markonm/traces.vim' }
-  -- use {
-  --   "smjonas/live-command.nvim",
-  --   -- live-command supports semantic versioning via tags
-  --   -- tag = "1.*",
-  --   config = function()
-  --     require("live-command").setup {
-  --       commands = {
-  --         Norm = { cmd = "norm" },
-  --       },
-  --     }
-  --   end,
-  -- }
 
   use { 'eandrju/cellular-automaton.nvim' }
 
-  use { 'RRethy/vim-illuminate',
-  config = get_setup('illuminate')}
+  use {
+    'RRethy/vim-illuminate',
+    config = get_setup('illuminate')
+  }
 
   use {
     'nyngwang/NeoZoom.lua',
     requires = {
       'nyngwang/NeoNoName.lua' -- you will need this if you want to use the keymap sample below.
-      },
-      config = get_setup('neo-zoom')
+    },
+    config = get_setup('neo-zoom')
   }
 
-  use {'akinsho/flutter-tools.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
-      config = get_setup('flutter-tools')
-    }
-
-
-  -- use {
-  --   "zbirenbaum/neodim",
-  --   event = "LspAttach",
-  --   config = function ()
-  --     require("neodim").setup({
-  --       alpha = 0.35,
-  --       blend_color = "#ff0000",
-  --       update_in_insert = {
-  --         enable = true,
-  --         delay = 100,
-  --       },
-  --       hide = {
-  --         virtual_text = true,
-  --         signs = true,
-  --         underline = true,
-  --       }
-  --     })
-  --   end
-  -- }
-
-
-  use { "petertriho/nvim-scrollbar", requires = { 'kevinhwang91/nvim-hlslens' }, config = function ()
-    require("scrollbar").setup({
-        show_in_active_only = true,
-        hide_if_all_visible = true,
-        handle = {
+  use {
+    "petertriho/nvim-scrollbar", 
+    requires = { 'kevinhwang91/nvim-hlslens' },
+    event = 'BufRead',
+    config = function ()
+      require("scrollbar").setup({
+          show_in_active_only = true,
           hide_if_all_visible = true,
-        },
-        excluded_filetypes = {
-          "NvimTree",
-          "prompt",
-          "TelescopePrompt",
-          "noice",
-          "alpha",
-        }
-      })
-    require("scrollbar.handlers.search").setup()
-
-  end }
+          handle = {
+            hide_if_all_visible = true,
+          },
+          excluded_filetypes = {
+            "NvimTree",
+            "prompt",
+            "TelescopePrompt",
+            "noice",
+            "alpha",
+          }
+        })
+      require("scrollbar.handlers.search").setup()
+    end
+  }
 
   use { 'sheerun/vim-polyglot', event = 'BufRead' }
 
   use { 'folke/zen-mode.nvim', config = get_setup('zen-mode'), cmd = "ZenMode" }
   use { 'rrethy/vim-hexokinase',  run = 'make hexokinase'  }
 
-  use { 'ziontee113/color-picker.nvim', config = function ()
-    require('color-picker')
-  end }
   use { 'mhinz/vim-signify', event = 'VimEnter' }
   use { 'lukas-reineke/indent-blankline.nvim', event = 'BufRead', config = get_setup('indent-blankline') }
 
@@ -157,12 +123,17 @@ packer.startup(function(use)
 
   use { 'folke/which-key.nvim', config = get_setup('which-key'), module = 'which-key', keys = '<space>' }
 
+  use { 'ziontee113/color-picker.nvim', config = function ()
+    require('color-picker')
+  end }
+
   use { 'akinsho/bufferline.nvim', config = get_setup('bufferline'), event = "VimEnter" }
   use { 'nvim-lualine/lualine.nvim', config = get_setup('lualine'), event = "VimEnter" }
-  use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree') }
+  use { 'kyazdani42/nvim-tree.lua', config = get_setup('nvimtree'), cmd = 'NvimTreeToggle' }
 
 
   -- use { 'simnalamburt/vim-mundo', cmd = "MundoToggle"  }
+  use { 'mbbill/undotree', cmd = "UndotreeToggle"  }
   use { 'tpope/vim-fugitive', cmd = 'Git' }
 
   -- theme
@@ -170,29 +141,46 @@ packer.startup(function(use)
 
   -- writing essentials
   use { 'tpope/vim-repeat' }
-  use { 'wellle/targets.vim' }
   use { 'jiangmiao/auto-pairs' }
   use { 'tpope/vim-surround' }
   use { 'rhysd/clever-f.vim' }
+  -- use { 'wellle/targets.vim' }
 
   use { 'inkarkat/vim-ReplaceWithRegister', requires = {
       { 'inkarkat/vim-ingo-library' }
   } }
 
-  use { 'kana/vim-textobj-user',
-      { 'kana/vim-textobj-indent' },
-      { 'kana/vim-textobj-entire' }
+  use {
+    'echasnovski/mini.ai',
+    config = get_setup('mini_ai')
   }
+
+  use {
+    "chrisgrieser/nvim-various-textobjs",
+    config = function () 
+      txtobjs = require("various-textobjs")
+      txtobjs.setup({ useDefaultKeymaps = true })
+      vim.keymap.set({"o", "x"}, "gG", "Nop")
+      vim.keymap.set({"o", "x"}, "ie", txtobjs.entireBuffer)
+    end,
+  }
+
+  use({
+    'Wansmer/treesj',
+    requires = { 'nvim-treesitter' },
+    keys = {'gS'},
+    config = function()
+      require('treesj').setup()
+      vim.keymap.set( {'n'}, 'gS', ':TSJToggle<cr>' )
+    end,
+  })
+
 
   use { 'numToStr/Comment.nvim', config = get_setup('comment') }
 
   -- less important writing plugins
-  -- use { 'arecarn/vim-selection' }
-  -- use { 'arecarn/vim-crunch', event = 'VimEnter' }
 
   use { 'mg979/vim-visual-multi', branch = 'master', keys = {"çc", "<C-n>"} }
-  -- use { 'AndrewRadev/splitjoin.vim', keys = "gS" }
-  -- use { 'AndrewRadev/sideways.vim', event = 'BufRead' }
   -- use 'inkarkat/vim-visualrepeat'
 
   use { 'ggandor/lightspeed.nvim', config = get_setup('lightspeed') }
@@ -212,13 +200,12 @@ packer.startup(function(use)
   -- snippets
   use { 'rafamadriz/friendly-snippets' }
   use { 'L3MON4D3/LuaSnip', config = get_setup('luasnip') }
-  -- use { 'SirVer/ultisnips' }
 
   -- lsp
   use { 'neovim/nvim-lspconfig', requires = {
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
-    { 'glepnir/lspsaga.nvim' } ,
+    { 'glepnir/lspsaga.nvim', commit = '2eb8d023790099b182ac0c43d13dede80f42153e' } ,
     { 'ray-x/lsp_signature.nvim' } ,
   }, config = get_setup('lsp'), event = 'BufRead' }
 
@@ -230,23 +217,23 @@ packer.startup(function(use)
       { 'hrsh7th/cmp-calc' },
       { 'saadparwaiz1/cmp_luasnip' },
       { 'hrsh7th/cmp-path' },
-      -- { 'quangnguyen30192/cmp-nvim-ultisnips' },
       {'hrsh7th/cmp-cmdline'},
       { 'ziontee113/color-picker.nvim' },
     },
     config = get_setup('cmp')
   }
 
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
-    requires = {
-      use {'nvim-treesitter/nvim-treesitter-textobjects'}
-    }
-  }
-
+  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', }
 
   -- language specific 
   use { 'mattn/emmet-vim',
     ft = {'markdown', 'html', 'jsxtypescript', 'javascripttypescript', 'javascript', 'javascriptreact'}
+  }
+
+  use {'akinsho/flutter-tools.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+    ft = 'dart',
+    config = get_setup('flutter-tools')
   }
 
   use {

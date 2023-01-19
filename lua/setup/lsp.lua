@@ -4,7 +4,6 @@
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
 
@@ -105,47 +104,6 @@ nvim_lsp.clangd.setup {
 }
 
 require 'nvim-treesitter.install'.compilers = {'clang', 'gcc'}
-require'nvim-treesitter.configs'.setup {
-  highlight = { enable = true, disable = { 'vim' } },
-  textobjects = {
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        ["]m"] = "@function.outer",
-        ["]]"] = "@class.outer",
-      },
-      goto_next_end = {
-        ["]M"] = "@function.outer",
-        ["]["] = "@class.outer",
-      },
-      goto_previous_start = {
-        ["[m"] = "@function.outer",
-        ["[["] = "@class.outer",
-      },
-      goto_previous_end = {
-        ["[M"] = "@function.outer",
-        ["[]"] = "@class.outer",
-      },
-    },
-    select = {
-      enable = true,
-
-      -- Automatically jump forward to textobj, similar to targets.vim
-      lookahead = true,
-
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@conditional.outer",
-        ["ic"] = "@conditional.inner",
-        ["am"] = "@block.outer",
-        ["im"] = "@block.inner",
-      },
-    },
-  },
-}
 
 
 
@@ -173,6 +131,30 @@ handlers["textDocument/signatureHelp"] = lsp.with(handlers.signature_help, pop_o
 
 --- lsp-saga
 -- use custom config
+
+-- require('lspsaga').setup({
+--   ui = {
+--     theme = 'round',
+--     diagnostic = "",
+--     code_action = "",
+--
+--   },
+--   outline = {
+--     auto_preview = false,
+--   },
+--   symbol_in_winbar = {
+--     enable = true,
+--     show_file = false
+--   },
+--   lightbulb = {
+--     enable = true,
+--     sign = true,
+--     enable_in_insert = true,
+--     sign_priority = 20,
+--     virtual_text = true,
+--   },
+-- })
+
 require('lspsaga').init_lsp_saga({
   border_style = "rounded", 
   diagnostic_header = { "", "", "", "" },
@@ -194,6 +176,7 @@ require('lspsaga').init_lsp_saga({
     virtual_text = true,
   },
 })
+
 
 vim.keymap.set('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", {silent = true})
 vim.keymap.set('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", {silent = true})
