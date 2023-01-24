@@ -73,7 +73,7 @@ return {
       dashboard.button("f", "  Recent files", ":Telescope oldfiles<CR>"),
       dashboard.button("r", "  Recent folders", ":Telescope zoxide list<CR>"),
       dashboard.button("c", "  Config", ":lua OpenConfig()<CR>"),
-      dashboard.button("u", "ﮮ  Plugins", ":Lazy<CR>"),
+      dashboard.button("p", "ﮮ  Plugins", ":Lazy<CR>"),
       dashboard.button("q", "  Quit", ":qa<CR>"),
     }
 
@@ -140,7 +140,7 @@ return {
       group = newgroup,
       pattern = "<buffer>",
       callback = function()
-        if vim.o.filetype == '' then
+        if vim.fn.argc == 0 then
           vim.api.nvim_command(':Alpha')
         end
       end,

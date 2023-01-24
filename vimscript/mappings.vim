@@ -93,18 +93,6 @@ nnoremap Ç hBi <esc>ldiWciw <esc>gE
 inoremap <C-j> <esc>lBi <esc>ldiWciw <esc>gEa
 
 
-" command to rename current file
-function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
-endfunction
-command! Rename call RenameFile()
-cnoreabbrev rename Rename
 
 " creates a new tab using current buffer as main window
 function! OpenCurrentAsNewTab()
@@ -299,7 +287,29 @@ vim.o.number = false
 vim.fn.feedkeys('i')
 end
 vim.keymap.set('t', '<A-p>', function()searchTerminal(false,false)end, {noremap = true})
+
+
+-- command to rename current file
+function rename_file( args )
+    local old_name = vim.fn.expand('%')
+    local new_name = args.args
+    initial_buffer = vim.api.nvim_get_current_buf()
+    if new_name ~= '' and new_name ~= old_name then
+        vim.api.nvim_command('saveas '..new_name)
+        vim.api.nvim_command('silent !rm '..old_name)
+        vim.cmd('redraw!')
+        end_buffer = vim.api.nvim_get_current_buf()
+
+        if initial_buffer ~= end_buffer then
+            vim.api.nvim_buf_delete(initial_buffer)
+        end
+
+    end
+end
+vim.api.nvim_create_user_command('Rename', rename_file, { nargs='?' })
+
 EOF
+cnoreabbrev rename Rename
 
 nnoremap <silent> <A-d> :call v:lua.searchTerminal(v:true,v:true)<CR>
 tnoremap <silent> <A-d> <C-\><C-n>

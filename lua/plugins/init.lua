@@ -6,8 +6,6 @@ return {
 
   -- libs
   'skywind3000/asyncrun.vim',
-  'airblade/vim-rooter',
-
 
   'stevearc/dressing.nvim',
   'nvim-lua/plenary.nvim',
@@ -40,6 +38,7 @@ return {
             "TelescopePrompt",
             "noice",
             "alpha",
+            "color-picker"
           }
         })
       require("scrollbar.handlers.search").setup()
@@ -51,9 +50,7 @@ return {
   { 'mhinz/vim-signify', event = 'VimEnter' },
 
   -- ui/ide related plugins
-  { 'ziontee113/color-picker.nvim', config = function ()
-      require('color-picker')
-    end
+  { 'ziontee113/color-picker.nvim', config = true
   },
 
   { 'mbbill/undotree', cmd = "UndotreeToggle"  },

@@ -18,7 +18,11 @@ local vimscriptpath = resolve(vim.fn.stdpath("config").."/vimscript")
 
 vim.g.mapleader = " "
 
-require('lazy').setup('plugins')
+require('lazy').setup('plugins', {
+  change_detection = {
+    enabled = false 
+  }
+})
 
 require('settings')
 vim.cmd("source ".. vimscriptpath .."/mappings.vim")

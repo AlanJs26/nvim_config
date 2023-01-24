@@ -24,18 +24,8 @@ nmap <silent>gn <plug>(crunch-operator-line)
 " xnoremap <silent>gn <plug>(visual-crunch-operator)
 
 
-" send to term
-let g:send_disable_mapping = 1
-nmap g<space><space> <Plug>SendLine
-nmap g<space> <Plug>Send
-vmap g<space> <Plug>Send
-
-" vim abolish
-nmap gç  <Plug>(abolish-coerce-word)
-
 " EasyAlign
 xmap ga <Plug>(EasyAlign)
-
 nmap gaip <Plug>(EasyAlign)ip
 nmap gaap <Plug>(EasyAlign)ip
 
@@ -49,22 +39,8 @@ nmap gaap <Plug>(EasyAlign)ip
 "
 " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab rr rb bb ll al aa'
 
-" sideways vim
-" nmap <silent> çi <Plug>SidewaysArgumentInsertBefore
-" nmap <silent> ça <Plug>SidewaysArgumentAppendAfter
-" nmap <silent> çI <Plug>SidewaysArgumentInsertFirst
-" nmap <silent> çA <Plug>SidewaysArgumentAppendLast
-
-" omap <silent> aa <Plug>SidewaysArgumentTextobjA
-" xmap <silent> aa <Plug>SidewaysArgumentTextobjA
-" omap <silent> ia <Plug>SidewaysArgumentTextobjI
-" xmap <silent> ia <Plug>SidewaysArgumentTextobjI
-
 autocmd BufEnter * silent! iunmap ça
 autocmd BufEnter * silent! iunmap çi
-
-" nnoremap <silent> <M-9> :SidewaysJumpLeft<cr>
-" nnoremap <silent> <M-0> :SidewaysJumpRight<cr>
 
 " clecer f
 let g:clever_f_highlight_timeout_ms = 650
@@ -85,9 +61,6 @@ autocmd BufEnter * highlight IndentGuidesOdd  guibg=#2C2F45 ctermbg=3
 autocmd BufEnter * highlight IndentGuidesEven guibg=#282c40 ctermbg=4
 nmap <leader>ig <Nop>
 
-" Vim rooter
-let g:rooter_patterns = ['=src', '=nvim']
-let g:rooter_silent_chdir = 1
 
 " surround
 let g:surround_{char2nr('q')} = "\"\r\""

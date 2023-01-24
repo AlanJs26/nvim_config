@@ -3,7 +3,7 @@ return {
     dependencies = {
       { 'williamboman/mason.nvim' },
       { 'williamboman/mason-lspconfig.nvim' },
-      { 'glepnir/lspsaga.nvim', commit = '2eb8d023790099b182ac0c43d13dede80f42153e' } ,
+      { 'glepnir/lspsaga.nvim' } ,
       { 'ray-x/lsp_signature.nvim' } ,
     },
     config = function()
@@ -25,11 +25,14 @@ local on_attach = function(client, bufnr)
 
   -- Mappings.
   local opts = { noremap=true, silent=true }
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  -- buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<Cmd>Lspsaga peek_definition<CR>', opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
 
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('i', '<C-k>', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  -- buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  -- buf_set_keymap('i', '<C-k>', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts)
+  buf_set_keymap('i', '<C-k>', '<Cmd>Lspsaga hover_doc<CR>', opts)
 
 end
 
@@ -164,28 +167,40 @@ handlers["textDocument/signatureHelp"] = lsp.with(handlers.signature_help, pop_o
 --     virtual_text = true,
 --   },
 -- })
-
-require('lspsaga').init_lsp_saga({
-  border_style = "rounded", 
-  diagnostic_header = { "", "", "", "" },
-  -- show_diagnostic_source = true,
-  code_action_icon = "",
-  show_outline = {
-    auto_preview = false,
-    auto_enter = false,
-  },
-  symbol_in_winbar = {
-    enable = true,
-    show_file = false
-  },
-  code_action_lightbulb = {
-    enable = true,
-    sign = true,
-    enable_in_insert = true,
-    sign_priority = 20,
-    virtual_text = true,
-  },
-})
+require('lspsaga').setup({
+    outline = {
+      auto_preview = false
+    },
+    ui = {
+      theme = 'round',
+      title=false,
+      winblend = 10,
+      colors = {
+        normal_bg = '#1D202F'
+      }
+    }
+  })
+-- require('lspsaga').init_lsp_saga({
+--   border_style = "rounded", 
+--   diagnostic_header = { "", "", "", "" },
+--   -- show_diagnostic_source = true,
+--   code_action_icon = "",
+--   show_outline = {
+--     auto_preview = false,
+--     auto_enter = false,
+--   },
+--   symbol_in_winbar = {
+--     enable = true,
+--     show_file = false
+--   },
+--   code_action_lightbulb = {
+--     enable = true,
+--     sign = true,
+--     enable_in_insert = true,
+--     sign_priority = 20,
+--     virtual_text = true,
+--   },
+-- })
 
 
 vim.keymap.set('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", {silent = true})
