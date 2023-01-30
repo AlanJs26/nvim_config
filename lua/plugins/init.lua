@@ -15,7 +15,25 @@ return {
   'kyazdani42/nvim-web-devicons',
 
   -- theme
-  { 'folke/tokyonight.nvim', branch = 'main' },
+  {
+    'folke/tokyonight.nvim',
+    branch = 'main',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.g.tokyonight_style = 'storm'
+      if vim.fn.has('win32') == 1 then
+        vim.g.tokyonight_style = 'night'
+      end
+
+      require('tokyonight').setup({
+        style = vim.g.tokyonight_style,
+        transparent = false,
+      })
+
+      vim.cmd([[ colorscheme tokyonight ]])
+    end
+  },
 
   -- gui related
   'markonm/traces.vim',
@@ -93,7 +111,9 @@ return {
     dependencies = { 'nvim-treesitter' },
     keys = {'gS'},
     config = function()
-      require('treesj').setup()
+      require('treesj').setup({
+          use_default_keymaps = false
+      })
       vim.keymap.set( {'n'}, 'gS', ':TSJToggle<cr>' )
     end,
   },
@@ -127,27 +147,4 @@ return {
     ft = {'markdown', 'html', 'jsxtypescript', 'javascripttypescript', 'javascript', 'javascriptreact'}
   },
 
-
-  {
-    "iurimateus/luasnip-latex-snippets.nvim",
-    dependencies = { "L3MON4D3/LuaSnip", "lervag/vimtex" },
-    config = function()
-      require'luasnip-latex-snippets'.setup()
-
-      require'user.latexsnippets'.setup()
-      require'user.markdownsnippets'.setup()
-    end,
-    ft = { "tex", "markdown" },
-  },
-
-  { 'lervag/vimtex',  ft = {'markdown', 'tex', 'latex'} },
-  { 'plasticboy/vim-markdown',  ft = {'markdown'} },
-
-  {
-      "iamcco/markdown-preview.nvim",
-      build = function() vim.fn["mkdp#util#install"]() end,
-      ft = { 'markdown' },
-  },
-
-  { 'stevearc/vim-arduino',  ft = {'arduino'}, cond = (not vim.fn.has('win32')) },
 }

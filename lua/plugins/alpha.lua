@@ -70,6 +70,7 @@ return {
     dashboard.section.buttons.val = {
       dashboard.button("e", "  New file", ":ene | startinsert <CR>"),
       dashboard.button("s", "  Recent sessions", ":silent! Telescope session-lens search_session<CR>"),
+      -- dashboard.button("s", "  Recent sessions", ":silent! Telescope projects projects<CR>"),
       dashboard.button("f", "  Recent files", ":Telescope oldfiles<CR>"),
       dashboard.button("r", "  Recent folders", ":Telescope zoxide list<CR>"),
       dashboard.button("c", "  Config", ":lua OpenConfig()<CR>"),

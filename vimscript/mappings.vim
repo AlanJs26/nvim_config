@@ -56,9 +56,29 @@ xmap <M-.> g<C-a>
 xmap <M-,> g<C-x>
 
 
+" quickfix mappings
+nnoremap ]q :silent! cprev<cr> 
+nnoremap [q :silent! cnext<cr> 
+
+" When using `dd` in the quickfix list, remove the item from the quickfix list.
+function! RemoveQFItem()
+  let curqfidx = line('.') - 1
+  let qfall = getqflist()
+  call remove(qfall, curqfidx)
+  call setqflist(qfall, 'r')
+  execute curqfidx + 1 . "cfirst"
+  :copen
+endfunction
+:command! RemoveQFItem :call RemoveQFItem()
+" Use map <buffer> to only map dd in the quickfix window. Requires +localmap
+autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
+
+autocmd FileType qf map <buffer> o <c-cr><c-w>p
+
+
 
 " return to last insert position
-" nnoremap gl `.
+nnoremap gu `.
 
 " cursor to end of line
 nnoremap gl g_

@@ -1,6 +1,8 @@
 local Input = require("nui.input")
 local event = require("nui.utils.autocmd").event
 
+local M = {}
+
 function _G.create_file(command, prefix, ext)
   local input = Input({
     position = "50%",
@@ -48,6 +50,7 @@ function _G.create_file(command, prefix, ext)
   end)
 end
 
+M.confirmPopup = _G.confirmPopup
 function _G.confirmPopup(query, positive_action, negative_action)
   local input = Input({
     position = "50%",
@@ -95,6 +98,7 @@ end
 
 
 
+M.RegisterWKByFiletype = _G.RegisterWKByFiletype
 function _G.RegisterWKByFiletype(a, mode)
   local wk = require("which-key")
   for filetype,opts in pairs(a) do
@@ -113,3 +117,9 @@ function _G.RegisterWKByFiletype(a, mode)
   end
 end
 
+
+M.create_file = _G.create_file
+M.confirmPopup = _G.confirmPopup
+M.RegisterWKByFiletype = _G.RegisterWKByFiletype
+
+return M

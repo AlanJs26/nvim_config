@@ -1,6 +1,6 @@
 local options = {
   clipboard   = 'unnamedplus',
-  autochdir   = true,
+  autochdir   = false,
   -- shell       = 'C:/cygwin64/bin/bash.exe',
   mouse       = "a",
   cursorline  = true,
@@ -37,22 +37,7 @@ end
 
 vim.g.maplocalleader = "ç"
 
-if vim.fn.has('win32') == 0 then
-  vim.g.tokyonight_style = 'storm' -- available: night, storm
-else
-  vim.g.tokyonight_style = 'night' -- available: night, storm
-end
-
-vim.g.tokyonight_enable_italic = 1
-
-
 vim.cmd([[
-  if g:tokyonight_style == 'storm'
-    colorscheme tokyonight
-  else
-    colorscheme tokyonight-night
-  endif
-
   syntax enable
   set cpoptions+=y
   set cinkeys-=:
@@ -65,39 +50,6 @@ vim.cmd([[
     let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'
   endif
 
-  autocmd BufEnter,BufNew *.ino :ArduinoChoosePort /dev/ttyUSB0
-  autocmd BufEnter,BufNew *.ino :ArduinoSetBaud 115200
-  autocmd BufEnter,BufNew *.md :setlocal spell
-  autocmd FileType markdown,text set spelllang=pt_br,en_us
-
-  " fix last spell error
-  autocmd FileType markdown,text inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-  autocmd User Startified set spelllang=pt_br,en_us | inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-
-  " --------- Custom highlights
-
-  " highlight on yank
-  augroup highlight_yank
-      autocmd!
-      au TextYankPost * silent! lua vim.highlight.on_yank{higroup="Constant", timeout=700}
-  augroup END
-
-  " Makes the Conceal color more visible
-  autocmd BufEnter * highlight Conceal ctermfg=14 ctermbg=242 guifg=#525975 guibg=#24283b
-
-  if g:tokyonight_style == 'storm'
-    highlight CursorLine   cterm=NONE guibg=#2C2F45 guifg=NONE
-  else
-    highlight CursorLine   cterm=NONE guibg=#232434 guifg=NONE
-  endif
-
-  highlight CmpItemKind guifg=#7aa2f7 
-  highlight CmpItemAbbrMatch guifg=#7aa2f7 
-  highlight CmpItemAbbrMatchFuzzy guifg=#4c68a6 
-
-  syn match Done "DONE" containedin=.*Comment  
-  hi Done guifg=#565f89 gui=bold
-  hi Todo guibg=none guifg=#bb9af7 gui=italic 
 ]])
 
 
