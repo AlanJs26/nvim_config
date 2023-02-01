@@ -11,6 +11,8 @@ return {
   'nvim-lua/plenary.nvim',
   'MunifTanjim/nui.nvim',
 
+  {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', },
+
   'ryanoasis/vim-devicons',
   'kyazdani42/nvim-web-devicons',
 
@@ -35,41 +37,8 @@ return {
     end
   },
 
-  -- gui related
-  'markonm/traces.vim',
-  'eandrju/cellular-automaton.nvim',
-
-  {
-    "petertriho/nvim-scrollbar", 
-    dependencies = { 'kevinhwang91/nvim-hlslens' },
-    event = 'BufRead',
-    config = function ()
-      require("scrollbar").setup({
-          show_in_active_only = true,
-          hide_if_all_visible = true,
-          handle = {
-            hide_if_all_visible = true,
-          },
-          excluded_filetypes = {
-            "NvimTree",
-            "prompt",
-            "TelescopePrompt",
-            "noice",
-            "alpha",
-            "color-picker"
-          }
-        })
-      require("scrollbar.handlers.search").setup()
-    end
-  },
-
-  { 'sheerun/vim-polyglot' },
-
-  { 'mhinz/vim-signify', event = 'VimEnter' },
-
   -- ui/ide related plugins
-  { 'ziontee113/color-picker.nvim', config = true
-  },
+  { 'ziontee113/color-picker.nvim', config = true },
 
   { 'mbbill/undotree', cmd = "UndotreeToggle"  },
   { 'tpope/vim-fugitive', cmd = 'Git' },
@@ -87,21 +56,36 @@ return {
     } 
   },
 
-  { 'echasnovski/mini.ai', config = function() require('mini.ai').setup({
-    mappings = {
-        around_next = '',
-        inside_next = '',
-        around_last = '',
-        inside_last = '',
-    }
-  })end, priority = 100, lazy = false},
+  {
+    'echasnovski/mini.ai',
+    config = function()
+      require('mini.ai').setup({
+          mappings = {
+            around_next = '',
+            inside_next = '',
+            around_last = '',
+            inside_last = '',
+          }
+        })
+    end,
+    priority = 100,
+    lazy = false
+  },
 
   {
     "chrisgrieser/nvim-various-textobjs",
     config = function () 
       txtobjs = require("various-textobjs")
       txtobjs.setup({ useDefaultKeymaps = true })
-      vim.keymap.set({"o", "x"}, "gG", "Nop")
+      vim.api.nvim_del_keymap("o", "gG")
+      vim.api.nvim_del_keymap("x", "gG")
+      vim.api.nvim_del_keymap("x", "r")
+
+      vim.api.nvim_clear_autocmds({
+          pattern = "markdown,toml",
+          group = "VariousTextobjs"
+        })
+
       vim.keymap.set({"o", "x"}, "ie", txtobjs.entireBuffer)
     end,
   },
@@ -122,25 +106,17 @@ return {
 
   -- less important writing plugins
 
-  { 'mg979/vim-visual-multi', branch = 'master', keys = {"çc", "<C-n>"} },
+  {
+    'mg979/vim-visual-multi',
+    branch = 'master',
+    keys = {"çc", "<C-n>"},
+  },
   -- use 'inkarkat/vim-visualrepeat'
 
   {'junegunn/vim-easy-align', event = 'VimEnter'},
   { 'tommcdo/vim-exchange', keys = {"cx", "X"} },
 
 
-  -- start menu and sessions
-
-
-
-  -- snippets
-  'rafamadriz/friendly-snippets',
-
-  -- lsp
-
-
-
-  {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', },
 
   -- language specific 
   { 'mattn/emmet-vim',

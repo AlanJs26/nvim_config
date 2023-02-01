@@ -66,14 +66,16 @@ function! RemoveQFItem()
   let qfall = getqflist()
   call remove(qfall, curqfidx)
   call setqflist(qfall, 'r')
-  execute curqfidx + 1 . "cfirst"
-  :copen
+  execute "normal ".curqfidx. "j"
+  " execute curqfidx + 1 . "cfirst"
+  " :copen
 endfunction
 :command! RemoveQFItem :call RemoveQFItem()
 " Use map <buffer> to only map dd in the quickfix window. Requires +localmap
 autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
 
 autocmd FileType qf map <buffer> o <c-cr><c-w>p
+autocmd FileType qf map <buffer> p :Telescope quickfix<cr>
 
 
 
@@ -101,8 +103,8 @@ xmap çf za
 nnoremap <silent> z. :<C-u>normal! zszH<CR>
 
 " line text objects
-vnoremap <silent> al :<c-u>norm!0v$h<cr>
-vnoremap <silent> il :<c-u>norm!^vg_<cr>
+xnoremap <silent> al :<c-u>norm!0v$h<cr>
+xnoremap <silent> il :<c-u>norm!^vg_<cr>
 onoremap <silent> al :norm val<cr>
 onoremap <silent> il :norm vil<cr>
 nnoremap <silent> yal :norm valy<cr>g_

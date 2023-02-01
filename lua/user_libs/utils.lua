@@ -1,4 +1,5 @@
 local Input = require("nui.input")
+local Menu = require("nui.menu")
 local event = require("nui.utils.autocmd").event
 
 local M = {}
@@ -52,7 +53,7 @@ end
 
 M.confirmPopup = _G.confirmPopup
 function _G.confirmPopup(query, positive_action, negative_action)
-  local input = Input({
+  local input = Menu({
     position = "50%",
     size = {
         width = string.len(query)+5,
@@ -68,18 +69,26 @@ function _G.confirmPopup(query, positive_action, negative_action)
     },
     win_options = {
       winblend = 10,
-      winhighlight = "Normal:Normal",
+      winhighlight = "Normal:Normal,FloatBorder:Normal",
     },
   }, {
-    prompt = "(y/n): ",
-    default_value = "",
+    lines = {
+      Menu.item("no"),
+      Menu.item("yes"),
+    },
+    keymap = {
+      focus_next = { "j", "<Down>", "<Tab>" },
+      focus_prev = { "k", "<Up>", "<S-Tab>" },
+      close = { "<Esc>", "<C-c>", "n", "q" },
+      submit = { "<CR>", "<Space>", "y" },
+    },
     on_close = function()
       if negative_action then
         vim.api.nvim_command(negative_action)
       end
     end,
-    on_submit = function(value)
-      if string.match(value, "^y") then
+    on_submit = function(item)
+      if item.text == 'yes' then
         vim.api.nvim_command(positive_action)
       elseif negative_action then
         vim.api.nvim_command(negative_action)
