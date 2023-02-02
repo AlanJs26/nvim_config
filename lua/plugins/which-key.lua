@@ -97,7 +97,7 @@ return {
           end
         end
 
-        
+
         if modified_buffers > 0 then
           local utils = require('user_libs.utils')
 
@@ -109,12 +109,16 @@ return {
       n = { ':NvimTreeFindFileToggle<cr>', 'file tree' },
       S = { ':Alpha<cr>',                  'start screen' },
       w = { function()
-        auto_session_save_count = auto_session_save_count+1 
-        if auto_session_save_count >= 3 then
-          vim.cmd('SaveSession')
-          auto_session_save_count = 0 
+        local status = require('user.git_status').status
+
+        if status.is_git_dir == true then
+          auto_session_save_count = auto_session_save_count+1 
+          if auto_session_save_count >= 3 then
+            vim.cmd(':silent! SaveSession')
+            auto_session_save_count = 0 
+          end
         end
-        vim.cmd('w')
+        vim.cmd(':silent w')
       end,                      'write'},
       d = { ':Kwbd<cr>',                   'delete buffer'},
       a = { ':wa<cr>',                     'write all'},
