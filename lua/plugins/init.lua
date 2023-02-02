@@ -41,7 +41,22 @@ return {
   { 'ziontee113/color-picker.nvim', config = true },
 
   { 'mbbill/undotree', cmd = "UndotreeToggle"  },
-  { 'tpope/vim-fugitive', cmd = 'Git' },
+  {
+    'tpope/vim-fugitive',
+    cmd = 'Git',
+    config = function()
+      vim.api.nvim_create_autocmd("FileType", {    
+          callback = function()                                                                                                                       
+            vim.api.nvim_buf_del_keymap(0, "n", "gs")
+            vim.api.nvim_buf_set_keymap(0, "n","gs",":<C-U>exe <SNR>92_StageJump(v:count, 'Staged')<CR>",{})
+            vim.api.nvim_buf_set_keymap(0, "n","çs","gq",{})
+          end,    
+          pattern = { 'fugitive' },                                                                                                               
+          group = 'fugitive',                                                                                                                        
+        })
+
+    end
+  },
 
   -- writing essentials
   'tpope/vim-repeat',
