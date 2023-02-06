@@ -26,10 +26,10 @@ nnoremap <silent> <M-o> moo<ESC>`o
 nnoremap <silent> <M-O> moO<ESC>`o
 
 " Use alt + hjkl to resize windows
-nnoremap <silent> <M-j>   :resize -4<CR>
-nnoremap <silent> <M-k>   :resize +4<CR>
-nnoremap <silent> <M-h>   :vertical resize +4<CR>
-nnoremap <silent> <M-l>   :vertical resize -4<CR>
+nnoremap <silent> <M-J>   :resize -4<CR>
+nnoremap <silent> <M-K>   :resize +4<CR>
+nnoremap <silent> <M-H>   :vertical resize +4<CR>
+nnoremap <silent> <M-L>   :vertical resize -4<CR>
 
 " Better window navigation
 nnoremap <C-h>   <C-w>h
@@ -54,6 +54,12 @@ nmap <M-.> <C-a>
 nmap <M-,> <C-x>
 xmap <M-.> g<C-a>
 xmap <M-,> g<C-x>
+
+function! DeleteFile()
+  call delete(expand('%'))
+  bdelete!
+endfunction
+:command! DeleteFile :call DeleteFile()
 
 
 " quickfix mappings
