@@ -26,7 +26,10 @@ require('lazy').setup('plugins', {
 
 require('settings')
 require('user.highlights')
+
 vim.cmd("source ".. vimscriptpath .."/mappings.vim")
+require('user.mappings')
+
 vim.cmd("source ".. vimscriptpath .."/misc.vim")
 vim.cmd("source ".. vimscriptpath .."/bufdelete.vim")
 require('user_libs.utils')

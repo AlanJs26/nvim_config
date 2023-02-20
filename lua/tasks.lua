@@ -10,7 +10,12 @@ return {
         -- {"g++ -I"..sfmlpath.."/include -c {{t:p}} -o {{t:r}}.o && g++ {{t:r}}.o -o {{t:r}}.exe -L"..sfmlpath.."/lib -lsfml-graphics -lsfml-window -lsfml-system && {{t:r}}.exe", 'Compile and run SFML'},
     },
     python = {
-        {'python3 "{{p}}"', 'run'},
+        -- {'python3 "{{p}}"', 'run', float = true},
+        {'python3 "/mnt/DiscoExterno/Users/Alan/Documents/_Codes/Python/Text Processing/movy/test.py"', 'run test', float = true},
+        -- {'pytest', 'run pytest', float = true},
+    },
+    yuck = {
+        {"silent !eww reload", 'reload config', before = 'w', after = '', prefix = ''},
     },
     vim = {
         {"source %", 'source current file', before = 'w', after = '', prefix = ''},

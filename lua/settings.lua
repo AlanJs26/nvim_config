@@ -3,6 +3,7 @@ local options = {
   autochdir   = false,
   -- shell       = 'C:/cygwin64/bin/bash.exe',
   mouse       = "a",
+  mousemoveevent = true,
   cursorline  = true,
   spell       = false,
   foldmethod  = "syntax",

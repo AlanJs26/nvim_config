@@ -11,7 +11,15 @@ return {
       },
       options = {
         persist_buffer_sort = true,
+        hover = {
+            enabled = true,
+            delay = 200,
+            reveal = {'close'}
+        },
         show_close_icon = false,
+        -- indicator = {
+        --     style = 'underline'
+        -- },
         --separator_style = {'', ''},
 
         custom_filter = function(buf,buf_nums)

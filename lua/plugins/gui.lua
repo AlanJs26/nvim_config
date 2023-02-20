@@ -3,7 +3,8 @@ vim.g.Hexokinase_highlighters = {'backgroundfull'}
 return {
   'markonm/traces.vim',
   'eandrju/cellular-automaton.nvim',
-   'sheerun/vim-polyglot',
+  'sheerun/vim-polyglot',
+  'elkowar/yuck.vim',
   { 'mhinz/vim-signify', event = 'VimEnter' },
   {
     'rrethy/vim-hexokinase',

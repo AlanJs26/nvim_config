@@ -14,6 +14,7 @@ function M.setup(opts)
     prefix = 'term ',
     before = 'w|sp',
     after = 'call feedkeys("i")',
+    float = false,
   }
 
   M.lines = {}
@@ -57,6 +58,7 @@ function M.register(tasks)
             disabled = disabled,
             before = task.before or M.opts.before,
             after = task.after or M.opts.after,
+            float = task.float or M.opts.float,
             prefix = task.prefix or M.opts.prefix,
             unpack(task),
           })
@@ -128,16 +130,40 @@ function M.subscribe_filetype(tasks, filetype)
           return function ()
             local commands = ''
 
-            if task.before ~= nil then
+            if type(task.before) == 'function' then
+              task.before()
+            elseif type(task.before) == 'string' then
               commands = commands .. task.before .. '\n'
             end
 
             commands = commands .. task.prefix .. entry
 
-            if task.after ~= nil then
+            if type(task.after) == 'function' then
+              vim.cmd(commands)
+              task.after()
+            elseif type(task.after) == 'string' then
               commands = commands .. '\n' ..task.after
+              vim.cmd(commands)
             end
-            vim.cmd(commands)
+
+            if task.float == true then
+              local win = vim.api.nvim_get_current_win()
+              local ui = vim.api.nvim_list_uis()[1]
+              local w = ui.width
+              local h = ui.height
+
+              vim.api.nvim_win_set_config(win, {
+                  width = w-15,
+                  height = h-7,
+                  relative = 'editor',
+                  row = 3 ,
+                  col = 7,
+                  style = 'minimal',
+                  border = 'rounded'
+              })
+              vim.api.nvim_feedkeys('i', 'x', false)
+              -- vim.fn.feedkeys('i')
+            end
           end
         end
 
