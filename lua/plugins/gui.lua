@@ -5,6 +5,7 @@ return {
   'eandrju/cellular-automaton.nvim',
   'sheerun/vim-polyglot',
   'elkowar/yuck.vim',
+
   { 'mhinz/vim-signify', event = 'VimEnter' },
   {
     'rrethy/vim-hexokinase',
@@ -80,7 +81,6 @@ return {
     end
   },
   {
-
     'nyngwang/NeoZoom.lua',
     -- dependencies = {
     --   'nyngwang/NeoNoName.lua' -- you will need this if you want to use the keymap sample below.
