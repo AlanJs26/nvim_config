@@ -3,6 +3,59 @@ local M = {}
 local augroupname
 local namespace
 
+M.custom_command = {
+  content = ''
+}
+
+M.custom_command.input = function()
+  vim.ui.input('custom command: ', function(result)
+    M.custom_command.content = result
+    M.custom_command.call()
+  end)
+end
+
+M.custom_command.call = function()
+  if M.custom_command.content == '' then
+    M.custom_command.input()
+    return
+  end
+
+  local commands = ''
+
+  if type(M.opts.before) == 'function' then
+    M.opts.before()
+  elseif type(M.opts.before) == 'string' then
+    commands = M.opts.before .. '\n'
+  end
+
+  commands = commands .. M.opts.prefix .. M.custom_command.content
+
+  if type(M.opts.after) == 'function' then
+    vim.cmd(commands)
+    M.opts.after()
+  elseif type(M.opts.after) == 'string' then
+    commands = commands .. '\n' ..M.opts.after
+    vim.cmd(commands)
+  end
+
+  local win = vim.api.nvim_get_current_win()
+  local ui = vim.api.nvim_list_uis()[1]
+  local w = ui.width
+  local h = ui.height
+
+  vim.api.nvim_win_set_config(win, {
+      width = w-15,
+      height = h-7,
+      relative = 'editor',
+      row = 3 ,
+      col = 7,
+      style = 'minimal',
+      border = 'rounded'
+  })
+  vim.api.nvim_feedkeys('i', 'x', false)
+
+end
+
 function M.setup(opts)
   M.tasks = {} -- filetype = { autocmd_id = {id,...}, {command, title, disabled[true|false]},... }
   augroupname = vim.api.nvim_create_augroup('taskmanager_au', {clear = true})
@@ -10,12 +63,16 @@ function M.setup(opts)
 
   M.opts = {
     map_list = {'a','d','f','q','w','e','r','z','x','c','v'},
+    main_map = 'u',
+    secondary_map = 'U',
     group_name = 'tasks',
     prefix = 'term ',
     before = 'w|sp',
     after = 'call feedkeys("i")',
     float = false,
   }
+
+  M.main_task_index = 1
 
   M.lines = {}
 
@@ -75,6 +132,9 @@ function M.register(tasks)
 end
 
 local function parse_entry(entry)
+  if type(entry) == 'function' then
+    return entry
+  end
   local new_entry = entry
   for m in entry:gmatch("{{(.-)}}") do
     local parsed_value = m
@@ -102,48 +162,39 @@ function M.subscribe_filetype(tasks, filetype)
       pattern = '*',
       group = augroupname,
       callback = function()
-        if vim.o.filetype ~= filetype then
-          return
-        end
+        -- if vim.o.filetype ~= filetype then
+        --   return
+        -- end
         local wk = require("which-key")
 
-        local opts = {u = {}}
-
+        local opts = {[M.opts.secondary_map] = {}}
         local enabled_tasks = {}
-        for i, task in ipairs(tasks) do
-          if task.disabled == false then
-            table.insert(enabled_tasks, task)
-          else
-            opts.u[M.opts.map_list[i]] = {'', 'which_key_ignore'}
-          end
-        end
 
-        if #tasks - #enabled_tasks > 0 then
-          if #enabled_tasks == 1 then
-            opts.u[M.opts.map_list[1]] = {'', 'which_key_ignore'}
-          end
-          wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
-        end
-
-        local callback = function (task)
+        local create_task_runner = function (task, index)
           local entry = parse_entry(task[1])
           return function ()
-            local commands = ''
+            M.main_task_index = index
 
-            if type(task.before) == 'function' then
-              task.before()
-            elseif type(task.before) == 'string' then
-              commands = commands .. task.before .. '\n'
-            end
+            if type(entry) == 'string' then
+              local commands = ''
 
-            commands = commands .. task.prefix .. entry
+              if type(task.before) == 'function' then
+                task.before()
+              elseif type(task.before) == 'string' then
+                commands = task.before .. '\n'
+              end
 
-            if type(task.after) == 'function' then
-              vim.cmd(commands)
-              task.after()
-            elseif type(task.after) == 'string' then
-              commands = commands .. '\n' ..task.after
-              vim.cmd(commands)
+              commands = commands .. task.prefix .. entry
+
+              if type(task.after) == 'function' then
+                vim.cmd(commands)
+                task.after()
+              elseif type(task.after) == 'string' then
+                commands = commands .. '\n' ..task.after
+                vim.cmd(commands)
+              end
+            else
+              entry()
             end
 
             if task.float == true then
@@ -162,32 +213,45 @@ function M.subscribe_filetype(tasks, filetype)
                   border = 'rounded'
               })
               vim.api.nvim_feedkeys('i', 'x', false)
-              -- vim.fn.feedkeys('i')
             end
           end
         end
 
-        opts = {u = {}}
-        if #enabled_tasks > 0 then
-          if #enabled_tasks == 1 then
-            local task = enabled_tasks[1]
-            opts.u = {callback(task), task[2]}
-            opts.u.name = nil
-          else
 
-            for i, task in ipairs(enabled_tasks) do
-              opts.u[M.opts.map_list[i]] = {callback(task), task[2]}
+        if vim.o.filetype == filetype then
+          for i, task in ipairs(tasks) do
+            if task.disabled == false then
+              table.insert(enabled_tasks, task)
             end
-            opts.u.name = M.opts.group_name
-            wk.register({u = {'', 'which_key_ignore'}}, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
+            opts[M.opts.secondary_map][M.opts.map_list[i]] = {'', 'which_key_ignore'}
           end
+        end
 
-          wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
+        table.insert(enabled_tasks, {M.custom_command.input, 'run custom task'})
+
+        wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
+
+        if #enabled_tasks >= 1 then
+          for i, task in ipairs(enabled_tasks) do
+            opts[M.opts.secondary_map][M.opts.map_list[i]] = {create_task_runner(task, i), task[2]}
+          end
+          opts[M.opts.secondary_map].name = M.opts.group_name
+
         else
-
-          wk.register({u = {'', 'which_key_ignore'}}, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
+          M.main_task_index = 1
         end
-        -- vim.fn.feedkeys('i'..vim.inspect(opts))
+
+        if #enabled_tasks > 0 and M.main_task_index <= #enabled_tasks  then
+          task = enabled_tasks[M.main_task_index]
+          if task[1] == M.custom_command.input then
+            opts[M.opts.main_map] = {create_task_runner({M.custom_command.call, 'run custom task'}, M.main_task_index), task[2]}
+          else
+            opts[M.opts.main_map] = {create_task_runner(task, M.main_task_index), task[2]}
+          end
+        else
+          opts[M.opts.main_map] = {'', 'which_key_ignore'}
+        end
+        wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
 
       end
     }

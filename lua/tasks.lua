@@ -11,8 +11,9 @@ return {
     },
     python = {
         -- {'python3 "{{p}}"', 'run', float = true},
-        {'python3 "/mnt/DiscoExterno/Users/Alan/Documents/_Codes/Python/Text Processing/movy/test.py"', 'run test', float = true},
-        -- {'pytest', 'run pytest', float = true},
+        -- {'python3 "/mnt/DiscoExterno/Users/Alan/Documents/_Codes/Python/Text Processing/movy/test.py"', 'run test', float = true},
+        {'pytest', 'run pytest', float = true},
+        {'python3 runner.py', 'run runner.py', float = true},
     },
     yuck = {
         {"silent !eww reload", 'reload config', before = 'w', after = '', prefix = ''},

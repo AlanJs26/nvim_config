@@ -22,24 +22,23 @@ function Setup_tasks()
 
     for k,_ in pairs(tasks) do
       RegisterWKByFiletype({
-          [k] = {
-            j = {
-              name='+toggle',
-              c = {
-                name = 'config',
-                t = {':lua openTasksMenu()<cr>', 'Enabled tasks'},
-                e = {function() vim.api.nvim_command("e "..tasks_path) end, 'Edit tasks'},
-                -- r = {function() vim.api.nvim_command("source "..tasks_path) end, 'Reload tasks'}
-                r = {':lua Setup_tasks()<cr>', 'Reload tasks'}
-              }
-            },
+        [k] = {
+          h = {
+            name = 'config',
+            t = {':lua openTasksMenu()<cr>', 'Enabled tasks'},
+            e = {function() vim.api.nvim_command("e "..tasks_path) end, 'Edit tasks'},
+            r = {Setup_tasks, 'Reload tasks'}
           }
-        }, 'n')
+        },
+      }, 'n')
 
     end
-
-
 end
+
+wk.register({
+    U = { }
+
+})
 
 -- if pcall(function() local _ = tm.tasks end) then
 --     Setup_tasks()
