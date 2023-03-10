@@ -65,9 +65,9 @@ endfunction
 :command! DeleteFile :call DeleteFile()
 
 
-" quickfix mappings
-nnoremap ]q :silent! cprev<cr> 
-nnoremap [q :silent! cnext<cr> 
+" " quickfix mappings
+" nnoremap ]q :silent! cprev<cr> 
+" nnoremap [q :silent! cnext<cr> 
 
 " When using `dd` in the quickfix list, remove the item from the quickfix list.
 function! RemoveQFItem()

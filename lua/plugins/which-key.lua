@@ -189,20 +189,20 @@ return {
       t= {':call v:lua.searchTerminal(v:true,v:true)<cr>',                         'vertical terminal'},
       T= {':exe "sp|term"|exe "SendHere"|set nonumber|norm i<cr>',                 'horizontal terminal'},
 
-      l= {function()
-            local qf_exists = false
-            for _, win in pairs(vim.fn.getwininfo()) do
-              if win["quickfix"] == 1 then
-                qf_exists = true
-                break
-              end
-            end
-            if qf_exists == true then
-              vim.cmd("cclose")
-            elseif not vim.tbl_isempty(vim.fn.getqflist()) then
-              vim.cmd("copen")
-            end
-          end,                                                           'quickfix'},
+      -- l= {function()
+      --       local qf_exists = false
+      --       for _, win in pairs(vim.fn.getwininfo()) do
+      --         if win["quickfix"] == 1 then
+      --           qf_exists = true
+      --           break
+      --         end
+      --       end
+      --       if qf_exists == true then
+      --         vim.cmd("cclose")
+      --       elseif not vim.tbl_isempty(vim.fn.getqflist()) then
+      --         vim.cmd("copen")
+      --       end
+      --     end,                                                           'quickfix'},
 
       v= {':vsplit<cr>',                                                           'vertical split'},
       h= {':split<cr>',                                                            'horizontal split'},
