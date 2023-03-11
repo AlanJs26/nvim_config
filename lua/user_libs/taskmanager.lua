@@ -56,6 +56,90 @@ M.custom_command.call = function()
 
 end
 
+M.attach_main_map = function(task, index, buflist)
+    M.main_task_index = index
+
+    opts = {}
+    if task[1] == M.custom_command.input then
+      opts[M.opts.main_map] = {M.create_task_runner({M.custom_command.call, 'run custom task'}, M.main_task_index, buflist), task[2]}
+    else
+      opts[M.opts.main_map] = {M.create_task_runner(task, M.main_task_index, buflist), task[2]}
+    end
+    local wk = require("which-key")
+    for i,bufnr in ipairs(buflist) do
+      if vim.fn.bufexists(bufnr) == 1 then
+        wk.register(opts, {prefix = '<leader>', nowait = true, buffer = bufnr})
+      end
+    end
+end
+
+M.parse_entry = function(entry)
+  if type(entry) == 'function' then
+    return entry
+  end
+  local new_entry = entry
+  for m in entry:gmatch("{{(.-)}}") do
+    local parsed_value = m
+
+    if string.match(m, "^[gb]:") then
+      parsed_value = string.format('expand(%s)', m)
+    else
+      parsed_value = string.format('expand("%%:%s")', m)
+    end
+
+    new_entry = string.gsub(new_entry, '{{'..m..'}}', vim.api.nvim_eval(parsed_value))
+  end
+
+  return new_entry
+end
+
+M.create_task_runner = function (task, index, buflist)
+  local entry = M.parse_entry(task[1])
+  return function ()
+    M.attach_main_map(task, index, buflist)
+
+    if type(entry) == 'string' then
+      local commands = ''
+
+      if type(task.before) == 'function' then
+        task.before()
+      elseif type(task.before) == 'string' then
+        commands = task.before .. '\n'
+      end
+
+      commands = commands .. task.prefix .. entry
+
+      if type(task.after) == 'function' then
+        vim.cmd(commands)
+        task.after()
+      elseif type(task.after) == 'string' then
+        commands = commands .. '\n' ..task.after
+        vim.cmd(commands)
+      end
+    else
+      entry()
+    end
+
+    if task.float == true then
+      local win = vim.api.nvim_get_current_win()
+      local ui = vim.api.nvim_list_uis()[1]
+      local w = ui.width
+      local h = ui.height
+
+      vim.api.nvim_win_set_config(win, {
+          width = w-15,
+          height = h-7,
+          relative = 'editor',
+          row = 3 ,
+          col = 7,
+          style = 'minimal',
+          border = 'rounded'
+      })
+      vim.api.nvim_feedkeys('i', 'x', false)
+    end
+  end
+end
+
 function M.setup(opts)
   M.tasks = {} -- filetype = { autocmd_id = {id,...}, {command, title, disabled[true|false]},... }
   augroupname = vim.api.nvim_create_augroup('taskmanager_au', {clear = true})
@@ -69,6 +153,7 @@ function M.setup(opts)
     prefix = 'term ',
     before = 'w|sp',
     after = 'call feedkeys("i")',
+    exclude_filetypes = {'NvimTree', 'Alpha', 'WhichKey'},
     float = false,
   }
 
@@ -83,6 +168,95 @@ function M.setup(opts)
   end
 
   M.updateMenu()
+
+  vim.api.nvim_create_autocmd(
+    'BufEnter,BufNew',
+    {
+      pattern = '*',
+      group = augroupname,
+      callback = function()
+        for i,item in ipairs(M.opts.exclude_filetypes) do
+          if vim.o.filetype == item then
+            return
+          end
+        end
+        tasks = {}
+        for ft,ft_tasks in pairs(M.subscribed_tasks) do
+          if vim.o.filetype == ft then
+            tasks = ft_tasks
+            break
+          end
+        end
+
+        local wk = require("which-key")
+
+        local opts = {[M.opts.secondary_map] = {}}
+        local enabled_tasks = {}
+        local buflist = {}
+
+        if #tasks == 0 then
+          for i,item in ipairs(M.buflist) do
+            if item == vim.fn.bufnr('%') then
+              return
+            end
+          end
+          table.insert(M.buflist, vim.fn.bufnr('%'))
+          buflist = M.buflist
+
+          table.insert(enabled_tasks, {M.custom_command.input, 'run custom task', disabled = false})
+        else
+          for i,item in ipairs(tasks.buflist) do
+            if item == vim.fn.bufnr('%') then
+              return
+            end
+          end
+          table.insert(tasks.buflist, vim.fn.bufnr('%'))
+          buflist = tasks.buflist
+
+          local has_custom_task = false
+          for i, task in ipairs(tasks) do
+            if task[1] == M.custom_command.input then
+              has_custom_task = true
+            end
+            if task.disabled == false then
+              table.insert(enabled_tasks, task)
+            end
+            opts[M.opts.secondary_map][M.opts.map_list[i]] = {'', 'which_key_ignore'}
+          end
+
+          if has_custom_task == false then
+            table.insert(tasks, {M.custom_command.input, 'run custom task', disabled = false})
+            table.insert(enabled_tasks, {M.custom_command.input, 'run custom task', disabled = false})
+          end
+
+          wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
+        end
+
+
+
+        if #enabled_tasks >= 1 then
+          for i, task in ipairs(enabled_tasks) do
+            opts[M.opts.secondary_map][M.opts.map_list[i]] = {M.create_task_runner(task, i, buflist), task[2]}
+          end
+          opts[M.opts.secondary_map].name = M.opts.group_name
+        else
+          M.main_task_index = 1
+        end
+
+        if #enabled_tasks > 0 and M.main_task_index <= #enabled_tasks  then
+          task = enabled_tasks[M.main_task_index]
+          if task[1] == M.custom_command.input then
+            opts[M.opts.main_map] = {M.create_task_runner({M.custom_command.call, 'run custom task'}, M.main_task_index, buflist), task[2]}
+          else
+            opts[M.opts.main_map] = {M.create_task_runner(task, M.main_task_index, buflist), task[2]}
+          end
+        else
+          opts[M.opts.main_map] = {'', 'which_key_ignore'}
+        end
+        wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
+      end
+    }
+  )
 
 end
 
@@ -131,132 +305,17 @@ function M.register(tasks)
 
 end
 
-local function parse_entry(entry)
-  if type(entry) == 'function' then
-    return entry
-  end
-  local new_entry = entry
-  for m in entry:gmatch("{{(.-)}}") do
-    local parsed_value = m
 
-    if string.match(m, "^[gb]:") then
-      parsed_value = string.format('expand(%s)', m)
-    else
-      parsed_value = string.format('expand("%%:%s")', m)
-    end
 
-    new_entry = string.gsub(new_entry, '{{'..m..'}}', vim.api.nvim_eval(parsed_value))
-  end
-
-  return new_entry
-end
-
+M.buflist = {}
+M.subscribed_tasks = {}
 function M.subscribe_filetype(tasks, filetype)
-  if tasks.autocmd_id ~= nil then
-    return
-  end
-
-  tasks.autocmd_id = vim.api.nvim_create_autocmd(
-    'BufEnter,BufNew',
-    {
-      pattern = '*',
-      group = augroupname,
-      callback = function()
-        -- if vim.o.filetype ~= filetype then
-        --   return
-        -- end
-        local wk = require("which-key")
-
-        local opts = {[M.opts.secondary_map] = {}}
-        local enabled_tasks = {}
-
-        local create_task_runner = function (task, index)
-          local entry = parse_entry(task[1])
-          return function ()
-            M.main_task_index = index
-
-            if type(entry) == 'string' then
-              local commands = ''
-
-              if type(task.before) == 'function' then
-                task.before()
-              elseif type(task.before) == 'string' then
-                commands = task.before .. '\n'
-              end
-
-              commands = commands .. task.prefix .. entry
-
-              if type(task.after) == 'function' then
-                vim.cmd(commands)
-                task.after()
-              elseif type(task.after) == 'string' then
-                commands = commands .. '\n' ..task.after
-                vim.cmd(commands)
-              end
-            else
-              entry()
-            end
-
-            if task.float == true then
-              local win = vim.api.nvim_get_current_win()
-              local ui = vim.api.nvim_list_uis()[1]
-              local w = ui.width
-              local h = ui.height
-
-              vim.api.nvim_win_set_config(win, {
-                  width = w-15,
-                  height = h-7,
-                  relative = 'editor',
-                  row = 3 ,
-                  col = 7,
-                  style = 'minimal',
-                  border = 'rounded'
-              })
-              vim.api.nvim_feedkeys('i', 'x', false)
-            end
-          end
-        end
-
-
-        if vim.o.filetype == filetype then
-          for i, task in ipairs(tasks) do
-            if task.disabled == false then
-              table.insert(enabled_tasks, task)
-            end
-            opts[M.opts.secondary_map][M.opts.map_list[i]] = {'', 'which_key_ignore'}
-          end
-        end
-
-        table.insert(enabled_tasks, {M.custom_command.input, 'run custom task'})
-
-        wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
-
-        if #enabled_tasks >= 1 then
-          for i, task in ipairs(enabled_tasks) do
-            opts[M.opts.secondary_map][M.opts.map_list[i]] = {create_task_runner(task, i), task[2]}
-          end
-          opts[M.opts.secondary_map].name = M.opts.group_name
-
-        else
-          M.main_task_index = 1
-        end
-
-        if #enabled_tasks > 0 and M.main_task_index <= #enabled_tasks  then
-          task = enabled_tasks[M.main_task_index]
-          if task[1] == M.custom_command.input then
-            opts[M.opts.main_map] = {create_task_runner({M.custom_command.call, 'run custom task'}, M.main_task_index), task[2]}
-          else
-            opts[M.opts.main_map] = {create_task_runner(task, M.main_task_index), task[2]}
-          end
-        else
-          opts[M.opts.main_map] = {'', 'which_key_ignore'}
-        end
-        wk.register(opts, {prefix = '<leader>', nowait = true, buffer = vim.fn.bufnr('%')})
-
-      end
-    }
-  )
+  M.subscribed_tasks[filetype] = tasks
+  M.subscribed_tasks[filetype].buflist = {}
 end
+
+
+------- Menu
 
 local function add_menu_highlights()
   local buf = vim.api.nvim_get_current_buf()
@@ -292,8 +351,10 @@ function M.updateMenu()
 
   M.lines = {}
 
+  M.buflist = {}
   for filetype, FiletypeTasks in pairs(M.tasks) do
     if filetype == vim.o.filetype then
+      FiletypeTasks.buflist = {}
       for _, task in ipairs(FiletypeTasks) do
         local disabled = 'enabled'
         if task.disabled then

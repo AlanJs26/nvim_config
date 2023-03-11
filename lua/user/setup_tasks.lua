@@ -2,7 +2,7 @@ local tm = require('user_libs.taskmanager')
 local wk = require('which-key')
 
 function Setup_tasks()
-    local unalowedft = {'', 'alpha', 'TelescopePrompt', 'NvimTree'}
+    local unalowedft = {'alpha', 'TelescopePrompt', 'NvimTree'}
     for _, value in ipairs(unalowedft) do
         if vim.o.filetype == value then
             return
@@ -34,11 +34,6 @@ function Setup_tasks()
 
     end
 end
-
-wk.register({
-    U = { }
-
-})
 
 -- if pcall(function() local _ = tm.tasks end) then
 --     Setup_tasks()
