@@ -4,7 +4,7 @@ return {
   'markonm/traces.vim',
   'eandrju/cellular-automaton.nvim',
   'sheerun/vim-polyglot',
-  'elkowar/yuck.vim',
+  { 'elkowar/yuck.vim', ft = 'yuck' },
 
   { 'mhinz/vim-signify', event = 'VimEnter' },
   {

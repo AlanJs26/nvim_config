@@ -154,7 +154,9 @@ return {
   -- use 'inkarkat/vim-visualrepeat'
 
   {'junegunn/vim-easy-align', event = 'VimEnter'},
-  { 'tommcdo/vim-exchange', keys = {"cx", "X"} },
+  { 'tommcdo/vim-exchange', keys = {
+      "cx"
+  } },
 
 
 
