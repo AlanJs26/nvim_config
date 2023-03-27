@@ -48,6 +48,8 @@ vim.cmd([[
   autocmd FileType python set tabstop=4
   autocmd FileType python set shiftwidth=4
 
+  autocmd BufNewFile,BufRead,BufReadPost *.movy set filetype=movy
+
   if has('win32')
     let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'
   endif

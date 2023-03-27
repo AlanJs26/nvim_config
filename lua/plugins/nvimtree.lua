@@ -39,7 +39,7 @@ return {
         ignore_list = {}
       },
       system_open = {
-        cmd  = nil,
+        cmd  = 'nemo',
         args = {}
       },
       filters = {
