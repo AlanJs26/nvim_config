@@ -1,13 +1,16 @@
 local sfmlpath = 'C:/SFML-2.4.2'
 return {
     c = {
-        {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2 -lm && "{{t:r}}.exe"', 'Compile and run'},
+        {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2 -lm && "./{{t:r}}"', 'Compile and run'},
         {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2',                      'Compile'},
     },
     cpp = {
         {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},
         -- {'g++ *.cpp -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile all and run'},
         -- {"g++ -I"..sfmlpath.."/include -c {{t:p}} -o {{t:r}}.o && g++ {{t:r}}.o -o {{t:r}}.exe -L"..sfmlpath.."/lib -lsfml-graphics -lsfml-window -lsfml-system && {{t:r}}.exe", 'Compile and run SFML'},
+    },
+    javascript = {
+        {'npm start', 'npm start'},
     },
     python = {
         {'python3 runner.py', 'run runner.py', float = true},

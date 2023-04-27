@@ -1,7 +1,12 @@
+
 return {
+  { 'j-hui/fidget.nvim', config = true },
   {
     'neovim/nvim-lspconfig',
     dependencies = {
+      "SmiteshP/nvim-navbuddy",
+      "SmiteshP/nvim-navic",
+
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
       'glepnir/lspsaga.nvim',
@@ -11,23 +16,21 @@ return {
     event = 'BufRead',
     config = function()
 
-      -- Setup lspconfig.
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local wk = require('which-key')
 
-      local nvim_lsp = require('lspconfig')
       local on_attach = function(client, bufnr)
-
         local function buf_set_keymap(...)
           vim.api.nvim_buf_set_keymap(bufnr, ...)
         end
 
-        require "lsp_signature".on_attach({
+        require("lsp_signature").on_attach({
             handler_opts = {
               border = 'single',
             },
             toggle_key = '<M-x>',
             transparency = 10
-          })
+        })
+        require("nvim-navbuddy").attach(client, bufnr)
 
         -- Mappings.
         local opts = { noremap=true, silent=true }
@@ -40,10 +43,46 @@ return {
         -- buf_set_keymap('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts)
         -- buf_set_keymap('i', '<C-k>', '<Cmd>Lspsaga hover_doc<CR>', opts)
 
+        buf_set_keymap('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", opts)
+        buf_set_keymap('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+        buf_set_keymap('n', 'dp', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+
+
+        wk.register({ 
+
+          l = {
+            name='+lsp',
+            d= {':Lspsaga peek_definition<cr>',              'preview definition'},
+            s= {':lua vim.lsp.buf.signature_help()<cr>',     'signature help'},
+            t= {':Telescope lsp_document_symbols<cr>',       'telescope symbols'},
+            r= {':Lspsaga rename<cr>',                       'rename'},
+            c= {':Lspsaga code_action<cr>',                  'code action'},
+            p= {':Lspsaga diagnostic_jump_prev<cr>',         'previous diagnostic'},
+            n= {':Lspsaga diagnostic_jump_next<cr>',         'next diagnostic'},
+            f= {':lua vim.lsp.buf.format{async = true}<cr>', 'formatting'},
+            l= {':Lspsaga show_line_diagnostics<cr>',        'show diagnostics'},
+
+            m= {':lua require("nvim-navbuddy").open()<cr>',  'symbols'},
+            -- m= {':Lspsaga outline<cr>',                  'symbols'},
+            -- l= {':lua vim.diagnostic.open_float()<cr>',    'show diagnostics'},
+            -- a= {':lua vim.lsp.buf.add_workspace_folder()<cr>',                       'add wosksp folder'},
+            -- A= {':lua vim.lsp.buf.remove_workspace_folder()<cr>',                    'remove worksp folder'},
+            -- w= {':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', 'list workspaces'},
+          },
+        }, {
+          prefix = "<leader>",
+          nowait = true,
+          mode='n',
+        })
+
+
       end
 
 
       -- mason / lsp_install
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      capabilities.offsetEncoding = "utf-8"
+      local nvim_lsp = require('lspconfig')
 
       require('mason').setup()
 
@@ -103,9 +142,10 @@ return {
       -- clangd
       nvim_lsp.clangd.setup {
         on_attach = on_attach,
-        -- capabilities = capabilities,
+        capabilities = capabilities,
         filetypes = {'arduino', 'c', 'cpp', 'ino'},
         -- cmd = {'C:/tools/clangd_14.0.3/bin/clangd.exe', '--resource-dir','C:/SFML-2.4.2;C:/tools/clangd_14.0.3/lib/clang/14.0.3/include'},
+            offsetEncoding = { 'utf-8', 'utf-16', },
         settings = {
           clangd = {
             arguments = {
@@ -122,14 +162,16 @@ return {
         }
       }
 
+
       require 'nvim-treesitter.install'.compilers = {'clang', 'gcc', 'python'}
 
 
+      --- Ui config ----
       local lsp = vim.lsp
       local handlers = lsp.handlers
 
       -- icon
-      lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      handlers["textDocument/publishDiagnostics"] = lsp.with(
         lsp.diagnostic.on_publish_diagnostics, {
           underline = true,
           -- This sets the spacing and the prefix, obviously.
@@ -165,31 +207,8 @@ return {
 
 
 
-      --- lsp-saga
-      -- use custom config
+      --- lsp-saga ---
 
-      -- require('lspsaga').setup({
-      --   ui = {
-      --     theme = 'round',
-      --     diagnostic = "",
-      --     code_action = "",
-      --
-      --   },
-      --   outline = {
-      --     auto_preview = false,
-      --   },
-      --   symbol_in_winbar = {
-      --     enable = true,
-      --     show_file = false
-      --   },
-      --   lightbulb = {
-      --     enable = true,
-      --     sign = true,
-      --     enable_in_insert = true,
-      --     sign_priority = 20,
-      --     virtual_text = true,
-      --   },
-      -- })
       require('lspsaga').setup({
           outline = {
             auto_preview = false
@@ -203,32 +222,6 @@ return {
             }
           }
         })
-      -- require('lspsaga').init_lsp_saga({
-      --   border_style = "rounded", 
-      --   diagnostic_header = { "", "", "", "" },
-      --   -- show_diagnostic_source = true,
-      --   code_action_icon = "",
-      --   show_outline = {
-      --     auto_preview = false,
-      --     auto_enter = false,
-      --   },
-      --   symbol_in_winbar = {
-      --     enable = true,
-      --     show_file = false
-      --   },
-      --   code_action_lightbulb = {
-      --     enable = true,
-      --     sign = true,
-      --     enable_in_insert = true,
-      --     sign_priority = 20,
-      --     virtual_text = true,
-      --   },
-      -- })
-
-
-      vim.keymap.set('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", {silent = true})
-      vim.keymap.set('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", {silent = true})
-      vim.keymap.set('n', 'dp', "<cmd>Lspsaga diagnostic_jump_prev<CR>", {silent = true})
 
       local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
       for type, icon in pairs(signs) do
@@ -281,6 +274,5 @@ return {
       }
     end
   },
-  { 'j-hui/fidget.nvim', config = true }
 
 }

@@ -7,7 +7,7 @@ local options = {
   mousemoveevent = true,
   cursorline  = true,
   spell       = false,
-  foldmethod  = "syntax",
+  foldmethod  = "manual",
   foldlevel   = 99,
   scrolloff   = 7,
   shiftwidth  = 2,
@@ -43,6 +43,8 @@ vim.cmd([[
   syntax enable
   set cpoptions+=y
   set cinkeys-=:
+
+  autocmd VimResized * wincmd =
 
   autocmd BufRead * set scroll=7
   autocmd FileType python set tabstop=4

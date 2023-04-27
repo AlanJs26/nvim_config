@@ -1,10 +1,35 @@
 vim.g.Hexokinase_highlighters = {'backgroundfull'}
 
 return {
-  'markonm/traces.vim',
   'eandrju/cellular-automaton.nvim',
   'sheerun/vim-polyglot',
+  {
+    'rcarriga/nvim-notify',
+    lazy = true,
+    config = function()
+      require('notify').setup({
+        timeout = 1000
+      })
+    end
+  },
   { 'elkowar/yuck.vim', ft = 'yuck' },
+
+
+  {
+    'nmac427/guess-indent.nvim',
+    dependencies = { 'folke/which-key.nvim' },
+    config = function()
+      require('guess-indent').setup()
+      local wk = require('which-key')
+
+      wk.register({
+          l = {
+            i = {':GuessIndent<cr>', 'Guess indent'}
+          }
+        }, {prefix = '<leader>', nowait = true})
+
+    end,
+  },
 
   { 'mhinz/vim-signify', event = 'VimEnter' },
   {
@@ -87,9 +112,13 @@ return {
     -- },
     config = function()
       require('neo-zoom').setup { -- use the defaults or UNCOMMENT and change any one to overwrite
+        winopts = {
+          offset = {
+            width = 0.87,
+          }
+        }
         -- left_ratio = 0.2,
         -- top_ratio = 0.03,
-        width_ratio = 0.87,
         -- height_ratio = 0.9,
         -- border = 'double',
         -- exclude_filetypes = {
@@ -127,30 +156,30 @@ return {
 
     end,
   },
-{
+  {
     'RRethy/vim-illuminate',
     config = function()
       require('illuminate').configure({
           -- providers: provider used to get references in the buffer, ordered by priority
           providers = {
-              'lsp',
-              'treesitter',
-              'regex',
+            'lsp',
+            'treesitter',
+            'regex',
           },
           -- delay: delay in milliseconds
           delay = 100,
           filetype_overrides = {},
           filetypes_denylist = {
-              'dirvish',
-              'fugitive',
-              'alpha',
-              'NvimTree',
+            'dirvish',
+            'fugitive',
+            'alpha',
+            'NvimTree',
           },
           under_cursor = true,
           large_file_cutoff = nil,
           large_file_overrides = nil,
           min_count_to_highlight = 2,
-      })
+        })
       vim.cmd([[
           augroup illuminate_augroup
               autocmd!
@@ -164,6 +193,6 @@ return {
           augroup END
       ]])
     end
-},
+  },
 
 }

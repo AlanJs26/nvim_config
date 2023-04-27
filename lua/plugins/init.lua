@@ -68,34 +68,6 @@ return {
       { 'inkarkat/vim-ingo-library' }
     } 
   },
-  -- {
-  --   'echasnovski/mini.move',
-  --   version = false,
-  --   config = function()
-  --     require('mini.move').setup({
-  --     -- Module mappings. Use `''` (empty string) to disable one.
-  --     mappings = {
-  --       -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
-  --       left = '<M-h>',
-  --       right = '<M-l>',
-  --       down = '<M-j>',
-  --       up = '<M-k>',
-  --
-  --       -- Move current line in Normal mode
-  --       line_left = '<M-h>',
-  --       line_right = '<M-l>',
-  --       line_down = '<M-j>',
-  --       line_up = '<M-k>',
-  --     },
-  --
-  --     -- Options which control moving behavior
-  --     options = {
-  --       -- Automatically reindent selection during linewise vertical move
-  --       reindent_linewise = true,
-  --     },
-  --   })
-  -- end
-  -- },
   {
     'echasnovski/mini.ai',
     priority = 100,
@@ -130,35 +102,63 @@ return {
     end,
   },
 
+  -- {
+  --   'Wansmer/treesj',
+  --   dependencies = { 'nvim-treesitter', },
+  --   lazy = true,
+  --   keys = {'gS'},
+  --   config = function()
+  --     require('treesj').setup({
+  --         use_default_keymaps = false,
+  --         check_syntax_error = false,
+  --         dot_repeat = false,
+  --         cursor_behaior = 'hold',
+  --         langs = {
+  --           python = {
+  --             list = {
+  --               both = {
+  --                 recursive = true,
+  --                 separator = '',
+  --                 last_separator = false
+  --               }
+  --             }
+  --           }
+  --         }
+  --     })
+  --     vim.keymap.set('n', 'gS', require('treesj').toggle )
+  --   end,
+  -- },
+
   {
-    'Wansmer/treesj',
-    dependencies = { 'nvim-treesitter' },
-    keys = {'gS'},
+    'AndrewRadev/splitjoin.vim',
     config = function()
-      require('treesj').setup({
-          use_default_keymaps = false
-      })
-      vim.keymap.set( {'n'}, 'gS', ':TSJToggle<cr>' )
-    end,
+      vim.cmd([[
+        let g:splitjoin_split_mapping = ''
+        let g:splitjoin_join_mapping = ''
+        let g:splitjoin_quiet = 1
+        let g:splitjoin_normalize_whitespace = 1
+
+        let g:splitjoin_curly_brace_padding = 1
+
+        let g:splitjoin_python_brackets_on_separate_lines = 1
+      ]])
+      vim.keymap.set('n', 'gS', ':SplitjoinSplit<cr>' )
+      vim.keymap.set('n', 'GS', ':SplitjoinJoin<cr>' )
+    end
+
   },
 
-
-
   -- less important writing plugins
+  'junegunn/vim-easy-align',
+  'tommcdo/vim-exchange',
+
 
   {
     'mg979/vim-visual-multi',
     branch = 'master',
-    keys = {"çc", "<C-n>"},
+    keys = {"çc", { "<C-n>", mode = {'v', 'n'} }},
   },
   -- use 'inkarkat/vim-visualrepeat'
-
-  {'junegunn/vim-easy-align', event = 'VimEnter'},
-  { 'tommcdo/vim-exchange', keys = {
-      "cx"
-  } },
-
-
 
   -- language specific 
   { 'mattn/emmet-vim',

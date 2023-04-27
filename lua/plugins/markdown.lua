@@ -20,6 +20,7 @@ return {
     ft = { "tex", "markdown" },
   },
 
+
   { 'lervag/vimtex',  ft = {'markdown', 'tex', 'latex'} },
   { 'plasticboy/vim-markdown',  ft = {'markdown'} },
 

@@ -9,6 +9,9 @@ M.custom_command = {
 
 M.custom_command.input = function()
   vim.ui.input('custom command: ', function(result)
+    if not result then
+      return
+    end
     M.custom_command.content = result
     M.custom_command.call()
   end)

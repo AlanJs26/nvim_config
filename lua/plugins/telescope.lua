@@ -33,7 +33,7 @@ return {
           mappings = {
             default = {
               after_action = function(selection)
-                print("Directory changed to \"" .. selection.path .. "\"")
+                -- print("Directory changed to \"" .. selection.path .. "\"")
                 vim.cmd("NvimTreeOpen")
               end
             },

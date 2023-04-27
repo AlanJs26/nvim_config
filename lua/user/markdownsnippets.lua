@@ -34,16 +34,16 @@ M.setup = function(opts)
   ls.add_snippets("markdown", math_i, { default_priority = 0 })
 
   local autosnippets = {
-    s({ trig = "(%a)dot", name = "\\dot{x}", wordTrig = true, regTrig = true, priority = 100 },
+    s({ trig = "(%a)dot", name = "\\dot{x}", wordTrig = true, priority = 100 },
         f(function(_, snip) return string.format("\\dot{%s}", snip.captures[1])
     end, {})),
-    s({ trig = "(%a)ddot", name = "\\ddot{x}", wordTrig = false, regTrig = true, priority = 100 },
+    s({ trig = "(%a)ddot", name = "\\ddot{x}", wordTrig = false, priority = 100 },
         f(function(_, snip) return string.format("\\ddot{%s}", snip.captures[1])
     end, {})),
-    s({ trig = "(%a)([0-9])", name = "x_0", wordTrig = true, regTrig = true, priority = 100 },
+    s({ trig = "(%a)([0-9])", name = "x_0", wordTrig = true, priority = 100 },
         f(function(_, snip) return string.format("%s_%s", snip.captures[1], snip.captures[2]) end, {})
     ),
-    s({ trig = "([%a0-9_\\{\\}\\\\]+)/", name = "num frac", wordTrig = true, regTrig = true, priority = 100 },
+    s({ trig = "([%a0-9_\\{\\}\\\\]+)/", name = "num frac", wordTrig = true, priority = 100 },
       {
         t"\\frac{",
           f(function(_, snip) return snip.captures[1] end, {}),
@@ -54,6 +54,11 @@ M.setup = function(opts)
       }
     ),
   }
+
+  for _, snip in ipairs(autosnippets) do
+    snip.regTrig = true
+    snip.condition = pipe({ is_math, no_backslash })
+  end
 
   for _, snip in ipairs(require("luasnip-latex-snippets/math_wRA_no_backslash")) do
     snip.regTrig = true
@@ -68,6 +73,7 @@ M.setup = function(opts)
     table.insert(autosnippets, snip)
   end
   local normal_wa = require("luasnip-latex-snippets/normal_wA")
+
   for _, snip in ipairs(normal_wa) do
     if snip['dscr'][1] == 'mk' then
        snip = ls.parser.parse_snippet({ trig = "mk", name = "Math" },

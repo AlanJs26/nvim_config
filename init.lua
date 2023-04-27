@@ -32,7 +32,7 @@ require('user.mappings')
 
 vim.cmd("source ".. vimscriptpath .."/misc.vim")
 vim.cmd("source ".. vimscriptpath .."/bufdelete.vim")
+require('user.neovide')
 require('user_libs.utils')
-require('user_libs.floatwin')
 require('user.language_specific')
 require('user.setup_tasks')

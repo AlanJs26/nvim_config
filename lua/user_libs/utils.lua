@@ -4,6 +4,18 @@ local event = require("nui.utils.autocmd").event
 
 local M = {}
 
+function run_action(func)
+  if not func then
+    return
+  end
+
+  if type(func) == 'function' then
+    func()
+  else
+    vim.api.nvim_command(func)
+  end
+end
+
 function _G.create_file(command, prefix, ext)
   local input = Input({
     position = "50%",
@@ -51,7 +63,7 @@ function _G.create_file(command, prefix, ext)
   end)
 end
 
-M.confirmPopup = _G.confirmPopup
+
 function _G.confirmPopup(query, positive_action, negative_action)
   local input = Menu({
     position = "50%",
@@ -61,7 +73,7 @@ function _G.confirmPopup(query, positive_action, negative_action)
     },
     relative = "editor",
     border = {
-      style = "single",
+      style = "rounded",
       text = {
           top = query,
           top_align = "center",
@@ -69,7 +81,8 @@ function _G.confirmPopup(query, positive_action, negative_action)
     },
     win_options = {
       winblend = 10,
-      winhighlight = "Normal:Normal,FloatBorder:Normal",
+      winhighlight = "NormalFloat:Pmenu,NormalFloat:Pmenu,CursorLine:PmenuSel,Search:None",
+      -- winhighlight = "Normal:Normal,FloatBorder:Normal",
     },
   }, {
     lines = {
@@ -80,24 +93,27 @@ function _G.confirmPopup(query, positive_action, negative_action)
       focus_next = { "j", "<Down>", "<Tab>" },
       focus_prev = { "k", "<Up>", "<S-Tab>" },
       close = { "<Esc>", "<C-c>", "n", "q" },
-      submit = { "<CR>", "<Space>", "y" },
+      submit = { "<CR>", "<Space>" },
     },
     on_close = function()
-      if negative_action then
-        vim.api.nvim_command(negative_action)
-      end
+      run_action(negative_action)
     end,
     on_submit = function(item)
       if item.text == 'yes' then
-        vim.api.nvim_command(positive_action)
-      elseif negative_action then
-        vim.api.nvim_command(negative_action)
+        run_action(positive_action)
+      else
+        run_action(negative_action)
       end
     end,
   })
 
   -- mount/open the component
   input:mount()
+
+  vim.keymap.set('n', 'y', function()
+    run_action(positive_action)
+    input:unmount()
+  end , {buffer = true, silent = true})
 
   -- unmount component when cursor leaves buffer
   input:on(event.BufLeave, function()
@@ -127,8 +143,71 @@ function _G.RegisterWKByFiletype(a, mode)
 end
 
 
+function _G.floatwin(command, title)
+  local input = Input({
+    position = "50%",
+    size = {
+        width = 20,
+        height = 2,
+    },
+    relative = "editor",
+    border = {
+      style = "single",
+      text = {
+          top = title,
+          top_align = "center",
+      },
+    },
+    win_options = {
+      winblend = 10,
+      winhighlight = "Normal:Normal",
+    },
+  }, {
+    prompt = "> ",
+    default_value = "",
+    on_close = function()
+      print("Input closed!")
+    end,
+    on_submit = function(value)
+      local newcommand = command
+      for match in command:gmatch("{{(.-)}}") do
+        local parsed_value = match
+
+        if string.match(match, "value") then
+          newcommand = string.gsub(newcommand, '{{'..match..'}}', value)
+        else
+          if string.match(match, "^[gb]:") then
+            parsed_value = string.format('expand(%s)', match)
+          else
+            parsed_value = string.format('expand("%%:%s")',match)
+          end
+          newcommand = string.gsub(newcommand, '{{'..match..'}}', vim.api.nvim_eval(parsed_value))
+        end
+
+
+      end
+
+      vim.api.nvim_command(newcommand)
+      -- vim.fn.feedkeys(command)
+      -- vim.api.nvim_command("W")
+    end,
+  })
+
+  -- mount/open the component
+  input:mount()
+
+  -- unmount component when cursor leaves buffer
+  input:on(event.BufLeave, function()
+    input:unmount()
+  end)
+end
+
+
+
+M.floatwin = _G.floatwin
 M.create_file = _G.create_file
 M.confirmPopup = _G.confirmPopup
 M.RegisterWKByFiletype = _G.RegisterWKByFiletype
+M.run_action = run_action
 
 return M
