@@ -2,19 +2,27 @@ local M = {}
 
 local augroupname
 local namespace
+local Terminal = require('toggleterm.terminal').Terminal
 
 M.custom_command = {
-  content = ''
+  content = '',
+  term = nil
 }
 
 M.custom_command.input = function()
-  vim.ui.input('custom command: ', function(result)
-    if not result then
-      return
-    end
-    M.custom_command.content = result
-    M.custom_command.call()
-  end)
+  vim.ui.input({
+      prompt='custom command: ',
+      default = vim.g.CustomCommand or M.custom_command.content
+    },
+    function(result)
+      if not result then
+        return
+      end
+
+      M.custom_command.content = result
+      vim.g.CustomCommand = result
+      M.custom_command.call()
+    end)
 end
 
 M.custom_command.call = function()
@@ -23,39 +31,24 @@ M.custom_command.call = function()
     return
   end
 
-  local commands = ''
-
   if type(M.opts.before) == 'function' then
     M.opts.before()
   elseif type(M.opts.before) == 'string' then
-    commands = M.opts.before .. '\n'
+    vim.cmd(M.opts.before)
   end
 
-  commands = commands .. M.opts.prefix .. M.custom_command.content
+  M.custom_command.term = Terminal:new({
+    cmd = M.parse_entry(M.custom_command.content),
+    direction = M.opts.direction,
+    close_on_exit = false,
+  })
+  M.custom_command.term:toggle()
 
   if type(M.opts.after) == 'function' then
-    vim.cmd(commands)
     M.opts.after()
   elseif type(M.opts.after) == 'string' then
-    commands = commands .. '\n' ..M.opts.after
-    vim.cmd(commands)
+    vim.cmd(M.opts.after)
   end
-
-  local win = vim.api.nvim_get_current_win()
-  local ui = vim.api.nvim_list_uis()[1]
-  local w = ui.width
-  local h = ui.height
-
-  vim.api.nvim_win_set_config(win, {
-      width = w-15,
-      height = h-7,
-      relative = 'editor',
-      row = 3 ,
-      col = 7,
-      style = 'minimal',
-      border = 'rounded'
-  })
-  vim.api.nvim_feedkeys('i', 'x', false)
 
 end
 
@@ -98,48 +91,41 @@ end
 
 M.create_task_runner = function (task, index, buflist)
   local entry = M.parse_entry(task[1])
+  term = nil
+
   return function ()
     M.attach_main_map(task, index, buflist)
 
+    if type(task.before) == 'function' then
+      task.before()
+    elseif type(task.before) == 'string' then
+      vim.cmd(task.before)
+    end
+
     if type(entry) == 'string' then
-      local commands = ''
 
-      if type(task.before) == 'function' then
-        task.before()
-      elseif type(task.before) == 'string' then
-        commands = task.before .. '\n'
+      if term == nil then
+        term = Terminal:new({
+          cmd = entry,
+          direction = task.direction,
+          close_on_exit = false,
+        })
       end
 
-      commands = commands .. task.prefix .. entry
-
-      if type(task.after) == 'function' then
-        vim.cmd(commands)
-        task.after()
-      elseif type(task.after) == 'string' then
-        commands = commands .. '\n' ..task.after
-        vim.cmd(commands)
-      end
+      term:toggle()
     else
       entry()
     end
 
-    if task.float == true then
-      local win = vim.api.nvim_get_current_win()
-      local ui = vim.api.nvim_list_uis()[1]
-      local w = ui.width
-      local h = ui.height
-
-      vim.api.nvim_win_set_config(win, {
-          width = w-15,
-          height = h-7,
-          relative = 'editor',
-          row = 3 ,
-          col = 7,
-          style = 'minimal',
-          border = 'rounded'
-      })
-      vim.api.nvim_feedkeys('i', 'x', false)
+    if type(task.after) == 'function' then
+      task.after()
+    elseif type(task.after) == 'string' then
+      vim.cmd(task.after)
     end
+
+
+
+
   end
 end
 
@@ -153,11 +139,10 @@ function M.setup(opts)
     main_map = 'u',
     secondary_map = 'U',
     group_name = 'tasks',
-    prefix = 'term ',
-    before = 'w|sp',
-    after = 'call feedkeys("i")',
+    before = nil,
+    after = nil,
     exclude_filetypes = {'NvimTree', 'Alpha', 'WhichKey'},
-    float = false,
+    direction = 'float',
   }
 
   M.main_task_index = 1
@@ -292,8 +277,7 @@ function M.register(tasks)
             disabled = disabled,
             before = task.before or M.opts.before,
             after = task.after or M.opts.after,
-            float = task.float or M.opts.float,
-            prefix = task.prefix or M.opts.prefix,
+            direction = task.direction or M.opts.direction,
             unpack(task),
           })
       end

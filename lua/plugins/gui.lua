@@ -3,6 +3,37 @@ vim.g.Hexokinase_highlighters = {'backgroundfull'}
 return {
   'eandrju/cellular-automaton.nvim',
   'sheerun/vim-polyglot',
+  'theRealCarneiro/hyprland-vim-syntax',
+  { 'kaarmu/typst.vim', ft = 'typst' },
+  {
+    dependencies = {
+      'othree/html5.vim',
+      'pangloss/vim-javascript',
+    },
+    'evanleck/vim-svelte',
+    ft = 'svelte',
+  },
+
+  {
+    "ellisonleao/carbon-now.nvim",
+    config = function()
+      local carbon = require('carbon-now')
+      carbon.setup({
+        options = {
+          theme = "VSCode",
+          drop_shadow = true,
+          bg = "#2B2323",
+          font_family = "Monoid",
+        }
+      })
+
+      local wk = require('which-key')
+      wk.register({
+        S = {":'<,'>CarbonNow<cr>", 'Share Snippet'},
+      }, {prefix = "<leader>", nowait = true, mode = 'v' })
+
+    end
+  },
   {
     'rcarriga/nvim-notify',
     lazy = true,
@@ -13,7 +44,6 @@ return {
     end
   },
   { 'elkowar/yuck.vim', ft = 'yuck' },
-
 
   {
     'nmac427/guess-indent.nvim',
@@ -31,7 +61,32 @@ return {
     end,
   },
 
-  { 'mhinz/vim-signify', event = 'VimEnter' },
+  {
+    "caenrique/swap-buffers.nvim",
+    config = function()
+      local swap = require('swap-buffers')
+      swap.setup()
+
+      vim.keymap.set('n', '<c-w><c-l>', function() swap.swap_buffers('l') end, {desc = 'swap right'})
+      vim.keymap.set('n', '<c-w><c-h>', function() swap.swap_buffers('h') end, {desc = 'swap left'})
+      vim.keymap.set('n', '<c-w><c-j>', function() swap.swap_buffers('j') end, {desc = 'swap down'})
+      vim.keymap.set('n', '<c-w><c-k>', function() swap.swap_buffers('k') end, {desc = 'swap up'})
+
+
+    end
+  },
+
+  {
+    'mhinz/vim-signify',
+    event = 'VimEnter',
+    config = function()
+      vim.g.signify_sign_add               = '▎'
+      vim.g.signify_sign_delete            = '▎'
+      vim.g.signify_sign_delete_first_line = '▎'
+      vim.g.signify_sign_change            = '▎'
+      vim.g.signify_priority=1
+    end
+  },
   {
     'rrethy/vim-hexokinase',
     build = 'make hexokinase'
@@ -84,7 +139,7 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     event = 'BufRead',
     config = function()
-      require('indent_blankline').setup {
+      require('ibl').setup {
         filetype_exclude = {
           "help",
           "terminal",
@@ -103,6 +158,9 @@ return {
       }
 
       vim.api.nvim_set_hl(0, 'IndentBlanklineChar',  {fg = "#26273b"})
+
+
+
     end
   },
   {
@@ -111,6 +169,9 @@ return {
     --   'nyngwang/NeoNoName.lua' -- you will need this if you want to use the keymap sample below.
     -- },
     config = function()
+
+
+
       require('neo-zoom').setup { -- use the defaults or UNCOMMENT and change any one to overwrite
         winopts = {
           offset = {
@@ -127,7 +188,14 @@ return {
         -- scrolloff_on_zoom = 13, -- offset to the top-border.
       }
       local NOREF_NOERR_TRUNC = { silent = true, nowait = true }
-      vim.keymap.set('n', 'go', require("neo-zoom").neo_zoom, NOREF_NOERR_TRUNC)
+      vim.keymap.set('n', 'go', ':NeoZoomToggle<cr>', NOREF_NOERR_TRUNC)
+
+     local wk = require('which-key')
+      wk.register({
+        t = {
+          o = {':NeoZoomToggle<cr>', 'NeoZoom'},
+        }
+      }, {prefix = "<leader>", nowait = true })
 
       -- My setup (This requires NeoNoName.lua, and optionally NeoWell.lua)
       -- local cur_buf = nil

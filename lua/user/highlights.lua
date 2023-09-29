@@ -26,6 +26,11 @@ vim.cmd([[
     highlight CmpItemAbbrMatch guifg=#7aa2f7 
     highlight CmpItemAbbrMatchFuzzy guifg=#4c68a6 
 
+    " Diff highlights and style
+    highlight DiffAdd ctermbg=4 guifg=#709943 guibg=transparent
+    highlight DiffChange ctermbg=5 guifg=#3e5380 guibg=transparent
+    highlight DiffDelete ctermbg=12 guifg=#803d49 guibg=transparent
+
     syn match Done "DONE" containedin=.*Comment  
     hi Done guifg=#565f89 gui=bold
     hi Todo guibg=none guifg=#bb9af7 gui=italic 

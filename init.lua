@@ -18,6 +18,7 @@ local vimscriptpath = resolve(vim.fn.stdpath("config").."/vimscript")
 
 vim.g.mapleader = " "
 
+
 require('lazy').setup('plugins', {
   change_detection = {
     enabled = false 
@@ -35,4 +36,4 @@ vim.cmd("source ".. vimscriptpath .."/bufdelete.vim")
 require('user.neovide')
 require('user_libs.utils')
 require('user.language_specific')
-require('user.setup_tasks')
+-- require('user.setup_tasks')

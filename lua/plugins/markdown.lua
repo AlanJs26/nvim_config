@@ -20,13 +20,45 @@ return {
     ft = { "tex", "markdown" },
   },
 
+  {
+    'jbyuki/nabla.nvim',
+    ft = {'tex', 'latex', 'markdown'},
+    config = function()
+      vim.keymap.set('n', 'K', require('nabla').popup)
+    end
+  },
 
-  { 'lervag/vimtex',  ft = {'markdown', 'tex', 'latex'} },
-  { 'plasticboy/vim-markdown',  ft = {'markdown'} },
+
+  {
+    'lervag/vimtex',
+    ft = {'markdown', 'tex', 'latex'},
+    config = function()
+      vim.g.tex_flavor='latex'
+      vim.g.vimtex_view_method='zathura'
+      vim.g.vimtex_quickfix_mode=0
+      vim.g.vim_markdown_math = 1
+
+
+      vim.g.tex_conceal='abdmg'
+
+      vim.cmd('hi Conceal ctermbg=none')
+
+      vim.o.conceallevel=2
+    end
+  },
 
   {
       "iamcco/markdown-preview.nvim",
       build = function() vim.fn["mkdp#util#install"]() end,
+      config = function()
+        vim.g.mkdp_preview_options = {
+          disable_sync_scroll = 1,
+        }
+      end,
       ft = { 'markdown' },
   },
+  -- {
+  --   'plasticboy/vim-markdown',
+  --   ft = {'markdown'},
+  -- },
 }

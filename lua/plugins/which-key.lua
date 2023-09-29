@@ -86,11 +86,19 @@ return {
               end
             end
 
+            local utils = require('user_libs.utils')
+
+            local terminals = require('toggleterm.terminal').get_all(true)
 
             if modified_buffers > 0 then
-              local utils = require('user_libs.utils')
-
-              utils.confirmPopup('Do you really want to exit?', 'wqa', nil)
+              utils.confirmPopup('There are unsaved buffers. Do you really want to exit?', 'wqa', nil)
+            elseif #terminals > 0 then
+              utils.confirmPopup('There are '..#terminals..' active terminals. Do you really want to exit?', function()
+                for _,term in ipairs(terminals) do
+                  term:shutdown()
+                end
+                vim.cmd('wqa')
+              end, nil)
             else
               vim.cmd('wqa')
             end
@@ -102,10 +110,10 @@ return {
         local status = require('user.git_status').status
 
         if status.is_git_dir == true then
-          auto_session_save_count = auto_session_save_count+1 
+          auto_session_save_count = auto_session_save_count+1
           if auto_session_save_count >= 3 then
-            vim.cmd(':silent! SaveSession')
-            auto_session_save_count = 0 
+            vim.cmd(':silent! SessionSave')
+            auto_session_save_count = 0
           end
         end
         vim.cmd(':silent w')
@@ -139,6 +147,9 @@ return {
         g= {':exec "Telescope live_grep cwd="..g:scratchfolder<cr>', 'live grep scratch buffers'},
         n= {function()
           local date = os.date()
+          if type(date) ~= 'string' then
+            return
+          end
           date = string.gsub(date, "/", "-"):gsub("[ :]", "_")
           if vim.o.filetype == "" then
             vim.cmd("w " .. vim.g.scratchfolder .. date .. ".txt")
@@ -152,11 +163,14 @@ return {
 
       t = {
         name='+window toggle',
-        z= {':ZenMode<cr>',                                                          'zen mode'},
-        m= {':wincmd ||wincmd _<cr>',                                                'maximize window'},
-        n= {':wincmd =<cr>',                                                         'normalize windows'},
-        t= {':call v:lua.searchTerminal(v:true,v:true)<cr>',                         'vertical terminal'},
-        T= {':exe "sp|term"|exe "SendHere"|set nonumber|norm i<cr>',                 'horizontal terminal'},
+
+        e= {':tab split<cr>',                                                          'edit in new tab'},
+
+        z= {':ZenMode<cr>',                                                            'zen mode'},
+        m= {':wincmd ||wincmd _<cr>',                                                  'maximize window'},
+        n= {':wincmd =<cr>',                                                           'normalize windows'},
+        t= {':ToggleTerm direction=vertical<cr>',                                      'vertical terminal'},
+        T= {':ToggleTerm direction=horizontal<cr>',                                    'horizontal terminal'},
 
 
         v= {':vsplit<cr>',                                                           'vertical split'},
@@ -168,12 +182,22 @@ return {
       j = {
         name='+toggle',
 
-        b= {':ScrollbarToggle<cr>',                                                  'scrollbar'},
-        l= {':call CicleNumberMode()<cr>',                                           'line numbers'},
-        L= {':set nonumber norelativenumber|let b:currentNumberMode = 0<cr>',        'hide line numbers'},
-        i= {':IndentBlanklineToggle<cr>',                                            'toggle indent guides'},
-        w= {':call ToggleWrap(-1)<cr>',                                              'toggle word wrap'},
-        s= {':set spell!<cr>',                                                       'spell'},
+        b= {':ScrollbarToggle<cr>',                                           'scrollbar'},
+        l= {':call CicleNumberMode()<cr>',                                    'line numbers'},
+        L= {':set nonumber norelativenumber|let b:currentNumberMode = 0<cr>', 'hide line numbers'},
+        i= {':IBLToggle<cr>',                                                 'toggle indent guides'},
+        w= {':call ToggleWrap(-1)<cr>',                                       'toggle word wrap'},
+        s= {function() 
+          if vim.o.spell == true then
+            vim.o.spell = false
+          else
+            if vim.o.filetype == '' then
+              vim.o.filetype = 'text'
+            end
+            vim.o.spell = true
+            vim.o.spelllang = 'pt_br,en_us'
+          end
+        end,                                                       'spell'},
         S= {':if &laststatus == 0|set laststatus=2|else|set laststatus=0|endif<cr>', 'statusline'},
         g= {':Git<cr>',                                                              'Git' },
         h= {':IlluminateToggle<cr>',                                                 'word highlight'},

@@ -1,6 +1,6 @@
 
 return {
-  { 'j-hui/fidget.nvim', config = true },
+  { 'j-hui/fidget.nvim', tag = 'legacy', config = true },
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -11,7 +11,7 @@ return {
       'williamboman/mason-lspconfig.nvim',
       'glepnir/lspsaga.nvim',
       'ray-x/lsp_signature.nvim',
-      'hrsh7th/nvim-cmp'
+      'hrsh7th/nvim-cmp',
     },
     event = 'BufRead',
     config = function()
@@ -43,12 +43,12 @@ return {
         -- buf_set_keymap('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts)
         -- buf_set_keymap('i', '<C-k>', '<Cmd>Lspsaga hover_doc<CR>', opts)
 
-        buf_set_keymap('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", opts)
+        buf_set_keymap('n', 'gh', "<cmd>Lspsaga finder<CR>", opts)
         buf_set_keymap('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
         buf_set_keymap('n', 'dp', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
 
 
-        wk.register({ 
+        wk.register({
 
           l = {
             name='+lsp',
@@ -101,7 +101,7 @@ return {
                 on_attach = function(client, bufnr)
                   -- prevent duplicate pyright clients
                   for _,v in ipairs(vim.lsp.get_active_clients({name = 'pyright'})) do
-                    buffer_in_client = false
+                    local buffer_in_client = false
                     for bufid,_ in pairs(v.attached_buffers) do
                       if bufid == bufnr then
                         buffer_in_client = true
@@ -123,45 +123,76 @@ return {
               })
           end,
 
-          ['sumneko_lua'] = function ()
-            nvim_lsp.sumneko_lua.setup({
+          ['pylsp'] = function ()
+            nvim_lsp.pylsp.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
                 settings = {
-                  Lua = {
-                    diagnostics = {
-                      globals = { 'vim' }
+                  pylsp = {
+                    plugins = {
+                      pycodestyle = {
+                        enabled = false,
+                      },
+                      -- autopep8 = {
+                      --   enabled = false,
+                      -- },
                     }
                   }
                 }
               })
           end,
+
+          ['lua_ls'] = function ()
+            nvim_lsp.lua_ls.setup({
+                on_attach = on_attach,
+                capabilities = capabilities,
+                settings = {
+                  Lua = {
+                    runtime = {
+                      -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                      version = 'LuaJIT',
+                    },
+                    diagnostics = {
+                      -- Get the language server to recognize the `vim` global
+                      globals = {'vim'},
+                    },
+                    workspace = {
+                      -- Make the server aware of Neovim runtime files
+                      library = vim.api.nvim_get_runtime_file("", true),
+                    },
+                    -- Do not send telemetry data containing a randomized but unique identifier
+                    telemetry = {
+                      enable = false,
+                    },
+                  }
+                }
+              })
+          end,
+
+          ['clangd'] = function()
+            nvim_lsp.clangd.setup {
+              on_attach = on_attach,
+              capabilities = capabilities,
+              filetypes = {'arduino', 'c', 'cpp', 'ino'},
+              -- cmd = {'C:/tools/clangd_14.0.3/bin/clangd.exe', '--resource-dir','C:/SFML-2.4.2;C:/tools/clangd_14.0.3/lib/clang/14.0.3/include'},
+              offsetEncoding = { 'utf-8', 'utf-16', },
+              settings = {
+                clangd = {
+                  -- arguments = {
+                  --   "-IC:/SFML-2.4.2/include",
+                  --   "-LC:/SFML-2.4.2/lib",
+                  --   "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
+                  --   "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32",
+                  --   "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward",
+                  --   "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include",
+                  --   "-IC:/MinGW/include",
+                  --   "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
+                  -- },
+                }
+              }
+            }
+          end,
         })
-
-
-      -- clangd
-      nvim_lsp.clangd.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = {'arduino', 'c', 'cpp', 'ino'},
-        -- cmd = {'C:/tools/clangd_14.0.3/bin/clangd.exe', '--resource-dir','C:/SFML-2.4.2;C:/tools/clangd_14.0.3/lib/clang/14.0.3/include'},
-            offsetEncoding = { 'utf-8', 'utf-16', },
-        settings = {
-          clangd = {
-            arguments = {
-              "-IC:/SFML-2.4.2/include",
-              "-LC:/SFML-2.4.2/lib",
-              "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
-              "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32",
-              "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward",
-              "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include",
-              "-IC:/MinGW/include",
-              "-IC:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
-            },
-          }
-        }
-      }
-
 
       require 'nvim-treesitter.install'.compilers = {'clang', 'gcc', 'python'}
 

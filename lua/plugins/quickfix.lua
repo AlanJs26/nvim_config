@@ -6,7 +6,7 @@ return {
   {
     'ten3roberts/qf.nvim',
     dependencies = {'folke/which-key.nvim'},
-    config = function() 
+    config = function()
       require('qf').setup({
           -- Location list configuration
           l = {

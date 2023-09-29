@@ -1,8 +1,11 @@
 local sfmlpath = 'C:/SFML-2.4.2'
 return {
     c = {
-        {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2 -lm && "./{{t:r}}"', 'Compile and run'},
-        {'gcc "{{p}}" -o {{t:r}} -Wall -ansi -pedantic -O2',                      'Compile'},
+        {'gcc "{{p}}" -o "{{t:r}}" -Wall -ansi -pedantic -O2 -lm && "./{{t:r}}"', 'Compile and run'},
+        {'gcc "{{p}}" -o "{{t:r}}" -Wall -ansi -pedantic -O2',                      'Compile'},
+    },
+    vhdl = {
+        {'nvc -a *.vhd && nvc -e testbench_{{t:r}} && nvc -r testbench_{{t:r}}', 'Run Testbench'}
     },
     cpp = {
         {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},

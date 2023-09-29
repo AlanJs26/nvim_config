@@ -13,6 +13,15 @@ return {
             case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
             -- the default case_mode is "smart_case"
           }
+        },
+        pickers = {
+          buffers = {
+            mappings = {
+              i = {
+                ['<M-d>'] = require('telescope.actions').delete_buffer,
+              }
+            }
+          }
         }
       }
     end

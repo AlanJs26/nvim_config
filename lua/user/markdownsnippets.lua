@@ -72,7 +72,7 @@ M.setup = function(opts)
     snip.condition = pipe({ is_math, no_backslash })
     table.insert(autosnippets, snip)
   end
-  local normal_wa = require("luasnip-latex-snippets/normal_wA")
+  local normal_wa = require("luasnip-latex-snippets/wA")
 
   for _, snip in ipairs(normal_wa) do
     if snip['dscr'][1] == 'mk' then
@@ -127,6 +127,8 @@ M.setup = function(opts)
 
     -- linear algebra
 
+    ls.parser.parse_snippet({ trig = "proj", name = "\\text{proj}_$2$1$0" }, "\\text{proj}_$2$1$0"),
+
     ls.parser.parse_snippet({ trig = "inp", name = "\\langle,\\rangle" }, "\\langle $1\\rangle $0"),
     ls.parser.parse_snippet({ trig = "lvn", name = "list of vectors" }, "($1_1,$1_2,\\dots,$1_n)$0"),
     ls.parser.parse_snippet({ trig = "tran", name = "linear transformation" }, "T \\colon $1 \\to $2 $0"),
@@ -142,10 +144,10 @@ M.setup = function(opts)
     table.insert(autosnippets, snip)
   end
 
-  for _, snip in ipairs(require("luasnip-latex-snippets/math_bwA")) do
-    snip.condition = pipe({ conds.line_begin, is_math })
-    table.insert(autosnippets, snip)
-  end
+  -- for _, snip in ipairs(require("luasnip-latex-snippets/math_bwA")) do
+  --   snip.condition = pipe({ conds.line_begin, is_math })
+  --   table.insert(autosnippets, snip)
+  -- end
 
   for _, snip in ipairs(require("luasnip-latex-snippets/bwA")) do
     snip.condition = pipe({ conds.line_begin, not_math })

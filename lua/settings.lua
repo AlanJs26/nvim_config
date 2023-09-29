@@ -31,6 +31,7 @@ local options = {
   number      = true,
   swapfile    = false,
   wrap        = false,
+  sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions",
 }
 
 for key, value in pairs(options) do
@@ -39,11 +40,13 @@ end
 
 vim.g.maplocalleader = "ç"
 
+
 vim.cmd([[
   syntax enable
   set cpoptions+=y
   set cinkeys-=:
 
+  "autocmd BufReadPost * if (expand('%:e') == '') && (expand('%:t') != '')| NvimTreeOpen|endif
   autocmd VimResized * wincmd =
 
   autocmd BufRead * set scroll=7
@@ -51,11 +54,11 @@ vim.cmd([[
   autocmd FileType python set shiftwidth=4
 
   autocmd BufNewFile,BufRead,BufReadPost *.movy set filetype=movy
+  autocmd BufNewFile,BufRead,BufReadPost *.typ set filetype=typst
 
   if has('win32')
     let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'
   endif
-
 ]])
 
 

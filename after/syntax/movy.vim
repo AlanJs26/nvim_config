@@ -10,23 +10,27 @@ syn match movycomment '^\s*#.*'
 syn match blockname '^\s*\[\[.\+\]\]'
 syn keyword movyboolean true false 
 
-syn keyword operators echo trash set_defaults keywords move basename extension path file pdf_template hasproperty filecontent nextgroup=separator skipwhite
-syn keyword modes pass and or not reset nextgroup=expression_operators,operators skipwhite contained
+syn keyword rule_commands keywords basename extension path file pdf_template hasproperty filecontent nextgroup=rule_separator skipwhite
+syn keyword action_commands prompt terminal echo trash set_defaults move nextgroup=action_separator skipwhite
+
+syn keyword rule_modes pass and or not reset nextgroup=expression_operators,rule_commands skipwhite contained
+syn keyword action_modes all reset nextgroup=action_commands skipwhite contained
 
 :syntax include @PY syntax/python.vim
 syn keyword expression_operators if nextgroup=separator_expressions skipwhite
 syn match separator_expressions '->\|:' contained nextgroup=expression_line skipwhite extend
 syn match expression_line '.*' contained contains=@PY
 
-syn match beforecolon '^\s*[^#]\{-\}\(:\|->\)' contains=movygroups,operators,expression_operators,modes,invalid keepend
+syn match beforecolon '^\s*[^#]\{-\}\(:\|->\)' contains=movygroups,rule_commands,expression_operators,action_modes,rule_modes,invalid keepend
 syn match invalid '.\+' contained
 
 
 syn match movynumber '\(\s\|:\)\@<=\([0-9\.]\)\+\(\s\|\n\)\@=' contained
 
-syn match separator '->\|:' contained nextgroup=argumentsregion,movycontent extend skipwhite
+syn match rule_separator ':' contained nextgroup=argumentsregion,movycontent extend skipwhite
+syn match action_separator '->' contained nextgroup=argumentsregion,movycontent extend skipwhite
 
-syn match movygroups '(.\{-\})' nextgroup=operators,expression_operators contained skipwhite
+syn match movygroups '(.\{-\})' nextgroup=rule_commands,expression_operators contained skipwhite
 syn match movycontent '.*[^{]' contained contains=expression,movyregexp nextgroup=argumentsregion
 
 syn match movyregexp '\([^ ]\)\@<!/.\{-\}[^\\]/[a-z]*' contained
@@ -53,11 +57,17 @@ syn region yamlregion start="---" end="---" fold transparent contains=yamlfield,
 
 " HIGHLIGHTING ==========
 
-hi link operators        @text
-hi link modes        Operator
+hi link rule_commands        @text
+hi link action_commands        @text
+
+hi link rule_modes        Operator
+hi link action_modes        Operator
+
 hi link movygroups        @include
 hi link blockname        Number
-hi link separator @character.special
+
+hi link rule_separator @character.special
+hi link action_separator @character.special
 
 hi link separator_expressions @character.special
 hi link expression_operators        @text

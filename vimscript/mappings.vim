@@ -7,11 +7,13 @@ autocmd BufRead * imap <M-k> <up>
 imap <c-l> <End>
 inoremap <c-h> <c-o>^
 
+nnoremap <silent> <M-0> :tabnext<CR>
+nnoremap <silent> <M-9> :tabprev<CR>
+
 nnoremap <S-ScrollWheelDown> 2zl
 nnoremap <S-ScrollWheelUp> 2zh
 
-
-cnoreabbrev git Git
+noremap <F12> :syntax off\|syntax on<CR>
 
 nnoremap <silent> <M-w>       :close       <CR>
 nnoremap <silent> <M-v>       :VisualBlock <CR>
@@ -125,15 +127,6 @@ inoremap <C-j> <esc>lBi <esc>ldiWciw <esc>gEa
 
 
 
-" creates a new tab using current buffer as main window
-function! OpenCurrentAsNewTab()
-    let l:currentPos = getcurpos()
-    tabedit %
-    call setpos(".", l:currentPos)
-endfunction
-
-" nmap go :call OpenCurrentAsNewTab()<CR>
-
 "very magic mode
 nnoremap / /\v
 vnoremap / /\v
@@ -161,16 +154,16 @@ noremap ?? ??<CR>
 noremap /v/ /\V
 noremap ?V? ?\V
 
-" join motion
-nnoremap <silent>J :set operatorfunc=Joinoperator<CR>g@
-nnoremap <silent>gJ :set operatorfunc=GJoinoperator<CR>g@
-onoremap <silent>J j
-func! Joinoperator(submode)
-        '[,']join
-endfunc
-func! GJoinoperator(submode)
-        '[,']join!
-endfunc 
+" " join motion
+" nnoremap <silent>J :set operatorfunc=Joinoperator<CR>g@
+" nnoremap <silent>gJ :set operatorfunc=GJoinoperator<CR>g@
+" onoremap <silent>J j
+" func! Joinoperator(submode)
+"         '[,']join
+" endfunc
+" func! GJoinoperator(submode)
+"         '[,']join!
+" endfunc 
 
 
 

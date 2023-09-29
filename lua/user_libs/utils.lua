@@ -4,7 +4,7 @@ local event = require("nui.utils.autocmd").event
 
 local M = {}
 
-function run_action(func)
+local function run_action(func)
   if not func then
     return
   end
