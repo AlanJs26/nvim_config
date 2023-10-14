@@ -67,7 +67,7 @@ return {
             'vim.fn.reg_recording() ~= "" and "recording "..vim.fn.reg_recording() or ""',
             color = { fg = '#ffbc03' }
           },
-          "vim.o.scrollbind and ' ' or ''",
+          "vim.o.scrollbind and ' 󰍽' or ''",
           {
             function()
               -- ""
@@ -87,7 +87,7 @@ return {
                 return ''
               end
 
-              return '痢' .. status.staged .. '|' .. status.unstaged
+              return '󰈙 ' .. status.staged .. '|' .. status.unstaged
             end,
             color = { fg = '#545c7e' }
           },

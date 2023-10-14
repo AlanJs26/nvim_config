@@ -140,21 +140,23 @@ return {
     event = 'BufRead',
     config = function()
       require('ibl').setup {
-        filetype_exclude = {
-          "help",
-          "terminal",
-          "alpha",
-          "packer",
-          "lspinfo",
-          "NvimTree",
-          "TelescopePrompt",
-          "TelescopeResults",
-          "startup-log.txt",
-          "Mundo"
+        exclude = {
+          filetypes = {
+            "help",
+            "terminal",
+            "alpha",
+            "packer",
+            "lspinfo",
+            "NvimTree",
+            "TelescopePrompt",
+            "TelescopeResults",
+            "startup-log.txt",
+            "Mundo"
+          }
         },
-        space_char_clankline = " ",
-        show_current_context = true,
-        show_current_context_start = false,
+        -- space_char_clankline = " ",
+        -- show_current_context = true,
+        -- show_current_context_start = false,
       }
 
       vim.api.nvim_set_hl(0, 'IndentBlanklineChar',  {fg = "#26273b"})
