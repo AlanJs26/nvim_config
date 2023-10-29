@@ -18,6 +18,5 @@ git clone https://github.com/AlanJs26/nvim_config.git ~/.config/nvim
 An alternative way is to run the script `install.sh` that does this for you
 
 ```bash
-chmod +x install.sh
-./install.sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/AlanJs26/nvim_config/master/install.sh)"
 ``` 
