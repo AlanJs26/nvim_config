@@ -22,3 +22,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/AlanJs26/nvim_config/maste
 ```
 
 If do not have neovim installed yet, you can append the flag `--nvim-appimage` to setup neovim globally
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/AlanJs26/nvim_config/master/install.sh) --nvim-appimage"
+```

@@ -5,7 +5,7 @@ if ! [ -d ~/.config/nvim ]; then
 fi
 
 if [ "$1" = "--nvim-appimage" ] && ! [ $(which nvim 2> /dev/null) ]; then
-  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+  curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
   ./nvim.appimage --appimage-extract
   sudo mv squashfs-root /
   sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
