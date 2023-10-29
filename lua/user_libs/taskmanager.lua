@@ -158,7 +158,7 @@ function M.setup(opts)
   M.updateMenu()
 
   vim.api.nvim_create_autocmd(
-    'BufEnter,BufNew',
+    {'BufEnter','BufNew'},
     {
       pattern = '*',
       group = augroupname,
