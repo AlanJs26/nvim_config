@@ -128,7 +128,7 @@ function _G.RegisterWKByFiletype(a, mode)
   local wk = require("which-key")
   for filetype,opts in pairs(a) do
     vim.api.nvim_create_autocmd(
-      'BufEnter,BufNew',
+      {'BufEnter', 'BufNew'},
       {
         pattern = '*',
         callback = function()
