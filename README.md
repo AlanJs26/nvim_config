@@ -19,4 +19,6 @@ An alternative way is to run the script `install.sh` that does this for you
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/AlanJs26/nvim_config/master/install.sh)"
-``` 
+```
+
+If do not have neovim installed yet, you can append the flag `--nvim-appimage` to setup neovim globally
