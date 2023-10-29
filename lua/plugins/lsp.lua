@@ -1,6 +1,85 @@
+local wk = require('which-key')
+
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...)
+    vim.api.nvim_buf_set_keymap(bufnr, ...)
+  end
+
+  vim.o.signcolumn='yes'
+
+  require("lsp_signature").on_attach({
+      handler_opts = {
+        border = 'single',
+      },
+      toggle_key = '<M-x>',
+      transparency = 10
+  })
+  require("nvim-navbuddy").attach(client, bufnr)
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+  -- buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<Cmd>Lspsaga peek_definition<CR>', opts)
+  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+
+  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('i', '<C-k>', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  -- buf_set_keymap('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts)
+  -- buf_set_keymap('i', '<C-k>', '<Cmd>Lspsaga hover_doc<CR>', opts)
+
+  buf_set_keymap('n', 'gh', "<cmd>Lspsaga finder<CR>", opts)
+  buf_set_keymap('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+  buf_set_keymap('n', 'dp', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+
+
+  wk.register({
+
+    l = {
+      name='+lsp',
+      d= {':Lspsaga peek_definition<cr>',              'preview definition'},
+      s= {':lua vim.lsp.buf.signature_help()<cr>',     'signature help'},
+      t= {':Telescope lsp_document_symbols<cr>',       'telescope symbols'},
+      r= {':Lspsaga rename<cr>',                       'rename'},
+      c= {':Lspsaga code_action<cr>',                  'code action'},
+      p= {':Lspsaga diagnostic_jump_prev<cr>',         'previous diagnostic'},
+      n= {':Lspsaga diagnostic_jump_next<cr>',         'next diagnostic'},
+      f= {':lua vim.lsp.buf.format{async = true}<cr>', 'formatting'},
+      l= {':Lspsaga show_line_diagnostics<cr>',        'show diagnostics'},
+
+      m= {':lua require("nvim-navbuddy").open()<cr>',  'symbols'},
+      -- m= {':Lspsaga outline<cr>',                  'symbols'},
+      -- l= {':lua vim.diagnostic.open_float()<cr>',    'show diagnostics'},
+      -- a= {':lua vim.lsp.buf.add_workspace_folder()<cr>',                       'add wosksp folder'},
+      -- A= {':lua vim.lsp.buf.remove_workspace_folder()<cr>',                    'remove worksp folder'},
+      -- w= {':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', 'list workspaces'},
+    },
+  }, {
+    prefix = "<leader>",
+    nowait = true,
+    mode='n',
+  })
+
+
+end
 
 return {
   { 'j-hui/fidget.nvim', tag = 'legacy', config = true },
+  { 'mfussenegger/nvim-dap' },
+  {
+    'simrat39/rust-tools.nvim',
+    ft = {'rust'},
+    config = function()
+      local rt = require('rust-tools')
+
+      rt.setup({
+        server = {
+          on_attach = on_attach,
+        },
+      })
+
+    end
+  },
+
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -15,69 +94,6 @@ return {
     },
     event = 'BufRead',
     config = function()
-
-      local wk = require('which-key')
-
-      local on_attach = function(client, bufnr)
-        local function buf_set_keymap(...)
-          vim.api.nvim_buf_set_keymap(bufnr, ...)
-        end
-
-        require("lsp_signature").on_attach({
-            handler_opts = {
-              border = 'single',
-            },
-            toggle_key = '<M-x>',
-            transparency = 10
-        })
-        require("nvim-navbuddy").attach(client, bufnr)
-
-        -- Mappings.
-        local opts = { noremap=true, silent=true }
-        -- buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-        buf_set_keymap('n', 'gD', '<Cmd>Lspsaga peek_definition<CR>', opts)
-        buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-
-        buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        buf_set_keymap('i', '<C-k>', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        -- buf_set_keymap('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts)
-        -- buf_set_keymap('i', '<C-k>', '<Cmd>Lspsaga hover_doc<CR>', opts)
-
-        buf_set_keymap('n', 'gh', "<cmd>Lspsaga finder<CR>", opts)
-        buf_set_keymap('n', 'dn', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
-        buf_set_keymap('n', 'dp', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
-
-
-        wk.register({
-
-          l = {
-            name='+lsp',
-            d= {':Lspsaga peek_definition<cr>',              'preview definition'},
-            s= {':lua vim.lsp.buf.signature_help()<cr>',     'signature help'},
-            t= {':Telescope lsp_document_symbols<cr>',       'telescope symbols'},
-            r= {':Lspsaga rename<cr>',                       'rename'},
-            c= {':Lspsaga code_action<cr>',                  'code action'},
-            p= {':Lspsaga diagnostic_jump_prev<cr>',         'previous diagnostic'},
-            n= {':Lspsaga diagnostic_jump_next<cr>',         'next diagnostic'},
-            f= {':lua vim.lsp.buf.format{async = true}<cr>', 'formatting'},
-            l= {':Lspsaga show_line_diagnostics<cr>',        'show diagnostics'},
-
-            m= {':lua require("nvim-navbuddy").open()<cr>',  'symbols'},
-            -- m= {':Lspsaga outline<cr>',                  'symbols'},
-            -- l= {':lua vim.diagnostic.open_float()<cr>',    'show diagnostics'},
-            -- a= {':lua vim.lsp.buf.add_workspace_folder()<cr>',                       'add wosksp folder'},
-            -- A= {':lua vim.lsp.buf.remove_workspace_folder()<cr>',                    'remove worksp folder'},
-            -- w= {':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', 'list workspaces'},
-          },
-        }, {
-          prefix = "<leader>",
-          nowait = true,
-          mode='n',
-        })
-
-
-      end
-
 
       -- mason / lsp_install
       local capabilities = require('cmp_nvim_lsp').default_capabilities()

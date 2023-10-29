@@ -7,7 +7,7 @@ return {
       vim.g.AutoPairsShortcutToggle = ''
       vim.g.AutoPairsMapCh = 0
       vim.cmd([[
-        au Filetype python let b:AutoPairs = AutoPairsDefine({"f'":"'"}, {"r'":"'"})
+        au Filetype python let b:AutoPairs = AutoPairsDefine({"f'":"'", "r'":"'"})
       ]])
     end
   },

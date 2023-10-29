@@ -137,8 +137,8 @@ return {
         w= {':cd %:p:h|pwd<cr>',                         'use current buffer as working dir'},
         L= {':Lazy<cr>',                                 'Lazy'},
 
-        u = {":UndotreeToggle<cr>",     'undo history'},
-        U = {":Telescope undo<cr>",     'undo telescope'},
+        U = {":UndotreeToggle<cr>",     'undo history'},
+        u = {":Telescope undo<cr>",     'undo telescope'},
       },
 
       c = {nil, 'comment'},

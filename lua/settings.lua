@@ -53,6 +53,7 @@ vim.cmd([[
   autocmd FileType python set tabstop=4
   autocmd FileType python set shiftwidth=4
 
+  autocmd BufNewFile,BufRead,BufReadPost *.yuck set filetype=yuck
   autocmd BufNewFile,BufRead,BufReadPost *.movy set filetype=movy
   autocmd BufNewFile,BufRead,BufReadPost *.typ set filetype=typst
 

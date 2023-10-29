@@ -43,7 +43,7 @@ return {
       })
     end
   },
-  { 'elkowar/yuck.vim', ft = 'yuck' },
+  { 'elkowar/yuck.vim', ft = 'yuck'},
 
   {
     'nmac427/guess-indent.nvim',
