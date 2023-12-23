@@ -1,4 +1,4 @@
-vim.g.Hexokinase_highlighters = {'backgroundfull'}
+-- vim.g.Hexokinase_highlighters = {'backgroundfull'}
 
 return {
   'eandrju/cellular-automaton.nvim',
@@ -88,9 +88,15 @@ return {
     end
   },
   {
-    'rrethy/vim-hexokinase',
-    build = 'make hexokinase'
+    'NvChad/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup()
+    end
   },
+  -- {
+  --   'rrethy/vim-hexokinase',
+  --   build = 'make hexokinase'
+  -- },
   {
     "petertriho/nvim-scrollbar", 
     dependencies = { 'kevinhwang91/nvim-hlslens' },

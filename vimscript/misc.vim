@@ -12,7 +12,7 @@ let g:VM_mouse_mappings = 1
 let g:cursorhold_updatetime = 600
 
 " Crunch math eval
-nnoremap <silent>gn i<C-r>=<C-r>+<CR><ESC>
+nnoremap <silent>gnn cil<C-r>=<C-r>+<CR><ESC>
 vnoremap <silent>gn di<C-r>=<C-r>+<CR><ESC>
 " nmap <silent>gn <plug>(crunch-operator-line)
 " xnoremap <silent>gn <plug>(visual-crunch-operator)
