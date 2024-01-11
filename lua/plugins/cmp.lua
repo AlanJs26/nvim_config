@@ -24,6 +24,20 @@ return {
     cmd = 'Copilot'
   },
   {
+    "Dynge/gitmoji.nvim",
+    dependencies = {
+      "hrsh7th/nvim-cmp",
+    },
+    opts = { -- the values below are the defaults
+      filetypes = {},
+      completion = {
+        append_space = true,
+        complete_as = "emoji",
+      },
+    },
+    -- ft = "gitcommit",
+  },
+  {
     'hrsh7th/nvim-cmp',
     dependencies = {
       'onsails/lspkind-nvim',
@@ -62,7 +76,7 @@ return {
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
       cmp.setup.cmdline('/', {
           sources = {
-            { name = 'buffer' }
+            { name = 'buffer' },
           }
         })
 
@@ -80,7 +94,8 @@ return {
               { name = 'path' }
             },
             {
-              { name = 'cmdline', keyword_pattern = [[\!\@<!\w*]] }
+              { name = 'cmdline', keyword_pattern = [[\!\@<!\w*]] },
+              { name = 'gitmoji', keyword_pattern = [[Git commit.*\%('\|"\|\s\|^\)\zs:\w*:\?]]},
             }
             )
         })

@@ -56,6 +56,7 @@ vim.cmd([[
   autocmd BufNewFile,BufRead,BufReadPost *.yuck set filetype=yuck
   autocmd BufNewFile,BufRead,BufReadPost *.movy set filetype=movy
   autocmd BufNewFile,BufRead,BufReadPost *.typ set filetype=typst
+  autocmd BufNewFile,BufRead,BufReadPost *.gazebo set filetype=xml
 
   if has('win32')
     let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'

@@ -33,7 +33,25 @@ return {
     end,
   },
 
-  {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    config = function()
+      require('nvim-treesitter.install').compilers = {'clang', 'gcc', 'python'}
+      require('nvim-treesitter.configs').setup({
+          ensure_installed = {
+              'bash',
+              'fish',
+              'c',
+              'lua',
+              'markdown',
+              'python',
+              'query',
+              'vim',
+          }
+      })
+    end
+  },
 
   'ryanoasis/vim-devicons',
   'kyazdani42/nvim-web-devicons',
