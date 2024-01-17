@@ -189,6 +189,11 @@ return {
       vim.cmd([[
         autocmd BufEnter * silent! iunmap ça
         autocmd BufEnter * silent! iunmap çi
+
+        let g:VM_leader = 'ç'
+        let g:VM_maps = {}
+        let g:VM_mouse_mappings = 1
+        " let g:VM_maps["select all words in the file"] = 'ça' 
       ]])
     end
   },

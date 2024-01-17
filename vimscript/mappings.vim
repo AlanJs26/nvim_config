@@ -2,6 +2,10 @@
 
 let g:mapleader="\<space>"
 
+" math eval
+nnoremap <silent>gnn cil<C-r>=<C-r>+<CR><ESC>
+vnoremap <silent>gn di<C-r>=<C-r>+<CR><ESC>
+
 map ZZ <Nop>
 autocmd BufRead * imap <M-k> <up>
 imap <c-l> <End>
@@ -66,10 +70,6 @@ function! DeleteFile()
 endfunction
 :command! DeleteFile :call DeleteFile()
 
-
-" " quickfix mappings
-" nnoremap ]q :silent! cprev<cr> 
-" nnoremap [q :silent! cnext<cr> 
 
 " When using `dd` in the quickfix list, remove the item from the quickfix list.
 function! RemoveQFItem()

@@ -225,6 +225,8 @@ return {
           { name = 'path' },
         },{
           { name = 'buffer', keyword_pattern = [[\w\+]] },
+        }, {
+          { name = 'buffer' },
         }
         ),
       formatting = {
