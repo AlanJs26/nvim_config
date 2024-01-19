@@ -8,8 +8,13 @@ if [ "$1" = "--nvim-appimage" ] && ! [ $(which nvim 2> /dev/null) ]; then
   curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
   chmod u+x ./nvim.appimage
   ./nvim.appimage --appimage-extract
-  sudo mv squashfs-root /
-  sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
+  if [ $(which sudo) ]; then
+    sudo mv squashfs-root /
+    sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
+  else
+    mv squashfs-root /
+    ln -s /squashfs-root/AppRun /usr/bin/nvim
+  fi
   rm nvim.appimage
   chmod u+x /usr/bin/nvim
 fi
