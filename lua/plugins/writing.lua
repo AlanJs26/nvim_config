@@ -181,11 +181,11 @@ return {
   {
     'mg979/vim-visual-multi',
     branch = 'master',
-    keys = {
-      "çc",
-      { "<C-n>", mode = {'v', 'n'} },
-    },
-    config = function()
+    -- keys = {
+    --   "çc",
+    --   { "<C-n>", mode = {'v', 'n'} },
+    -- },
+    init = function()
       vim.cmd([[
         autocmd BufEnter * silent! iunmap ça
         autocmd BufEnter * silent! iunmap çi

@@ -57,6 +57,7 @@ vim.cmd([[
   autocmd BufNewFile,BufRead,BufReadPost *.movy set filetype=movy
   autocmd BufNewFile,BufRead,BufReadPost *.typ set filetype=typst
   autocmd BufNewFile,BufRead,BufReadPost *.gazebo set filetype=xml
+  autocmd BufNewFile,BufRead,BufReadPost *.kdl set filetype=kdl|TSEnable highlight
 
   if has('win32')
     let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'
