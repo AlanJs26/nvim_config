@@ -181,20 +181,22 @@ return {
   {
     'mg979/vim-visual-multi',
     branch = 'master',
-    -- keys = {
-    --   "çc",
-    --   { "<C-n>", mode = {'v', 'n'} },
-    -- },
     init = function()
       vim.cmd([[
         autocmd BufEnter * silent! iunmap ça
         autocmd BufEnter * silent! iunmap çi
 
-        let g:VM_leader = 'ç'
+        let g:VM_leader = 'ç'     
         let g:VM_maps = {}
+        let g:VM_set_statusline = 0
         let g:VM_mouse_mappings = 1
-        " let g:VM_maps["select all words in the file"] = 'ça' 
+        let g:VM_silent_exit = 1
+        let g:VM_show_warnings = 0
+        let g:VM_custom_remaps = {'gl': '$'}
+        let g:VM_maps["Add Cursor Down"] = '<C-c>' 
+        let g:VM_custom_remaps["gl"] = '$BE' 
       ]])
+
     end
   },
   -- use 'inkarkat/vim-visualrepeat'

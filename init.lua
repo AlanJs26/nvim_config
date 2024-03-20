@@ -25,6 +25,8 @@ require('lazy').setup('plugins', {
   }
 })
 
+require('user.nvimtree_autocmd')
+
 require('settings')
 require('user.highlights')
 

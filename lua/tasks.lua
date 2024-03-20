@@ -8,7 +8,8 @@ return {
         {'nvc -a *.vhd && nvc -e testbench_{{t:r}} && nvc -r testbench_{{t:r}}', 'Run Testbench'}
     },
     cpp = {
-        {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},
+        -- {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},
+        {'g++ "{{p}}" -o {{t:r}}&&./{{t:r}}', 'Compile and run'},
         -- {'g++ *.cpp -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile all and run'},
         -- {"g++ -I"..sfmlpath.."/include -c {{t:p}} -o {{t:r}}.o && g++ {{t:r}}.o -o {{t:r}}.exe -L"..sfmlpath.."/lib -lsfml-graphics -lsfml-window -lsfml-system && {{t:r}}.exe", 'Compile and run SFML'},
     },
