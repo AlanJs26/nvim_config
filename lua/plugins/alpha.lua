@@ -68,7 +68,7 @@ return {
     end
 
     dashboard.section.buttons.val = {
-      dashboard.button("e", "  New file", ":ene | startinsert <CR>"),
+      dashboard.button("e", "  New file", ":ene | set filetype=markdown | startinsert <CR>"),
       dashboard.button("s", "  Recent sessions", ":silent! Telescope session-lens search_session<CR>"),
       -- dashboard.button("s", "  Recent sessions", ":silent! Telescope projects projects<CR>"),
       dashboard.button("f", "  Recent files", ":Telescope oldfiles<CR>"),

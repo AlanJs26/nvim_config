@@ -1,9 +1,9 @@
 -- vim.g.Hexokinase_highlighters = {'backgroundfull'}
 
 return {
-  'eandrju/cellular-automaton.nvim',
+  -- 'eandrju/cellular-automaton.nvim',
   'sheerun/vim-polyglot',
-  'theRealCarneiro/hyprland-vim-syntax',
+  { 'theRealCarneiro/hyprland-vim-syntax', ft = 'conf' },
   { 'kaarmu/typst.vim', ft = 'typst' },
   {
     dependencies = {
@@ -12,27 +12,6 @@ return {
     },
     'evanleck/vim-svelte',
     ft = 'svelte',
-  },
-
-  {
-    "ellisonleao/carbon-now.nvim",
-    config = function()
-      local carbon = require('carbon-now')
-      carbon.setup({
-        options = {
-          theme = "VSCode",
-          drop_shadow = true,
-          bg = "#2B2323",
-          font_family = "Monoid",
-        }
-      })
-
-      local wk = require('which-key')
-      wk.register({
-        S = {":'<,'>CarbonNow<cr>", 'Share Snippet'},
-      }, {prefix = "<leader>", nowait = true, mode = 'v' })
-
-    end
   },
   {
     'rcarriga/nvim-notify',
@@ -45,21 +24,21 @@ return {
   },
   { 'elkowar/yuck.vim', ft = 'yuck'},
 
-  {
-    'nmac427/guess-indent.nvim',
-    dependencies = { 'folke/which-key.nvim' },
-    config = function()
-      require('guess-indent').setup()
-      local wk = require('which-key')
-
-      wk.register({
-          l = {
-            i = {':GuessIndent<cr>', 'Guess indent'}
-          }
-        }, {prefix = '<leader>', nowait = true})
-
-    end,
-  },
+  -- {
+  --   'nmac427/guess-indent.nvim',
+  --   dependencies = { 'folke/which-key.nvim' },
+  --   config = function()
+  --     require('guess-indent').setup()
+  --     local wk = require('which-key')
+  --
+  --     wk.register({
+  --         l = {
+  --           i = {':GuessIndent<cr>', 'Guess indent'}
+  --         }
+  --       }, {prefix = '<leader>', nowait = true})
+  --
+  --   end,
+  -- },
 
   {
     "caenrique/swap-buffers.nvim",
@@ -71,8 +50,6 @@ return {
       vim.keymap.set('n', '<c-w><c-h>', function() swap.swap_buffers('h') end, {desc = 'swap left'})
       vim.keymap.set('n', '<c-w><c-j>', function() swap.swap_buffers('j') end, {desc = 'swap down'})
       vim.keymap.set('n', '<c-w><c-k>', function() swap.swap_buffers('k') end, {desc = 'swap up'})
-
-
     end
   },
 
@@ -93,10 +70,6 @@ return {
       require('colorizer').setup()
     end
   },
-  -- {
-  --   'rrethy/vim-hexokinase',
-  --   build = 'make hexokinase'
-  -- },
   {
     "petertriho/nvim-scrollbar", 
     dependencies = { 'kevinhwang91/nvim-hlslens' },
@@ -160,40 +133,19 @@ return {
             "Mundo"
           }
         },
-        -- space_char_clankline = " ",
-        -- show_current_context = true,
-        -- show_current_context_start = false,
       }
-
       vim.api.nvim_set_hl(0, 'IndentBlanklineChar',  {fg = "#26273b"})
-
-
-
     end
   },
   {
     'nyngwang/NeoZoom.lua',
-    -- dependencies = {
-    --   'nyngwang/NeoNoName.lua' -- you will need this if you want to use the keymap sample below.
-    -- },
     config = function()
-
-
-
       require('neo-zoom').setup { -- use the defaults or UNCOMMENT and change any one to overwrite
         winopts = {
           offset = {
             width = 0.87,
           }
         }
-        -- left_ratio = 0.2,
-        -- top_ratio = 0.03,
-        -- height_ratio = 0.9,
-        -- border = 'double',
-        -- exclude_filetypes = {
-        --   'fzf', 'qf', 'dashboard'
-        -- }
-        -- scrolloff_on_zoom = 13, -- offset to the top-border.
       }
       local NOREF_NOERR_TRUNC = { silent = true, nowait = true }
       vim.keymap.set('n', 'go', ':NeoZoomToggle<cr>', NOREF_NOERR_TRUNC)
@@ -204,32 +156,6 @@ return {
           o = {':NeoZoomToggle<cr>', 'NeoZoom'},
         }
       }, {prefix = "<leader>", nowait = true })
-
-      -- My setup (This requires NeoNoName.lua, and optionally NeoWell.lua)
-      -- local cur_buf = nil
-      -- vim.keymap.set('n', 'go', function ()
-      --   if require('neo-zoom').FLOAT_WIN ~= nil
-      --     and vim.api.nvim_win_is_valid(require('neo-zoom').FLOAT_WIN) then
-      --     vim.cmd('NeoZoomToggle')
-      --     vim.api.nvim_set_current_buf(cur_buf)
-      --     return
-      --   end
-      --   -- don't zoom-in on floating win.
-      --     if vim.api.nvim_win_get_config(0).relative ~= '' then return end
-      --     cur_buf = vim.api.nvim_get_current_buf()
-      --   vim.cmd('NeoZoomToggle')
-      --   vim.cmd('wincmd p')
-      --   -- local try_get_no_name = require('neo-no-name').get_current_or_first_valid_listed_no_name_buf()
-      --   -- if try_get_no_name ~= nil then
-      --   --   vim.api.nvim_set_current_buf(try_get_no_name)
-      --   -- else
-      --   --   vim.cmd('NeoNoName')
-      --   -- end
-      --   vim.cmd('wincmd p')
-      --   -- Post pop-up commands
-      --   -- vim.cmd('NeoWellJump')
-      -- end, NOREF_NOERR_TRUNC)
-
     end,
   },
   {

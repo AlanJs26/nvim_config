@@ -76,7 +76,7 @@ return {
     'notjedi/nvim-rooter.lua',
     config = function()
       require('nvim-rooter').setup({
-          rooter_patterns = {'=nvim', '.git', 'package.json', 'Makefile', '!/home/alan', '!~'},
+          rooter_patterns = {'=nvim', '.git', 'package.json', 'Makefile', '!/home/alan', '!~', 'Cargo.toml'},
           exclude_filetypes = {
             'fugitive',
             'toggleterm',

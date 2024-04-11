@@ -29,7 +29,7 @@ return {
         {"source %", 'source current file', before = 'w', after = '', prefix = ''},
     },
     rust = {
-        {"cargo run", 'Compile and run'},
+        {"cargo run", 'Compile and run', before = 'w'},
     },
     ps1 = {
         {'powershell.exe -Command "& \'{{p}}\'"', 'Run script'},

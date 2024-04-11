@@ -48,6 +48,7 @@ return {
               'python',
               'query',
               'vim',
+              'latex',
           }
       })
     end

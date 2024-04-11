@@ -1,9 +1,9 @@
-local wk = require('which-key')
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 capabilities.offsetEncoding = "utf-8"
 
 local on_attach = function(client, bufnr)
+  local wk = require('which-key')
   local function buf_set_keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -49,6 +49,8 @@ local on_attach = function(client, bufnr)
       f= {':lua vim.lsp.buf.format{async = true}<cr>', 'formatting'},
       l= {':Lspsaga show_line_diagnostics<cr>',        'show diagnostics'},
 
+      h= {':Lspsaga finder<cr>',                       'references'},
+
       m= {':lua require("nvim-navbuddy").open()<cr>',  'symbols'},
       -- m= {':Lspsaga outline<cr>',                  'symbols'},
       -- l= {':lua vim.diagnostic.open_float()<cr>',    'show diagnostics'},
@@ -89,6 +91,7 @@ return {
       "SmiteshP/nvim-navbuddy",
       "SmiteshP/nvim-navic",
 
+      'folke/which-key.nvim',
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
       'glepnir/lspsaga.nvim',
@@ -97,6 +100,8 @@ return {
     },
     event = 'BufRead',
     config = function()
+
+      local wk = require('which-key')
 
       -- mason / lsp_install
       local nvim_lsp = require('lspconfig')
@@ -270,6 +275,9 @@ return {
       require('lspsaga').setup({
           outline = {
             auto_preview = false
+          },
+          finder = {
+            toggle_or_open = '<CR>'
           },
           ui = {
             theme = 'round',
