@@ -70,6 +70,11 @@ end
 return {
   { 'j-hui/fidget.nvim', tag = 'legacy', config = true },
   { 'mfussenegger/nvim-dap' },
+  { 'LhKipp/nvim-nu', config = function()
+      require('nu').setup({
+          use_lsp_features = false
+        })
+  end},
   {
     'simrat39/rust-tools.nvim',
     ft = {'rust'},
@@ -121,6 +126,7 @@ return {
       local mason_lspconfig = require("mason-lspconfig")
       mason_lspconfig.setup()
 
+
       mason_lspconfig.setup_handlers({
           function (server_name) -- default handler
             nvim_lsp[server_name].setup({
@@ -152,10 +158,20 @@ return {
                   on_attach(client, bufnr)
                 end,
                 capabilities = capabilities,
+                settings = {
+                  python = {
+                    analysis = {
+                      diagnosticSeverityOverrides = {
+                        reportUnusedExpression = "none"
+                      }
+                    }
+                  }
+                }
               })
           end,
 
           ['pylsp'] = function ()
+
             nvim_lsp.pylsp.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
@@ -200,6 +216,19 @@ return {
                 }
               })
           end,
+          ['julials'] = function()
+            nvim_lsp.julials.setup {
+              on_new_config = function(new_config, _)
+                  local julia = vim.fn.expand("~/.julia/environments/nvim-lspconfig/bin/julia")
+                  if require'lspconfig'.util.path.is_file(julia) then
+                      new_config.cmd[1] = julia
+                  end
+              end,
+              on_attach = on_attach,
+              capabilities = capabilities,
+              filetypes = {'julia'},
+            }
+          end,
 
           ['clangd'] = function()
             nvim_lsp.clangd.setup {
@@ -228,6 +257,10 @@ return {
 
       require 'nvim-treesitter.install'.compilers = {'clang', 'gcc', 'python'}
 
+      nvim_lsp.vhdl_ls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+      })
 
       --- Ui config ----
       local lsp = vim.lsp

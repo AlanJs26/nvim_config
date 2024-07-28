@@ -1,11 +1,5 @@
 return {
   {
-    'rmagatti/session-lens',
-    config = function()
-      require('telescope').load_extension('session-lens')
-    end
-  },
-  {
     'rmagatti/auto-session',
     config = function()
 
@@ -15,6 +9,10 @@ return {
           auto_session_suppress_dirs = {'~/', 'G:/Users/Alan/Documents/_Codes', '~/Documents/_Codes'},
           auto_session_enabled = true,
           auto_session_create_enabled = false,
+
+          session_lens = {
+            find_command = { "rg", "--files", "--color", "never", "--sortr", "modified" }
+          }
 
         })
 
@@ -76,7 +74,7 @@ return {
     'notjedi/nvim-rooter.lua',
     config = function()
       require('nvim-rooter').setup({
-          rooter_patterns = {'=nvim', '.git', 'package.json', 'Makefile', '!/home/alan', '!~', 'Cargo.toml'},
+          rooter_patterns = {'=nvim', '.git', 'package.json', 'Makefile', '!/home/alan', '!~', 'Cargo.toml', 'vhdl_ls.toml', 'pyproject.toml'},
           exclude_filetypes = {
             'fugitive',
             'toggleterm',

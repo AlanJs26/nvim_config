@@ -5,7 +5,8 @@ return {
         {'gcc "{{p}}" -o "{{t:r}}" -Wall -ansi -pedantic -O2',                      'Compile'},
     },
     vhdl = {
-        {'nvc -a *.vhd && nvc -e testbench_{{t:r}} && nvc -r testbench_{{t:r}}', 'Run Testbench'}
+        -- {'nvc -a *.vhd && nvc -e testbench_{{t:r}} && nvc -r testbench_{{t:r}}', 'Run Testbench'}
+        {'just run', 'just run', before = 'w'}
     },
     cpp = {
         -- {'g++ "{{p}}" -o {{t:r}}.exe&&{{t:r}}.exe', 'Compile and run'},

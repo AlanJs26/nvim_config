@@ -11,14 +11,24 @@ return {
       ]])
     end
   },
+  -- {
+  --   'tpope/vim-surround',
+  --   config = function()
+  --     vim.g["surround_"..vim.fn.char2nr('q')] = "\"\r\""
+  --     vim.g["surround_"..vim.fn.char2nr('o')] = "**\r**"
+  --     vim.g["surround_"..vim.fn.char2nr('i')] = "*\r*"
+  --     vim.g["surround_"..vim.fn.char2nr('=')] = "==\r=="
+  --     vim.g["surround_"..vim.fn.char2nr('u')] = "~~\r~~"
+  --   end
+  -- },
   {
-    'tpope/vim-surround',
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
     config = function()
-      vim.g["surround_"..vim.fn.char2nr('q')] = "\"\r\""
-      vim.g["surround_"..vim.fn.char2nr('o')] = "**\r**"
-      vim.g["surround_"..vim.fn.char2nr('i')] = "*\r*"
-      vim.g["surround_"..vim.fn.char2nr('=')] = "==\r=="
-      vim.g["surround_"..vim.fn.char2nr('u')] = "~~\r~~"
+      require("nvim-surround").setup({
+          -- Configuration here, or leave empty to use defaults
+        })
     end
   },
   { 

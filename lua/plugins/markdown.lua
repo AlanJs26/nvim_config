@@ -12,7 +12,9 @@ return {
     "iurimateus/luasnip-latex-snippets.nvim",
     dependencies = { "L3MON4D3/LuaSnip", "lervag/vimtex" },
     config = function()
-      require'luasnip-latex-snippets'.setup()
+      require'luasnip-latex-snippets'.setup({
+          use_treesitter = false
+        })
 
       require'user.latexsnippets'.setup()
       require'user.markdownsnippets'.setup()
@@ -27,7 +29,15 @@ return {
       vim.keymap.set('n', 'K', require('nabla').popup)
     end
   },
-
+  -- {
+  --   'MeanderingProgrammer/markdown.nvim',
+  --   name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
+  --   dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  --   ft = {'markdown'},
+  --   config = function()
+  --     require('render-markdown').setup({})
+  --   end,
+  -- },
 
   {
     'lervag/vimtex',

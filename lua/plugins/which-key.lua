@@ -1,6 +1,7 @@
 return {
   'folke/which-key.nvim',
   module = 'which-key',
+  commit = '0539da005b98b02cf730c1d9da82b8e8edb1c2d2',
   keys = '<space>',
   config = function()
     local wk = require('which-key')
@@ -124,6 +125,7 @@ return {
       g = { ':Telescope live_grep<cr>',    'live grep'},
       f = { ':Telescope find_files<cr>',   'find file'},
       b = { ':Telescope buffers<cr>',      'buffers'},
+      ['<Tab>'] = { ':Telescope telescope-tabs list_tabs<cr>',      'tabs'},
 
 
       r = {name = '+open recent',
