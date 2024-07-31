@@ -28,6 +28,7 @@ return {
     dependencies = {
       "hrsh7th/nvim-cmp",
     },
+    lazy = true,
     opts = { -- the values below are the defaults
       filetypes = {},
       completion = {

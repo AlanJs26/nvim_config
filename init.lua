@@ -30,6 +30,8 @@ require('user.nvimtree_autocmd')
 require('settings')
 require('user.highlights')
 
+vim.cmd("source ".. vimscriptpath .."/custom_functions.vim")
+
 vim.cmd("source ".. vimscriptpath .."/mappings.vim")
 require('user.mappings')
 

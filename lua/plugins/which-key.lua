@@ -1,8 +1,51 @@
+function neozoom_wk()
+  local wk = require('which-key')
+  wk.register({
+    t = {
+      o = {':NeoZoomToggle<cr>', 'NeoZoom'},
+    }
+  }, {prefix = "<leader>", nowait = true })
+end
+
+function sessions_wk()
+  local wk = require('which-key')
+    
+  wk.register({ 
+    s = {
+      name='+sessions',
+      n= {':lua floatwin("SessionSave {{value}}", "New Session")<cr>',                                       'save session'},
+      c= {':exec "silent! SessionSave"|let g:auto_session_enabled = v:false|bufdo bwipeout|Alpha<cr>', 'close session'},
+      s= {':Telescope session-lens search_session<cr>',                                                'switch session'},
+      f= {':SessionSave<cr>',                                                                          'quick save session'},
+      r= {':SessionRestore<cr>',                                                                       'restore previous session'},
+      -- p= {':Telescope projects projects<cr>',                                                          'switch project'},
+      d= {
+        function() 
+          confirmPopup("Do you really want to delete the session?", function()
+            vim.cmd('silent! SessionDelete')
+            require('notify')("Deleted Session")
+          end)
+        end,
+        'delete session',
+      }
+    },
+  }, {
+    prefix = "<leader>",
+    nowait = true,
+    mode='n',
+  })
+end
+
 return {
   'folke/which-key.nvim',
   module = 'which-key',
   commit = '0539da005b98b02cf730c1d9da82b8e8edb1c2d2',
   keys = '<space>',
+  dependencies = {
+    'ten3roberts/qf.nvim',
+    'rmagatti/auto-session',
+    'nyngwang/NeoZoom.lua',
+  },
   config = function()
     local wk = require('which-key')
 
@@ -29,46 +72,6 @@ return {
       highlight default link WhichKeyDesc      Function
 
 
-      function! ScreenMovement(movement)
-        if &wrap
-          return "g" . a:movement
-        else
-          return a:movement
-        endif
-      endfunction
-
-      function! ToggleWrap(mode)
-        onoremap <silent> <expr> j  ScreenMovement("j")
-        onoremap <silent> <expr> k  ScreenMovement("k")
-        onoremap <silent> <expr> 0  ScreenMovement("0")
-        onoremap <silent> <expr> ^  ScreenMovement("^")
-        onoremap <silent> <expr> $  ScreenMovement("$")
-        nnoremap <silent> <expr> j  ScreenMovement("j")
-        nnoremap <silent> <expr> k  ScreenMovement("k")
-        nnoremap <silent> <expr> 0  ScreenMovement("0")
-        nnoremap <silent> <expr> ^  ScreenMovement("^")
-        nnoremap <silent> <expr> g_ ScreenMovement("$")
-        if a:mode < 0
-          set wrap! linebreak
-        elseif a:mode == 0
-          set nowrap
-        else
-          set wrap linebreak
-        endif
-      endfunction
-
-      autocmd BufReadPost * :let b:currentNumberMode = 1
-      function CicleNumberMode()
-          if b:currentNumberMode == 0
-              set number norelativenumber
-          elseif b:currentNumberMode == 1 
-              set number relativenumber
-          elseif b:currentNumberMode == 2 
-              set nonumber relativenumber
-              let b:currentNumberMode = -1
-          endif
-          let b:currentNumberMode = b:currentNumberMode + 1 
-      endfunction
     ]])
 
     vim.g.scratchfolder = vim.fn.stdpath("data") .. "/scratch/"
@@ -206,14 +209,12 @@ return {
         g= {':Git<cr>',                                                              'Git' },
         h= {':IlluminateToggle<cr>',                                                 'word highlight'},
 
-
-        f = {
-          name='+fun',
-          r = {':CellularAutomaton make_it_rain<cr>', 'rain'},
-          g = {':CellularAutomaton game_of_life<cr>', 'game of life'},
-        }
       }
 }, {prefix = "<leader>", nowait = true })
+
+
+  sessions_wk()
+  neozoom_wk()
 
   if vim.fn.has('win32') == 0 then
     wk.register({

@@ -16,33 +16,6 @@ return {
 
         })
 
-      local wk = require('which-key')
-
-      wk.register({ 
-        s = {
-          name='+sessions',
-          n= {':lua floatwin("SessionSave {{value}}", "New Session")<cr>',                                       'save session'},
-          c= {':exec "silent! SessionSave"|let g:auto_session_enabled = v:false|bufdo bwipeout|Alpha<cr>', 'close session'},
-          s= {':Telescope session-lens search_session<cr>',                                                'switch session'},
-          f= {':SessionSave<cr>',                                                                          'quick save session'},
-          r= {':SessionRestore<cr>',                                                                       'restore previous session'},
-          -- p= {':Telescope projects projects<cr>',                                                          'switch project'},
-          d= {
-            function() 
-              confirmPopup("Do you really want to delete the session?", function()
-                vim.cmd('silent! SessionDelete')
-                require('notify')("Deleted Session")
-              end)
-            end,
-            'delete session',
-          }
-        },
-      }, {
-        prefix = "<leader>",
-        nowait = true,
-        mode='n',
-      })
-
     end 
   },
   -- 'airblade/vim-rooter',

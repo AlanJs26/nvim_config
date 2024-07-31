@@ -1,11 +1,13 @@
 return {
   {
       'yorickpeterse/nvim-pqf',
+      lazy = true,
       config = true
   },
   {
     'ten3roberts/qf.nvim',
     dependencies = {'folke/which-key.nvim'},
+    lazy = true,
     config = function()
       require('qf').setup({
           -- Location list configuration

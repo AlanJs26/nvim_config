@@ -53,6 +53,8 @@ M.setup = function(opts)
         i(0)
       }
     ),
+    s( { trig = '**', name = 'bold', wordTrig = true, priority = 100 }, { t'**', i(1), t'**', i(0) }),
+    s( { trig = '__', name = 'bold', wordTrig = true, priority = 100 }, { t'_', i(1), t'_', i(0) }),
   }
 
   for _, snip in ipairs(autosnippets) do

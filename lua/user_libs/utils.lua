@@ -125,7 +125,6 @@ end
 
 M.RegisterWKByFiletype = _G.RegisterWKByFiletype
 function _G.RegisterWKByFiletype(a, mode)
-  local wk = require("which-key")
   for filetype,opts in pairs(a) do
     vim.api.nvim_create_autocmd(
       {'BufEnter', 'BufNew'},
@@ -135,6 +134,7 @@ function _G.RegisterWKByFiletype(a, mode)
           if vim.o.filetype ~= filetype then
             return
           end
+          local wk = require("which-key")
           wk.register(opts, {prefix = '<leader>', mode=mode, noremap = false, buffer = vim.fn.bufnr('%')})
         end
       }

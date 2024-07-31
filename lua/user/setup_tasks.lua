@@ -1,7 +1,8 @@
-local tm = require('user_libs.taskmanager')
-local wk = require('which-key')
 
 function Setup_tasks()
+    local tm = require('user_libs.taskmanager')
+    local wk = require('which-key')
+
     local unalowedft = {'alpha', 'TelescopePrompt', 'NvimTree'}
     for _, value in ipairs(unalowedft) do
         if vim.o.filetype == value then

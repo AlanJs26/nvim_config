@@ -32,6 +32,7 @@
   "lualine.nvim": { "branch": "master", "commit": "544dd1583f9bb27b393f598475c89809c4d5e86b" },
   "luasnip-latex-snippets.nvim": { "branch": "main", "commit": "4b91f28d91979f61a3e8aef1cee5b7c7f2c7beb8" },
   "markdown-preview.nvim": { "branch": "master", "commit": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee" },
+  "markview.nvim": { "branch": "dev", "commit": "d0a2a7a4fb82157db0a0ea1befa120387ed1f666" },
   "mason-lspconfig.nvim": { "branch": "main", "commit": "58bc9119ca273c0ce5a66fad1927ef0f617bd81b" },
   "mason.nvim": { "branch": "main", "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22" },
   "mini.ai": { "branch": "main", "commit": "45587078f323eaf41b9f701bbc04f8d1ab008979" },

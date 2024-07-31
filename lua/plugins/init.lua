@@ -79,7 +79,7 @@ return {
   },
 
   -- ui/ide related plugins
-  { 'ziontee113/color-picker.nvim', config = true },
+  { 'ziontee113/color-picker.nvim', lazy = true, config = true },
   { 'mbbill/undotree', cmd = "UndotreeToggle"  },
   {
     "nvim-telescope/telescope.nvim",

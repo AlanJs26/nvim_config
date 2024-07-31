@@ -68,13 +68,22 @@ local on_attach = function(client, bufnr)
 end
 
 return {
-  { 'j-hui/fidget.nvim', tag = 'legacy', config = true },
+  {
+    'j-hui/fidget.nvim',
+    lazy = true,
+    tag = 'legacy',
+    config = true,
+  },
   { 'mfussenegger/nvim-dap' },
-  { 'LhKipp/nvim-nu', config = function()
+  { 
+    'LhKipp/nvim-nu',
+    ft = 'nu',
+    config = function()
       require('nu').setup({
           use_lsp_features = false
         })
-  end},
+    end
+  },
   {
     'simrat39/rust-tools.nvim',
     ft = {'rust'},
@@ -102,8 +111,11 @@ return {
       'glepnir/lspsaga.nvim',
       'ray-x/lsp_signature.nvim',
       'hrsh7th/nvim-cmp',
+      'j-hui/fidget.nvim',
     },
-    event = 'BufRead',
+    ft = {'cpp'},
+    lazy = true,
+    -- event = 'BufRead',
     config = function()
 
       local wk = require('which-key')

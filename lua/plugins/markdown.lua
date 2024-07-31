@@ -1,6 +1,10 @@
+
 vim.cmd([[
   autocmd BufEnter,BufNew *.md :setlocal spell
   autocmd FileType markdown,text set spelllang=pt_br,en_us
+
+  autocmd FileType markdown inoremap <C-b> **
+  autocmd FileType markdown inoremap <C-i> __
 
   " fix last spell error
   autocmd FileType markdown,text inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
@@ -55,6 +59,25 @@ return {
 
       vim.o.conceallevel=2
     end
+  },
+  {
+      "OXY2DEV/markview.nvim",
+      ft = "markdown",
+      branch = 'dev',
+
+      config = {
+            modes = { 'n', 'no', 'i' },
+            options = {
+              hybrid_modes = { 'i' },
+            }
+      },
+      dependencies = {
+          -- You may not need this if you don't lazy load
+          -- Or if the parsers are in your $RUNTIMEPATH
+          "nvim-treesitter/nvim-treesitter",
+
+          "nvim-tree/nvim-web-devicons"
+      },
   },
 
   {

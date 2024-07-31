@@ -162,6 +162,7 @@ return {
   },
   {
     'nyngwang/NeoZoom.lua',
+    lazy = true,
     config = function()
       require('neo-zoom').setup { -- use the defaults or UNCOMMENT and change any one to overwrite
         winopts = {
@@ -173,12 +174,6 @@ return {
       local NOREF_NOERR_TRUNC = { silent = true, nowait = true }
       vim.keymap.set('n', 'go', ':NeoZoomToggle<cr>', NOREF_NOERR_TRUNC)
 
-     local wk = require('which-key')
-      wk.register({
-        t = {
-          o = {':NeoZoomToggle<cr>', 'NeoZoom'},
-        }
-      }, {prefix = "<leader>", nowait = true })
     end,
   },
   {

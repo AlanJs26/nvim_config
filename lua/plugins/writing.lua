@@ -1,8 +1,12 @@
 return {
   -- writing essentials
-  'tpope/vim-repeat',
+  {
+    'tpope/vim-repeat',
+      lazy = true,
+  },
   {
     'jiangmiao/auto-pairs',
+    -- event = "VeryLazy",
     config = function()
       vim.g.AutoPairsShortcutToggle = ''
       vim.g.AutoPairsMapCh = 0
@@ -33,6 +37,7 @@ return {
   },
   { 
     'rhysd/clever-f.vim',
+    event = "VeryLazy",
     config = function() 
       vim.g.clever_f_highlight_timeout_ms = 650
       vim.g.clever_f_ignore_case = 1
@@ -122,6 +127,7 @@ return {
 
   {
     'AndrewRadev/splitjoin.vim',
+    event = 'BufRead',
     config = function()
       vim.cmd([[
         let g:splitjoin_split_mapping = ''
