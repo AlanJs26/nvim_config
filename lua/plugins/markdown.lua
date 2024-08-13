@@ -33,15 +33,6 @@ return {
       vim.keymap.set('n', 'K', require('nabla').popup)
     end
   },
-  -- {
-  --   'MeanderingProgrammer/markdown.nvim',
-  --   name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
-  --   dependencies = { 'nvim-treesitter/nvim-treesitter' },
-  --   ft = {'markdown'},
-  --   config = function()
-  --     require('render-markdown').setup({})
-  --   end,
-  -- },
 
   {
     'lervag/vimtex',
@@ -61,24 +52,50 @@ return {
     end
   },
   {
-      "OXY2DEV/markview.nvim",
-      ft = "markdown",
-      branch = 'dev',
-
-      config = {
-            modes = { 'n', 'no', 'i' },
-            options = {
-              hybrid_modes = { 'i' },
-            }
-      },
-      dependencies = {
-          -- You may not need this if you don't lazy load
-          -- Or if the parsers are in your $RUNTIMEPATH
-          "nvim-treesitter/nvim-treesitter",
-
-          "nvim-tree/nvim-web-devicons"
-      },
+    'MeanderingProgrammer/markdown.nvim',
+    main = "render-markdown",
+    opts = {},
+    name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    ft = {'markdown'},
+    config = function()
+      require('render-markdown').setup({
+          render_modes = { 'n', 'c', 'i' },
+          latex = { enabled = false },
+          win_options = {
+            conceallevel = { rendered = 2 },
+          },
+        })
+    end,
   },
+
+  -- {
+  --     "OXY2DEV/markview.nvim",
+  --     ft = "markdown",
+  --     -- branch = 'dev',
+  --
+  --     config = {
+  --           modes = { 'n', 'no', 'i' },
+  --           -- options = {
+  --           --   hybrid_modes = { 'i' },
+  --           -- }
+  --           list_items = {
+  --             enable = true,
+  --
+  --             marker_minus = {},
+  --             marker_plus = {},
+  --             marker_star = {},
+  --             marker_dot = {}
+  --           }
+  --     },
+  --     dependencies = {
+  --         -- You may not need this if you don't lazy load
+  --         -- Or if the parsers are in your $RUNTIMEPATH
+  --         "nvim-treesitter/nvim-treesitter",
+  --
+  --         "nvim-tree/nvim-web-devicons"
+  --     },
+  -- },
 
   {
       "iamcco/markdown-preview.nvim",

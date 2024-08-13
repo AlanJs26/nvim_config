@@ -34,9 +34,16 @@ nnoremap <silent> vs       :vsplit     <CR>
 nnoremap <silent> <M-o> moo<ESC>`o
 nnoremap <silent> <M-O> moO<ESC>`o
 
+
+function! ResizeCustom(amount)
+  if  winnr('$') > 1 
+    execute "resize ".a:amount
+  endif
+endfunction
+
 " Use alt + hjkl to resize windows
-nnoremap <silent> <M-j>   :resize -4<CR>
-nnoremap <silent> <M-k>   :resize +4<CR>
+nnoremap <silent> <M-j>   :call ResizeCustom("-4")<CR>
+nnoremap <silent> <M-k>   :call ResizeCustom("+4")<CR>
 nnoremap <silent> <M-h>   :vertical resize +4<CR>
 nnoremap <silent> <M-l>   :vertical resize -4<CR>
 

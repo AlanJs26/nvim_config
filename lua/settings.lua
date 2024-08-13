@@ -62,6 +62,7 @@ vim.cmd([[
   autocmd BufNewFile,BufRead,BufReadPost *.nu set filetype=nu | exe 'IlluminatePause' | TSBufEnable highlight
   autocmd BufNewFile,BufRead,BufReadPost *.elv set filetype=elvish|TSBufEnable highlight
   autocmd BufNewFile,BufRead,BufReadPost Justfile set filetype=just
+  autocmd BufNewFile,BufRead,BufReadPost *.conf set filetype=conf
 
   if has('win32')
     let g:python3_host_prog = expand('~')..'/miniconda3/python.exe'

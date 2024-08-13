@@ -52,29 +52,6 @@ return {
       vim.keymap.set('n', '<c-w><c-k>', function() swap.swap_buffers('k') end, {desc = 'swap up'})
     end
   },
-  {
-    'LukasPietzschmann/telescope-tabs',
-    config = function()
-      require('telescope').load_extension 'telescope-tabs'
-      require('telescope-tabs').setup({
-        entry_formatter = function(tab_id, buffer_ids, file_names, file_paths, is_current)
-          local entry_string = table.concat(vim.tbl_map(function(v)
-            return vim.fn.fnamemodify(v, ":h:t") .. '/' .. vim.fn.fnamemodify(v, ":t")
-          end, file_paths), ', ')
-          return string.format('%d: %s%s', tab_id, entry_string, is_current and ' <' or '')
-        end,
-        entry_ordinal = function(tab_id, buffer_ids, file_names, file_paths, is_current)
-          local entry_string = table.concat(vim.tbl_map(function(v)
-            return vim.fn.fnamemodify(v, ":.")
-          end, file_paths), ', ')
-          return string.format('%d: %s%s', tab_id, entry_string, is_current and ' <' or '')
-        end
-      })
-
-
-    end,
-    dependencies = { 'nvim-telescope/telescope.nvim' },
-  },
 
   {
     'mhinz/vim-signify',
@@ -176,43 +153,62 @@ return {
 
     end,
   },
-  {
-    'RRethy/vim-illuminate',
-    config = function()
-      require('illuminate').configure({
-          -- providers: provider used to get references in the buffer, ordered by priority
-          providers = {
-            'lsp',
-            'treesitter',
-            'regex',
-          },
-          -- delay: delay in milliseconds
-          delay = 100,
-          filetype_overrides = {},
-          filetypes_denylist = {
-            'dirvish',
-            'fugitive',
-            'alpha',
-            'NvimTree',
-          },
-          under_cursor = true,
-          large_file_cutoff = nil,
-          large_file_overrides = nil,
-          min_count_to_highlight = 2,
-        })
+
+  { 'echasnovski/mini.cursorword', version = '*', config = function() 
+      require('mini.cursorword').setup()
+
       vim.cmd([[
-          augroup illuminate_augroup
-              autocmd!
+        " augroup MiniCursorword
+        "     autocmd!
 
-              autocmd VimEnter * hi illuminatedWord      cterm=underline gui=underline guibg=none
-              autocmd VimEnter * hi illuminatedCurWord   cterm=underline gui=underline guibg=none
-              autocmd VimEnter * hi illuminatedWordText  cterm=underline gui=underline guibg=none
-              autocmd VimEnter * hi illuminatedWordWrite cterm=underline gui=underline guibg=none
-              autocmd VimEnter * hi illuminatedWordRead  cterm=underline gui=underline guibg=none
+        hi MiniCursorword          cterm=underline gui=underline guibg=none
+        hi MiniCursorwordCurrent   cterm=underline gui=underline guibg=none
+        " autocmd VimEnter * hi illuminatedWordText  cterm=underline gui=underline guibg=none
+        " autocmd VimEnter * hi illuminatedWordWrite cterm=underline gui=underline guibg=none
+        " autocmd VimEnter * hi illuminatedWordRead  cterm=underline gui=underline guibg=none
 
-          augroup END
-      ]])
+        " augroup END
+        ]])
     end
   },
+
+  -- {
+  --   'RRethy/vim-illuminate',
+  --   config = function()
+  --     require('illuminate').configure({
+  --         -- providers: provider used to get references in the buffer, ordered by priority
+  --         providers = {
+  --           'lsp',
+  --           'treesitter',
+  --           'regex',
+  --         },
+  --         -- delay: delay in milliseconds
+  --         delay = 100,
+  --         filetype_overrides = {},
+  --         filetypes_denylist = {
+  --           'dirvish',
+  --           'fugitive',
+  --           'alpha',
+  --           'NvimTree',
+  --         },
+  --         under_cursor = true,
+  --         large_file_cutoff = nil,
+  --         large_file_overrides = nil,
+  --         min_count_to_highlight = 2,
+  --       })
+  --     vim.cmd([[
+  --         augroup illuminate_augroup
+  --             autocmd!
+  --
+  --             autocmd VimEnter * hi illuminatedWord      cterm=underline gui=underline guibg=none
+  --             autocmd VimEnter * hi illuminatedCurWord   cterm=underline gui=underline guibg=none
+  --             autocmd VimEnter * hi illuminatedWordText  cterm=underline gui=underline guibg=none
+  --             autocmd VimEnter * hi illuminatedWordWrite cterm=underline gui=underline guibg=none
+  --             autocmd VimEnter * hi illuminatedWordRead  cterm=underline gui=underline guibg=none
+  --
+  --         augroup END
+  --     ]])
+  --   end
+  -- },
 
 }

@@ -93,6 +93,10 @@ return {
       rt.setup({
         server = {
           on_attach = on_attach,
+          disgnostics = {
+            enable = true,
+            experimental = true,
+          }
         },
       })
 
@@ -113,7 +117,7 @@ return {
       'hrsh7th/nvim-cmp',
       'j-hui/fidget.nvim',
     },
-    ft = {'cpp'},
+    ft = {'cpp', 'javascript', 'typescript'},
     lazy = true,
     -- event = 'BufRead',
     config = function()
@@ -244,6 +248,17 @@ return {
 
           ['clangd'] = function()
             nvim_lsp.clangd.setup {
+              on_new_config = function(new_config, _)
+                wk.register({
+                    l = {
+                      i= {':ClangdSwitchSourceHeader<cr>', 'switch source<->header'},
+                    },
+                  }, {
+                    prefix = "<leader>",
+                    nowait = true,
+                    mode='n',
+                  })
+              end,
               on_attach = on_attach,
               capabilities = capabilities,
               filetypes = {'arduino', 'c', 'cpp', 'ino'},
