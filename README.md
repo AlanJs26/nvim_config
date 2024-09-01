@@ -1,11 +1,11 @@
 # AlanJS's Neovim config
 
 
-![startscreen](./imgs/startscreen2.png)
+![startscreen](./imgs/startscreen.png)
 
-![coding](./imgs/coding2.png)
+![completion](./imgs/completion.png)
 
-![telescope](./imgs/telescope.png)
+![filetree](./imgs/filetree.png)
 
 ## Install
 
@@ -21,7 +21,7 @@ An alternative way is to run the script `install.sh` that does this for you
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/AlanJs26/nvim_config/master/install.sh)"
 ```
 
-If do not have neovim installed yet, you can append the flag `--nvim-appimage` to setup neovim globally
+If do not have neovim installed yet, you can append the flag `--nvim-appimage` to setup the latest official neovim appimage globally
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/AlanJs26/nvim_config/master/install.sh| bash -s -- --nvim-appimage
