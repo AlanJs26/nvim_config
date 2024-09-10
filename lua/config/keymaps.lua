@@ -7,7 +7,13 @@ local unmap = function(...)
   pcall(vim.keymap.del, ...)
 end
 
+map("n", "<leader>lL", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
 unmap("n", "<leader>K")
+--
+-- Clear search with <esc>
+unmap("i", "<esc>")
+map({ "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
 
 -- return to normal mode
 map("i", "jj", "<ESC>", { desc = "Normal Mode", remap = true })
@@ -29,9 +35,9 @@ unmap("n", "<leader>`")
 map("n", "<leader>0", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- windows
-vim.keymap.del({ "n" }, "<leader>wd")
-vim.keymap.del({ "n" }, "<leader>-")
-vim.keymap.del({ "n" }, "<leader>wm")
+unmap({ "n" }, "<leader>wd")
+unmap({ "n" }, "<leader>-")
+unmap({ "n" }, "<leader>wm")
 
 map("n", "<leader>e", "<c-w>", { desc = "Windows", remap = true })
 map("n", "vs", "<C-w>v", { desc = "Split Window Right", remap = true })
@@ -41,15 +47,15 @@ LazyVim.toggle.map("<leader>em", LazyVim.toggle.maximize)
 map("n", "<M-w>", "<C-w>c", { desc = "Delete window", remap = true })
 
 unmap("n", "<leader>|")
-vim.cmd([[map ZZ <Nop>]])
+map("n", "ZZ", "<Nop>")
 map("n", "-", "Q", { desc = "run last macro", remap = true })
 
 -- save file
 map("n", "<leader>w", "<cmd>w<cr><esc>", { desc = "Save File", remap = true })
 
 -- movement
-vim.keymap.del({ "i" }, "<M-j>")
-vim.keymap.del({ "i" }, "<M-k>")
+unmap({ "i" }, "<M-j>")
+unmap({ "i" }, "<M-k>")
 map("i", "<M-k>", "<up>", { desc = "Cursor up", remap = true })
 map("i", "<M-j>", "<down>", { desc = "Cursor down", remap = true })
 map("i", "<M-h>", "<left>", { desc = "Cursor left", remap = true })

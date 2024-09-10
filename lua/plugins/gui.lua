@@ -1,4 +1,5 @@
 return {
+  { "theRealCarneiro/hyprland-vim-syntax", ft = "hypr" },
   {
     "folke/tokyonight.nvim",
     lazy = true,
@@ -31,7 +32,7 @@ return {
             mode = { "n", "x" },
             desc = "code",
           },
-          { "<leader>wm", hidden = true },
+          { "<leader>wm", mode = { "n" }, hidden = true, desc = "which_key_ignore" },
         },
       },
     },

@@ -27,27 +27,39 @@ return {
   {
     "stevearc/overseer.nvim",
     init = function()
+      local overseer = require("overseer")
+
+      LazyVim.toggle.map("<leader>oF", require("config.toggle.overseer").focus)
+      LazyVim.toggle.map("<leader>of", require("config.toggle.overseer").float)
+
+      overseer.add_template_hook({ name = ".*run.*" }, function(task_defn, util)
+        if not util.has_component(task_defn, "open_output") then
+          util.add_component(task_defn, { "open_output", direction = "vertical", on_start = "always" })
+        end
+        util.remove_component(task_defn, "on_complete_notify")
+      end)
+      overseer.add_template_hook({ name = ".*build.*" }, function(task_defn, util)
+        util.remove_component(task_defn, "on_complete_notify")
+      end)
+
       vim.api.nvim_create_user_command("OverseerRestartLast", function()
-        local overseer = require("overseer")
         local tasks = overseer.list_tasks({ recent_first = true })
         if vim.tbl_isempty(tasks) then
-          vim.cmd("OverseerOpen")
           vim.cmd("OverseerRun")
         else
-          overseer.run_action(tasks[1], "restart")
-          vim.cmd("OverseerOpen")
-          vim.fn.feedkeys("o")
-
-          local close = function()
-            vim.cmd("OverseerClose")
+          if not tasks[1]:has_component("open_output") then
+            tasks[1].add_component(tasks[1], { "open_output", direction = "vertical", on_start = "always" })
           end
-
-          local timer = vim.loop.new_timer()
-          timer:start(200, 0, vim.schedule_wrap(close))
+          overseer.run_action(tasks[1], "restart")
         end
       end, {})
     end,
     opts = {
+      templates = {
+        "builtin",
+        "cpp.build_standalone",
+        "cpp.run_standalone",
+      },
       task_list = {
         bindings = {
           ["o"] = function()
@@ -56,10 +68,10 @@ return {
 
             if not vim.tbl_isempty(tasks) then
               overseer.run_action(tasks[1], "open float")
-              vim.keymap.set("n", "q", function()
-                vim.cmd("wincmd w")
-                vim.cmd("OverseerClose")
-              end, { buffer = 0 })
+              -- vim.keymap.set("n", "q", function()
+              --   vim.cmd("wincmd w")
+              --   vim.cmd("OverseerClose")
+              -- end, { buffer = 0 })
             end
             vim.fn.feedkeys("G")
           end,
@@ -69,6 +81,7 @@ return {
     keys = {
       { "<leader>oO", "<cmd>OverseerRun<cr>", desc = "Run task" },
       { "<leader>oo", "<cmd>OverseerRestartLast<cr>", desc = "Run last task" },
+      { "<leader>or", "<cmd>OverseerQuickAction restart<cr>", desc = "Restart last task" },
       {
         "<leader>ow",
         function()
@@ -137,7 +150,6 @@ return {
     opts = function()
       require("lazyvim.plugins.lsp.keymaps")._keys = {
         { "<leader>li", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
-        { "<leader>lL", "<cmd>Lazy<cr>", desc = "Lazy" },
         { "gh", "<cmd>Lspsaga finder<cr>", desc = "References" },
         { "<leader>lh", "<cmd>Lspsaga finder<cr>", desc = "References" },
         { "gd", "<cmd>Lspsaga goto_definition<cr>", desc = "Goto Definition", has = "definition" },
