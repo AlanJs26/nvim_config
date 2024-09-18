@@ -7,6 +7,9 @@ local unmap = function(...)
   pcall(vim.keymap.del, ...)
 end
 
+map("n", "u", "<cmd>silent undo<cr>", { desc = "which_key_ignore", remap = true })
+map("n", "<C-R>", "<cmd>silent redo<cr>", { desc = "which_key_ignore", remap = true })
+
 map("n", "<leader>lL", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 unmap("n", "<leader>K")

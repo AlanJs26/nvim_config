@@ -98,63 +98,66 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
-    opts = function()
-      vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
-      local cmp = require("cmp")
-      local defaults = require("cmp.config.default")()
-      local auto_select = true
-      return {
-        auto_brackets = {}, -- configure any filetype to auto add brackets
-        completion = {
-          completeopt = "menu,menuone,noinsert" .. (auto_select and "" or ",noselect"),
-        },
-        preselect = auto_select and cmp.PreselectMode.Item or cmp.PreselectMode.None,
-        mapping = cmp.mapping.preset.insert({
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<CR>"] = LazyVim.cmp.confirm({ select = auto_select }),
-          ["<C-y>"] = LazyVim.cmp.confirm({ select = true }),
-          ["<S-CR>"] = LazyVim.cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-          ["<C-CR>"] = function(fallback)
-            cmp.abort()
-            fallback()
-          end,
+    opts = function(_, opts)
+      for _, value in pairs(opts.sources) do
+        if value.name == "buffer" or value.name == "luasnip" then
+          value.keyword_length = 2
+        end
+      end
+
+      local luasnip = require("luasnip")
+
+      vim.api.nvim_create_autocmd("ModeChanged", {
+        group = vim.api.nvim_create_augroup("UnlinkLuaSnipSnippetOnModeChange", {
+          clear = true,
         }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "path" },
-        }, {
-          { name = "buffer", keyword_length = 2 },
-        }),
-        formatting = {
-          format = function(entry, item)
-            local icons = LazyVim.config.icons.kinds
-            if icons[item.kind] then
-              item.kind = icons[item.kind] .. item.kind
+        pattern = { "s:n", "i:*" },
+        desc = "Forget the current snippet when leaving the insert mode",
+        callback = function(evt)
+          -- If we have n active nodes, n - 1 will still remain after a `unlink_current()` call.
+          -- We unlink all of them by wrapping the calls in a loop.
+          while true do
+            if luasnip.session and luasnip.session.current_nodes[evt.buf] and not luasnip.session.jump_active then
+              luasnip.unlink_current()
+            else
+              break
             end
+          end
+        end,
+      })
+    end,
+  },
+  {
+    "ggandor/leap.nvim",
+    enabled = true,
+    keys = {
+      { "s", mode = { "n", "x", "o" }, desc = "Leap Forward to" },
+      { "gs", mode = { "n", "x", "o" }, desc = "Leap Backward to" },
+      -- { "gs", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
+    },
+    config = function(_, opts)
+      local leap = require("leap")
+      for k, v in pairs(opts) do
+        leap.opts[k] = v
+      end
 
-            local widths = {
-              abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
-              menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
-            }
+      vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap-forward)")
+      vim.keymap.set({ "n", "x", "o" }, "gs", "<Plug>(leap-backward)")
+      -- vim.keymap.set({'n', 'x', 'o'}, 'gs', '<Plug>(leap-from-window)')
 
-            for key, width in pairs(widths) do
-              if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
-                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
-              end
-            end
+      -- The below settings make Leap's highlighting closer to what you've been
+      -- used to in Lightspeed.
 
-            return item
-          end,
-        },
-        experimental = {
-          ghost_text = {
-            hl_group = "CmpGhostText",
-          },
-        },
-        sorting = defaults.sorting,
-      }
+      vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" }) -- or some grey
+      vim.api.nvim_set_hl(0, "LeapMatch", {
+        -- For light themes, set to 'black' or similar.
+        fg = "white",
+        bold = true,
+        nocombine = true,
+      })
+      -- Deprecated option. Try it without this setting first, you might find
+      -- you don't even miss it.
+      require("leap").opts.highlight_unlabeled_phase_one_targets = true
     end,
   },
 }
