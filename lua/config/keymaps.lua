@@ -10,6 +10,8 @@ end
 map("n", "u", "<cmd>silent undo<cr>", { desc = "which_key_ignore", remap = true })
 map("n", "<C-R>", "<cmd>silent redo<cr>", { desc = "which_key_ignore", remap = true })
 
+LazyVim.toggle.map("<leader>lw", require("config.toggle.root_detection").root_detection)
+
 map("n", "<leader>lL", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 unmap("n", "<leader>K")

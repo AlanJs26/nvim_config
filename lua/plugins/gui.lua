@@ -185,6 +185,13 @@ return {
         [[       ⠻⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⢀⣀⣤⣾⡿⠃     ]],
       }
 
+      local function padding(amount)
+        return {
+          type = "padding",
+          val = amount,
+        }
+      end
+
       -- Make the header a bit more fun with some color!
       local function colorized_header()
         local lines = {}
@@ -228,6 +235,17 @@ return {
       dashboard.section.buttons.opts.hl = "AlphaButtons"
       dashboard.section.footer.opts.hl = "AlphaFooter"
       dashboard.opts.layout[1].val = 4
+      if vim.fn.filereadable(require("persistence").current({ branch = true })) == 1 then
+        table.insert(dashboard.section.buttons.val, {
+          type = "text",
+          val = " Session Found!",
+          opts = {
+            hl = "AlphaFooter",
+            shrink_margin = false,
+            position = "center",
+          },
+        })
+      end
       return dashboard
     end,
   },

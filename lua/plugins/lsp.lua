@@ -59,6 +59,7 @@ return {
         "builtin",
         "cpp.build_standalone",
         "cpp.run_standalone",
+        "python.run_standalone",
       },
       task_list = {
         bindings = {
