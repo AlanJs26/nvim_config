@@ -10,15 +10,21 @@ end
 map("n", "u", "<cmd>silent undo<cr>", { desc = "which_key_ignore", remap = true })
 map("n", "<C-R>", "<cmd>silent redo<cr>", { desc = "which_key_ignore", remap = true })
 
-LazyVim.toggle.map("<leader>lw", require("config.toggle.root_detection").root_detection)
+require("config.toggle.root_detection").root_detection:map("<leader>lw")
 
 map("n", "<leader>lL", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 unmap("n", "<leader>K")
---
+
 -- Clear search with <esc>
 unmap("i", "<esc>")
 map({ "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
+
+-- Increment/Decrement numbers
+map({ "n" }, "<M-.>", "<C-a>", { desc = "increment number" })
+map({ "n" }, "<M-,>", "<C-x>", { desc = "decrement number" })
+map({ "x" }, "<M-.>", "g<C-a>", { desc = "increment number (cumulative)" })
+map({ "x" }, "<M-,>", "g<C-x>", { desc = "decrement number (cumulative)" })
 
 -- return to normal mode
 map("i", "jj", "<ESC>", { desc = "Normal Mode", remap = true })
@@ -31,23 +37,28 @@ map("n", "<M-O>", "moO<ESC>`o", { desc = "Add line up", remap = true })
 map("n", "çr", ":%s//", { desc = "Quick Replace", remap = true })
 map("x", "çr", ":s//", { desc = "Quick Replace", remap = true })
 
+-- global normall command
+map("n", "çg", ":g//norm ", { desc = "Quick Global Normal", remap = true })
+
 map("n", "<S-ScrollWheelDown>", "2zl", { desc = "Scroll right", remap = true })
 map("n", "<S-ScrollWheelUp>", "2zh", { desc = "Scroll left", remap = true })
 
 -- buffer
-map("n", "<leader>d", LazyVim.ui.bufremove, { desc = "Delete Buffer" })
+map("n", "<leader>d", Snacks.bufdelete.delete, { desc = "Delete Buffer" })
 unmap("n", "<leader>`")
 map("n", "<leader>0", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- windows
 unmap({ "n" }, "<leader>wd")
 unmap({ "n" }, "<leader>-")
+require("which-key").add({ "<leader>wm", mode = { "n" }, hidden = true, desc = "which_key_ignore" })
 unmap({ "n" }, "<leader>wm")
 
 map("n", "<leader>e", "<c-w>", { desc = "Windows", remap = true })
 map("n", "vs", "<C-w>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>ed", "<C-W>c", { desc = "Delete Window", remap = true })
-LazyVim.toggle.map("<leader>em", LazyVim.toggle.maximize)
+
+LazyVim.ui.maximize():map("<leader>em")
 
 map("n", "<M-w>", "<C-w>c", { desc = "Delete window", remap = true })
 

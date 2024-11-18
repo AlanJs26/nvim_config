@@ -29,8 +29,8 @@ return {
     init = function()
       local overseer = require("overseer")
 
-      LazyVim.toggle.map("<leader>oF", require("config.toggle.overseer").focus)
-      LazyVim.toggle.map("<leader>of", require("config.toggle.overseer").float)
+      require("config.toggle.overseer").focus:map("<leader>oF")
+      require("config.toggle.overseer").float:map("<leader>of")
 
       overseer.add_template_hook({ name = ".*run.*" }, function(task_defn, util)
         if not util.has_component(task_defn, "open_output") then
@@ -59,6 +59,8 @@ return {
         "builtin",
         "cpp.build_standalone",
         "cpp.run_standalone",
+        "c.build_standalone",
+        "c.run_standalone",
         "python.run_standalone",
       },
       task_list = {
@@ -179,7 +181,7 @@ return {
         },
         {
           "<leader>lR",
-          LazyVim.lsp.rename_file,
+          Snacks.rename.rename_file,
           desc = "Rename File",
           mode = { "n" },
           has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
@@ -189,45 +191,45 @@ return {
         {
           "]]",
           function()
-            LazyVim.lsp.words.jump(vim.v.count1)
+            Snacks.words.jump(vim.v.count1)
           end,
           has = "documentHighlight",
           desc = "Next Reference",
           cond = function()
-            return LazyVim.lsp.words.enabled
+            return Snacks.words.is_enabled()
           end,
         },
         {
           "[[",
           function()
-            LazyVim.lsp.words.jump(-vim.v.count1)
+            Snacks.words.jump(-vim.v.count1)
           end,
           has = "documentHighlight",
           desc = "Prev Reference",
           cond = function()
-            return LazyVim.lsp.words.enabled
+            return Snacks.words.is_enabled()
           end,
         },
         {
           "<a-n>",
           function()
-            LazyVim.lsp.words.jump(vim.v.count1, true)
+            Snacks.words.jump(vim.v.count1, true)
           end,
           has = "documentHighlight",
           desc = "Next Reference",
           cond = function()
-            return LazyVim.lsp.words.enabled
+            return Snacks.words.is_enabled()
           end,
         },
         {
           "<a-p>",
           function()
-            LazyVim.lsp.words.jump(-vim.v.count1, true)
+            Snacks.words.jump(-vim.v.count1, true)
           end,
           has = "documentHighlight",
           desc = "Prev Reference",
           cond = function()
-            return LazyVim.lsp.words.enabled
+            return Snacks.words.is_enabled()
           end,
         },
       }

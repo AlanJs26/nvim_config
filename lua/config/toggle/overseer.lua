@@ -1,10 +1,10 @@
 ---@class overseer.user.toggle
 local M = {}
 
-local util = LazyVim
+local Snacks = require("snacks")
 
 M._focus = true
-M.focus = util.toggle.wrap({
+M.focus = Snacks.toggle({
   name = "Focus",
   get = function()
     return M._focus
@@ -21,7 +21,7 @@ M.focus = util.toggle.wrap({
 })
 
 M._float = true
-M.float = util.toggle.wrap({
+M.float = Snacks.toggle({
   name = "Float",
   get = function()
     return M._float
@@ -37,10 +37,10 @@ M.float = util.toggle.wrap({
   end,
 })
 
-setmetatable(M, {
-  __call = function(m, ...)
-    return m.option(...)
-  end,
-})
+-- setmetatable(M, {
+--   __call = function(m, ...)
+--     return m.option(...)
+--   end,
+-- })
 
 return M

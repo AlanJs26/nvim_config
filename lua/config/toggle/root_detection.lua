@@ -1,9 +1,7 @@
 ---@class root_detection
 local M = {}
 
-local util = LazyVim
-
-M.root_detection = util.toggle.wrap({
+M.root_detection = Snacks.toggle({
   name = "Root Detection",
   get = function()
     return #vim.g.root_spec > 1
