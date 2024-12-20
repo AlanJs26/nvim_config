@@ -21,6 +21,7 @@ return {
         fish = { "fish_indent" },
         sh = { "shfmt" },
         typst = { "typstfmt" },
+        python = { "black" },
       },
     },
   },
@@ -232,11 +233,15 @@ return {
             return Snacks.words.is_enabled()
           end,
         },
+        { "gr", false },
       }
 
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-      -- change a keymap
-      keys[#keys + 1] = { "gr", false }
+      local unmap = function(...)
+        pcall(vim.keymap.del, ...)
+      end
+      unmap("n", "gri")
+      unmap("n", "gra")
+      unmap("n", "grn")
     end,
   },
 }

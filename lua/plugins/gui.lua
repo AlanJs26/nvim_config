@@ -5,6 +5,47 @@ return {
     lazy = true,
     opts = { style = "storm" },
   },
+
+  {
+    "folke/noice.nvim",
+    opts = {
+      presets = {
+        bottom_search = true,
+        command_palette = false,
+        long_message_to_split = true,
+        lsp_doc_border = true,
+      },
+      cmdline = {
+        view = "cmdline",
+      },
+    },
+  },
+  {
+    "snacks.nvim",
+    opts = {
+      indent = { enabled = true },
+      input = { enabled = true },
+      notifier = { enabled = true },
+      scope = { enabled = true },
+      scroll = { enabled = false },
+      statuscolumn = { enabled = false }, -- we set this in options.lua
+      toggle = { map = LazyVim.safe_keymap_set },
+      words = { enabled = true },
+    },
+    -- stylua: ignore
+    keys = {
+      {
+        "<leader>n",
+        function() require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() }) end,
+        desc = "Explorer NeoTree (Root Dir)",
+      },
+      {
+        "<leader>un",
+        function() Snacks.notifier.hide() end,
+        desc = "Dismiss All Notifications",
+      },
+    },
+  },
   {
     "Apeiros-46B/qalc.nvim",
     config = {
@@ -137,40 +178,6 @@ return {
       },
     },
   },
-  {
-    "folke/noice.nvim",
-    opts = {
-      presets = {
-        bottom_search = true,
-        command_palette = false,
-        long_message_to_split = true,
-        lsp_doc_border = true,
-      },
-      cmdline = {
-        view = "cmdline",
-      },
-    },
-  },
-
-  {
-    "nvim-telescope/telescope.nvim",
-    opts = {
-      pickers = {
-        buffers = {
-          mappings = {
-            i = { ["<CR>"] = require("telescope.actions").select_drop },
-          },
-        },
-      },
-    },
-    keys = {
-      {
-        "<leader>,",
-        "<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>",
-        desc = "Switch Buffer",
-      },
-    },
-  },
 
   {
     "goolord/alpha-nvim",
@@ -274,17 +281,6 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
-    init = function()
-      vim.g.lualine_laststatus = vim.o.laststatus
-      if vim.fn.argc(-1) > 0 then
-        -- set an empty statusline till lualine loads
-        vim.o.statusline = " "
-      else
-        -- hide the statusline on the starter page
-        vim.o.laststatus = 0
-      end
-    end,
     opts = function()
       -- PERF: we don't need this lualine require madness 🤷
       local lualine_require = require("lualine_require")
@@ -298,7 +294,7 @@ return {
         options = {
           theme = "auto",
           globalstatus = vim.o.laststatus == 3,
-          disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
+          disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
         },
         sections = {
           lualine_a = { "mode" },
@@ -319,29 +315,24 @@ return {
             { LazyVim.lualine.pretty_path() },
           },
           lualine_x = {
-          -- stylua: ignore
-          -- {
-          --   function() return require("noice").api.status.command.get() end,
-          --   cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-          --   color = function() return LazyVim.ui.fg("Statement") end,
-          -- },
+            Snacks.profiler.status(),
           -- stylua: ignore
           {
             function() return require("noice").api.status.mode.get() end,
             cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-            color = function() return LazyVim.ui.fg("Constant") end,
+            color = function() return { fg = Snacks.util.color("Constant") } end,
           },
           -- stylua: ignore
           {
             function() return "  " .. require("dap").status() end,
             cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-            color = function() return LazyVim.ui.fg("Debug") end,
+            color = function() return { fg = Snacks.util.color("Debug") } end,
           },
           -- stylua: ignore
           {
             require("lazy.status").updates,
             cond = require("lazy.status").has_updates,
-            color = function() return LazyVim.ui.fg("Special") end,
+            color = function() return { fg = Snacks.util.color("Special") } end,
           },
             {
               "diff",

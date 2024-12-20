@@ -14,7 +14,21 @@ require("config.toggle.root_detection").root_detection:map("<leader>lw")
 
 map("n", "<leader>lL", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
+map("n", "<C-/>", function()
+  local position = "right"
+  if require("config.toggle.terminal").floating_terminal:get() then
+    position = "float"
+  end
+  Snacks.terminal.toggle(nil, { win = { position = position } })
+end, { desc = "Terminal", remap = true })
+
+require("config.toggle.terminal").floating_terminal:map(
+  "<leader>uf",
+  { remap = true, desc = "Toggle Floating Terminal" }
+)
+
 unmap("n", "<leader>K")
+map({ "n" }, "<leader>n", "<leader>fe", { remap = true })
 
 -- Clear search with <esc>
 unmap("i", "<esc>")
@@ -58,7 +72,8 @@ map("n", "<leader>e", "<c-w>", { desc = "Windows", remap = true })
 map("n", "vs", "<C-w>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>ed", "<C-W>c", { desc = "Delete Window", remap = true })
 
-LazyVim.ui.maximize():map("<leader>em")
+unmap({ "n" }, "<leader>wm")
+Snacks.toggle.zoom():map("<leader>em"):map("<leader>uZ")
 
 map("n", "<M-w>", "<C-w>c", { desc = "Delete window", remap = true })
 
