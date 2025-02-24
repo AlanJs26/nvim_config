@@ -27,8 +27,10 @@ require("config.toggle.terminal").floating_terminal:map(
   { remap = true, desc = "Toggle Floating Terminal" }
 )
 
+require("config.toggle.scratch_ft"):map("<leader>u.")
+
 unmap("n", "<leader>K")
-map({ "n" }, "<leader>n", "<leader>fe", { remap = true })
+-- map({ "n" }, "<leader>n", "<leader>fe", { remap = true })
 
 -- Clear search with <esc>
 unmap("i", "<esc>")

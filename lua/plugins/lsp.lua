@@ -72,10 +72,6 @@ return {
 
             if not vim.tbl_isempty(tasks) then
               overseer.run_action(tasks[1], "open float")
-              -- vim.keymap.set("n", "q", function()
-              --   vim.cmd("wincmd w")
-              --   vim.cmd("OverseerClose")
-              -- end, { buffer = 0 })
             end
             vim.fn.feedkeys("G")
           end,
@@ -84,6 +80,7 @@ return {
     },
     keys = {
       { "<leader>oO", "<cmd>OverseerRun<cr>", desc = "Run task" },
+      { "<leader>oB", "<cmd>OverseerLoadBundle<cr>", desc = "Load Bundle" },
       { "<leader>oo", "<cmd>OverseerRestartLast<cr>", desc = "Run last task" },
       { "<leader>or", "<cmd>OverseerQuickAction restart<cr>", desc = "Restart last task" },
       {

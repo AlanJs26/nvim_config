@@ -31,14 +31,19 @@ return {
       statuscolumn = { enabled = false }, -- we set this in options.lua
       toggle = { map = LazyVim.safe_keymap_set },
       words = { enabled = true },
+      scratch = {
+        ft = function()
+          if require("config.toggle.scratch_ft"):get() and vim.bo.buftype == "" and vim.bo.filetype ~= "" then
+            return vim.bo.filetype
+          end
+          return "markdown"
+        end,
+      },
     },
     -- stylua: ignore
     keys = {
-      {
-        "<leader>n",
-        function() require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() }) end,
-        desc = "Explorer NeoTree (Root Dir)",
-      },
+      { "<leader>n", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
+      { "<leader>N", function() Snacks.notifier.show_history() end, desc = "Notification History" },
       {
         "<leader>un",
         function() Snacks.notifier.hide() end,
@@ -116,8 +121,9 @@ return {
       },
       { "<leader>e", false, desc = false },
       { "<leader>E", false, desc = false },
+
       { "<leader>n", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
-      { "<leader>N", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      -- { "<leader>N", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
       {
         "<leader>ge",
         function()
