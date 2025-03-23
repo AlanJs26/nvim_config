@@ -60,7 +60,7 @@ map("n", "<S-ScrollWheelDown>", "2zl", { desc = "Scroll right", remap = true })
 map("n", "<S-ScrollWheelUp>", "2zh", { desc = "Scroll left", remap = true })
 
 -- buffer
-map("n", "<leader>d", Snacks.bufdelete.delete, { desc = "Delete Buffer" })
+map("n", "<A-d>", Snacks.bufdelete.delete, { desc = "Delete Buffer" })
 unmap("n", "<leader>`")
 map("n", "<leader>0", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 

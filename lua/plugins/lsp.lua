@@ -110,6 +110,13 @@ return {
       },
       { "<leader>lm", "<cmd>Mason<cr>", desc = "Mason" },
     },
+    opts = {
+      ensure_installed = {
+        "stylua",
+        "shfmt",
+        "clangd",
+      },
+    },
   },
   {
     "folke/trouble.nvim",
