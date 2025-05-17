@@ -102,20 +102,23 @@ return {
     },
   },
   {
-    "williamboman/mason.nvim",
-    keys = {
-      {
-        "<leader>cm",
-        false,
-      },
-      { "<leader>lm", "<cmd>Mason<cr>", desc = "Mason" },
-    },
+    "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
         "stylua",
         "shfmt",
         "clangd",
       },
+    },
+  },
+  {
+    "mason-org/mason.nvim",
+    keys = {
+      {
+        "<leader>cm",
+        false,
+      },
+      { "<leader>lm", "<cmd>Mason<cr>", desc = "Mason" },
     },
   },
   {

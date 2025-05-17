@@ -32,6 +32,8 @@ require("config.toggle.scratch_ft"):map("<leader>u.")
 unmap("n", "<leader>K")
 -- map({ "n" }, "<leader>n", "<leader>fe", { remap = true })
 
+map({ "n" }, "*", "*N")
+
 -- Clear search with <esc>
 unmap("i", "<esc>")
 map({ "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
