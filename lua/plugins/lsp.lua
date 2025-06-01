@@ -17,9 +17,7 @@ return {
     },
     opts = {
       formatters_by_ft = {
-        lua = { "stylua" },
         fish = { "fish_indent" },
-        sh = { "shfmt" },
         typst = { "typstfmt" },
         python = { "black" },
       },
@@ -79,9 +77,9 @@ return {
       },
     },
     keys = {
-      { "<leader>oO", "<cmd>OverseerRun<cr>", desc = "Run task" },
-      { "<leader>oB", "<cmd>OverseerLoadBundle<cr>", desc = "Load Bundle" },
-      { "<leader>oo", "<cmd>OverseerRestartLast<cr>", desc = "Run last task" },
+      { "<leader>oO", "<cmd>OverseerRun<cr>",                 desc = "Run task" },
+      { "<leader>oB", "<cmd>OverseerLoadBundle<cr>",          desc = "Load Bundle" },
+      { "<leader>oo", "<cmd>OverseerRestartLast<cr>",         desc = "Run last task" },
       { "<leader>or", "<cmd>OverseerQuickAction restart<cr>", desc = "Restart last task" },
       {
         "<leader>ow",
@@ -105,8 +103,6 @@ return {
     "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
-        "stylua",
-        "shfmt",
         "clangd",
       },
     },
@@ -127,7 +123,7 @@ return {
       { "<leader>cs", false },
       { "<leader>cS", false },
       { "<leader>ls", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
-      { "<leader>lS", "<cmd>Trouble lsp toggle<cr>", desc = "LSP references/definitions/... (Trouble)" },
+      { "<leader>lS", "<cmd>Trouble lsp toggle<cr>",     desc = "LSP references/definitions/... (Trouble)" },
     },
   },
   {
@@ -153,25 +149,25 @@ return {
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter", -- optional
-      "nvim-tree/nvim-web-devicons", -- optional
+      "nvim-tree/nvim-web-devicons",     -- optional
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = function()
       require("lazyvim.plugins.lsp.keymaps")._keys = {
-        { "<leader>li", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
-        { "gh", "<cmd>Lspsaga finder<cr>", desc = "References" },
-        { "<leader>lh", "<cmd>Lspsaga finder<cr>", desc = "References" },
-        { "gd", "<cmd>Lspsaga goto_definition<cr>", desc = "Goto Definition", has = "definition" },
-        { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
-        { "gy", "<cmd>Lspsaga goto_type_definition<cr>", desc = "Goto T[y]pe Definition" },
+        { "<leader>li", "<cmd>LspInfo<cr>",                      desc = "Lsp Info" },
+        { "gh",         "<cmd>Lspsaga finder<cr>",               desc = "References" },
+        { "<leader>lh", "<cmd>Lspsaga finder<cr>",               desc = "References" },
+        { "gd",         "<cmd>Lspsaga goto_definition<cr>",      desc = "Goto Definition",       has = "definition" },
+        { "gI",         vim.lsp.buf.implementation,              desc = "Goto Implementation" },
+        { "gy",         "<cmd>Lspsaga goto_type_definition<cr>", desc = "Goto T[y]pe Definition" },
         { "<leader>ly", "<cmd>Lspsaga goto_type_definition<cr>", desc = "Goto T[y]pe Definition" },
-        { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-        { "K", vim.lsp.buf.hover, desc = "Hover" },
-        { "gK", vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp" },
-        { "<c-k>", vim.lsp.buf.signature_help, mode = "i", desc = "Signature Help", has = "signatureHelp" },
-        { "<leader>la", "<cmd>Lspsaga code_action<cr>", desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
+        { "gD",         vim.lsp.buf.declaration,                 desc = "Goto Declaration" },
+        { "K",          vim.lsp.buf.hover,                       desc = "Hover" },
+        { "gK",         vim.lsp.buf.signature_help,              desc = "Signature Help",        has = "signatureHelp" },
+        { "<c-k>",      vim.lsp.buf.signature_help,              mode = "i",                     desc = "Signature Help", has = "signatureHelp" },
+        { "<leader>la", "<cmd>Lspsaga code_action<cr>",          desc = "Code Action",           mode = { "n", "v" },     has = "codeAction" },
         {
           "<leader>ld",
           "<cmd>Lspsaga peek_definition<cr>",
@@ -179,7 +175,7 @@ return {
           mode = { "n" },
           has = "definition",
         },
-        { "<leader>lc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
+        { "<leader>lc", vim.lsp.codelens.run,      desc = "Run Codelens",  mode = { "n", "v" }, has = "codeLens" },
         {
           "<leader>lC",
           vim.lsp.codelens.refresh,
@@ -194,7 +190,7 @@ return {
           mode = { "n" },
           has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
         },
-        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+        { "<leader>lr", vim.lsp.buf.rename,        desc = "Rename",        has = "rename" },
         { "<leader>lA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
         {
           "]]",

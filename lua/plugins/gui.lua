@@ -1,4 +1,43 @@
 return {
+  {
+    "eero-lehtinen/oklch-color-picker.nvim",
+    event = "VeryLazy",
+    version = "*",
+    keys = {
+      -- One handed keymap recommended, you will be using the mouse
+      {
+        "<leader>lp",
+        function()
+          require("oklch-color-picker").pick_under_cursor()
+        end,
+        desc = "Color pick under cursor",
+      },
+    },
+    opts = {
+      patterns = {
+        hyprland_color = {
+          -- rgba(33ccff)
+          format = "hex_literal",
+          priority = -2,
+          "rgba%(()%x%x%x%x%x%x()%x-%f[%W]%)",
+          custom_parse = function(match)
+            local hex = tonumber("0x" .. match, 16)
+            return hex
+          end,
+        },
+        hex_literal = { priority = -1, "()0x%x%x%x%x%x%x+%f[%W]()" },
+
+        -- Rgb and Hsl support modern and legacy formats:
+        -- rgb(10 10 10 / 50%) and rgba(10, 10, 10, 0.5)
+        css_rgb = { priority = 0, "()rgba?%(.-%)()" },
+        css_hsl = { priority = 0, "()hsla?%(.-%)()" },
+        css_oklch = { priority = 0, "()oklch%([^,]-%)()" },
+
+        -- Allows any digits, dots, commas or whitespace within brackets.
+        numbers_in_brackets = false,
+      },
+    },
+  },
   { "theRealCarneiro/hyprland-vim-syntax", ft = "hypr" },
   {
     "folke/tokyonight.nvim",
