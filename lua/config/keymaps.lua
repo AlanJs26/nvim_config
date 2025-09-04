@@ -7,6 +7,10 @@ local unmap = function(...)
   pcall(vim.keymap.del, ...)
 end
 
+unmap("n", "gri")
+unmap("n", "gra")
+unmap("n", "grn")
+
 map("n", "u", "<cmd>silent undo<cr>", { desc = "which_key_ignore", remap = true })
 map("n", "<C-R>", "<cmd>silent redo<cr>", { desc = "which_key_ignore", remap = true })
 
@@ -61,10 +65,15 @@ map("n", "çg", ":g//norm ", { desc = "Quick Global Normal", remap = true })
 map("n", "<S-ScrollWheelDown>", "2zl", { desc = "Scroll right", remap = true })
 map("n", "<S-ScrollWheelUp>", "2zh", { desc = "Scroll left", remap = true })
 
+-- fzf
+map("n", "<leader>r", require("fzf-lua").resume, { desc = "Resume search", remap = true })
+
 -- buffer
 map("n", "<A-d>", Snacks.bufdelete.delete, { desc = "Delete Buffer" })
 unmap("n", "<leader>`")
 map("n", "<leader>0", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+map("n", "<C-,>", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer prev" })
+map("n", "<C-.>", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer next" })
 
 -- windows
 unmap({ "n" }, "<leader>wd")

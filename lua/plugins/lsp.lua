@@ -77,9 +77,9 @@ return {
       },
     },
     keys = {
-      { "<leader>oO", "<cmd>OverseerRun<cr>",                 desc = "Run task" },
-      { "<leader>oB", "<cmd>OverseerLoadBundle<cr>",          desc = "Load Bundle" },
-      { "<leader>oo", "<cmd>OverseerRestartLast<cr>",         desc = "Run last task" },
+      { "<leader>oO", "<cmd>OverseerRun<cr>", desc = "Run task" },
+      { "<leader>oB", "<cmd>OverseerLoadBundle<cr>", desc = "Load Bundle" },
+      { "<leader>oo", "<cmd>OverseerRestartLast<cr>", desc = "Run last task" },
       { "<leader>or", "<cmd>OverseerQuickAction restart<cr>", desc = "Restart last task" },
       {
         "<leader>ow",
@@ -123,7 +123,7 @@ return {
       { "<leader>cs", false },
       { "<leader>cS", false },
       { "<leader>ls", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
-      { "<leader>lS", "<cmd>Trouble lsp toggle<cr>",     desc = "LSP references/definitions/... (Trouble)" },
+      { "<leader>lS", "<cmd>Trouble lsp toggle<cr>", desc = "LSP references/definitions/... (Trouble)" },
     },
   },
   {
@@ -149,25 +149,42 @@ return {
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter", -- optional
-      "nvim-tree/nvim-web-devicons",     -- optional
+      "nvim-tree/nvim-web-devicons", -- optional
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = function()
       require("lazyvim.plugins.lsp.keymaps")._keys = {
-        { "<leader>li", "<cmd>LspInfo<cr>",                      desc = "Lsp Info" },
-        { "gh",         "<cmd>Lspsaga finder<cr>",               desc = "References" },
-        { "<leader>lh", "<cmd>Lspsaga finder<cr>",               desc = "References" },
-        { "gd",         "<cmd>Lspsaga goto_definition<cr>",      desc = "Goto Definition",       has = "definition" },
-        { "gI",         vim.lsp.buf.implementation,              desc = "Goto Implementation" },
-        { "gy",         "<cmd>Lspsaga goto_type_definition<cr>", desc = "Goto T[y]pe Definition" },
+        { "<leader>li", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
+        { "gh", "<cmd>Lspsaga finder<cr>", desc = "References" },
+        { "<leader>lh", "<cmd>Lspsaga finder<cr>", desc = "References" },
+        { "gd", "<cmd>Lspsaga goto_definition<cr>", desc = "Goto Definition", has = "definition" },
+        { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
+        { "gy", "<cmd>Lspsaga goto_type_definition<cr>", desc = "Goto T[y]pe Definition" },
         { "<leader>ly", "<cmd>Lspsaga goto_type_definition<cr>", desc = "Goto T[y]pe Definition" },
-        { "gD",         vim.lsp.buf.declaration,                 desc = "Goto Declaration" },
-        { "K",          vim.lsp.buf.hover,                       desc = "Hover" },
-        { "gK",         vim.lsp.buf.signature_help,              desc = "Signature Help",        has = "signatureHelp" },
-        { "<c-k>",      vim.lsp.buf.signature_help,              mode = "i",                     desc = "Signature Help", has = "signatureHelp" },
-        { "<leader>la", "<cmd>Lspsaga code_action<cr>",          desc = "Code Action",           mode = { "n", "v" },     has = "codeAction" },
+        { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+        { "K", vim.lsp.buf.hover, desc = "Hover" },
+        {
+          "gK",
+          vim.lsp.buf.signature_help,
+          desc = "Signature Help",
+          has = "signatureHelp",
+        },
+        {
+          "<c-k>",
+          vim.lsp.buf.signature_help,
+          mode = "i",
+          desc = "Signature Help",
+          has = "signatureHelp",
+        },
+        {
+          "<leader>la",
+          "<cmd>Lspsaga code_action<cr>",
+          desc = "Code Action",
+          mode = { "n", "v" },
+          has = "codeAction",
+        },
         {
           "<leader>ld",
           "<cmd>Lspsaga peek_definition<cr>",
@@ -175,7 +192,7 @@ return {
           mode = { "n" },
           has = "definition",
         },
-        { "<leader>lc", vim.lsp.codelens.run,      desc = "Run Codelens",  mode = { "n", "v" }, has = "codeLens" },
+        { "<leader>lc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
         {
           "<leader>lC",
           vim.lsp.codelens.refresh,
@@ -190,7 +207,7 @@ return {
           mode = { "n" },
           has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
         },
-        { "<leader>lr", vim.lsp.buf.rename,        desc = "Rename",        has = "rename" },
+        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
         { "<leader>lA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
         {
           "]]",
@@ -245,6 +262,136 @@ return {
       unmap("n", "gri")
       unmap("n", "gra")
       unmap("n", "grn")
+
+      local ret = {
+        -- options for vim.diagnostic.config()
+        ---@type vim.diagnostic.Opts
+        diagnostics = {
+          underline = true,
+          update_in_insert = false,
+          virtual_text = {
+            spacing = 4,
+            source = "if_many",
+            prefix = "●",
+          },
+          severity_sort = true,
+          signs = {
+            text = {
+              [vim.diagnostic.severity.ERROR] = LazyVim.config.icons.diagnostics.Error,
+              [vim.diagnostic.severity.WARN] = LazyVim.config.icons.diagnostics.Warn,
+              [vim.diagnostic.severity.HINT] = LazyVim.config.icons.diagnostics.Hint,
+              [vim.diagnostic.severity.INFO] = LazyVim.config.icons.diagnostics.Info,
+            },
+          },
+        },
+        -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
+        -- Be aware that you also will need to properly configure your LSP server to
+        -- provide the inlay hints.
+        inlay_hints = {
+          enabled = true,
+          exclude = { "vue", "typescriptreact" }, -- filetypes for which you don't want to enable inlay hints
+        },
+        -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
+        -- Be aware that you also will need to properly configure your LSP server to
+        -- provide the code lenses.
+        codelens = {
+          enabled = false,
+        },
+        -- add any global capabilities here
+        capabilities = {
+          workspace = {
+            fileOperations = {
+              didRename = true,
+              willRename = true,
+            },
+          },
+        },
+        -- options for vim.lsp.buf.format
+        -- `bufnr` and `filter` is handled by the LazyVim formatter,
+        -- but can be also overridden when specified
+        format = {
+          formatting_options = nil,
+          timeout_ms = nil,
+        },
+        -- LSP Server Settings
+        servers = {
+          lua_ls = {
+            settings = {
+              Lua = {
+                workspace = {
+                  checkThirdParty = false,
+                },
+                codeLens = {
+                  enable = true,
+                },
+                completion = {
+                  callSnippet = "Replace",
+                },
+                doc = {
+                  privateName = { "^_" },
+                },
+                hint = {
+                  enable = true,
+                  setType = false,
+                  paramType = true,
+                  paramName = "Disable",
+                  semicolon = "Disable",
+                  arrayIndex = "Disable",
+                },
+              },
+            },
+          },
+          -- harper_ls = {
+          --   settings = {
+          --     ["harper-ls"] = {
+          --       linters = {
+          --         SentenceCapitalization = false,
+          --         SpellCheck = false,
+          --       },
+          --     },
+          --   },
+          -- },
+          rust_analyzer = {
+            settings = {
+              ["rust-analyzer"] = {
+                assist = {
+                  importEnforceGranularity = true,
+                  importPrefix = "crate",
+                },
+                cargo = {
+                  allFeatures = true,
+                },
+                checkOnSave = {
+                  command = "clippy",
+                },
+                inlayHints = { locationLinks = false },
+                diagnostics = {
+                  enable = true,
+                  experimental = {
+                    enable = true,
+                  },
+                },
+              },
+            },
+          },
+          tailwindcss = {
+            filetypes = { "svelte", "html" },
+          },
+          cssls = {
+            filetypes = { "css" },
+          },
+        },
+        setup = {
+          -- example to setup with typescript.nvim
+          -- tsserver = function(_, opts)
+          --   require("typescript").setup({ server = opts })
+          --   return true
+          -- end,
+          -- Specify * to use this function as a fallback for any server
+          -- ["*"] = function(server, opts) end,
+        },
+      }
+      return ret
     end,
   },
 }

@@ -1,5 +1,43 @@
 return {
   {
+    "nvim-zh/colorful-winsep.nvim",
+    config = {
+      highlight = "#7aa2f7",
+      animate = { enabled = false },
+    },
+    event = { "WinLeave" },
+  },
+  {
+    "ibhagwan/fzf-lua",
+    opts = {
+      winopts = {
+        width = 0.9,
+        height = 0.95,
+        -- row = 0.1,
+        -- col = 0.05,
+        on_create = function()
+          vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true, buffer = true })
+        end,
+      },
+      defaults = {
+        formatter = { "path.filename_first", 1 },
+      },
+      grep = {
+        path_shorten = true,
+      },
+      git = {
+        diff = {
+          preview = "git diff --color {ref} -- $(echo {file}|sed -E 's/(\\w+) (.+)/\\2\\/\\1/')",
+          -- preview = "echo {file}",
+        },
+      },
+    },
+    keys = {
+      { "<leader>sC", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
+      { "<leader>sc", "<cmd>FzfLua changes<cr>", desc = "Changes" },
+    },
+  },
+  {
     "eero-lehtinen/oklch-color-picker.nvim",
     event = "VeryLazy",
     version = "*",
@@ -33,7 +71,7 @@ return {
         css_hsl = { priority = 0, "()hsla?%(.-%)()" },
         css_oklch = { priority = 0, "()oklch%([^,]-%)()" },
 
-        -- Allows any digits, dots, commas or whitespace within brackets.
+        -- Allows any digits, dots, commas, or whitespace within brackets.
         numbers_in_brackets = false,
       },
     },
@@ -42,7 +80,7 @@ return {
   {
     "folke/tokyonight.nvim",
     lazy = true,
-    opts = { style = "storm" },
+    opts = { style = "night" },
   },
 
   {
@@ -81,6 +119,8 @@ return {
     },
     -- stylua: ignore
     keys = {
+      { "<leader>>",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+      { "<leader>.", require('fzf-lua').git_diff, desc = "Find Files (git-diff)" },
       { "<leader>n", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
       { "<leader>N", function() Snacks.notifier.show_history() end, desc = "Notification History" },
       {
@@ -114,6 +154,15 @@ return {
             expand = function()
               return require("which-key.extras").expand.win()
             end,
+          },
+          {
+            "<leader>>",
+            desc = "Toggle Scratch Buffer",
+          },
+          {
+            "<leader>.",
+            desc = "Find Files (git-diff)",
+            icon = { icon = "󱡠", color = "azure" },
           },
           {
             "<leader>w",
