@@ -8,6 +8,7 @@ autocmd FileType qml set shiftwidth=4|set tabstop=4
 autocmd BufNewFile,BufRead,BufReadPost *.typ set filetype=typst
 autocmd BufNewFile,BufRead,BufReadPost *.gazebo set filetype=xml
 autocmd BufNewFile,BufRead,BufReadPost *.wbt set filetype=vrml
+autocmd BufNewFile,BufRead,BufReadPost *.proto set filetype=vrml
 autocmd BufNewFile,BufRead,BufReadPost *.launch set filetype=xml
 autocmd BufNewFile,BufRead,BufReadPost *.urdf set filetype=xml
 ]])

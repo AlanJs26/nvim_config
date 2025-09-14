@@ -134,5 +134,6 @@ map("n", "<leader>c", "<cmd>norm gcc<cr>", { desc = "Toggle Comment line", remap
 map("v", "<leader>c", "<cmd>norm gc<cr>", { desc = "Toggle Comment line", remap = true })
 
 -- tabs
+map("n", "<leader><tab><tab>", "<cmd>tab split<cr>", { desc = "New Tab", remap = true })
 map("n", "<M-l>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<M-h>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
